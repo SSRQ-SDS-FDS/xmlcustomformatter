@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="style.xsl"?>
+<!-- This is a comment outside the root-Element:
+     After that we have a doctype declaration,
+     and some declarations -->
+<!DOCTYPE root [
+        <!ELEMENT root ANY>
+        <!ELEMENT container-element (#PCDATA|inline-element)*>
+        <!ELEMENT inline-element (#PCDATA)>
+        <!ENTITY attributes "Attributes">
+        <!ATTLIST container-element attribute1 CDATA #IMPLIED>
+        <!ATTLIST container-element attribute2 CDATA #IMPLIED>
+        <!ATTLIST inline-element attribute1 CDATA #IMPLIED>
+        <!ATTLIST inline-element attribute2 CDATA #IMPLIED>
+        ]>
+<root>
+    <!-- Single line commentary -->
+    <!-- Multiple line commentary:
+         Just because. -->
+    <container-element>
+        But this is an <inline-element>inline-element</inline-element>,
+        which should not cause a line break.
+    </container-element>
+    <container-element attribute1="value1" attribute2="value2">
+        Now with attributes, because <inline-element attribute1="value1" attribute2="value2">&attributes;</inline-element>
+        often cause line breaks.
+    </container-element>
+    <![CDATA[Here comes a CDATA section]]>
+</root>
