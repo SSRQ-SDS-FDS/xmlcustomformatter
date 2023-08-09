@@ -5,25 +5,44 @@
      and some declarations -->
 <!DOCTYPE root [
         <!ELEMENT root ANY>
-        <!ELEMENT container-element (#PCDATA|inline-element)*>
-        <!ELEMENT inline-element (#PCDATA)>
-        <!ENTITY attributes "Attributes">
+          <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
+    <!ELEMENT inline-element (#PCDATA)><!ENTITY attributes "Attributes">
+        <!ELEMENT empty-element EMPTY>
         <!ATTLIST container-element attribute1 CDATA #IMPLIED>
+
+
         <!ATTLIST container-element attribute2 CDATA #IMPLIED>
+
         <!ATTLIST inline-element attribute1 CDATA #IMPLIED>
         <!ATTLIST inline-element attribute2 CDATA #IMPLIED>
         ]>
 <root>
-    <!-- Single line commentary -->
-    <!-- Multiple line commentary:
+    <!-- Single line comment -->
+    <empty-element/>
+    <!-- Multiple line comment:
          Just because. -->
-    <container-element>
-        But this is an <inline-element>inline-element</inline-element>,
-        which should not cause a line break.
+    <container-element><container-element>But this
+        is
+        an <inline-element> inline-element </inline-element>,
+                which should not cause a line break.</container-element>
     </container-element>
+
     <container-element attribute1="value1" attribute2="value2">
         Now with attributes, because <inline-element attribute1="value1" attribute2="value2">&attributes;</inline-element>
-        often cause line breaks.
+            often cause line breaks.
     </container-element>
-    <![CDATA[Here comes a CDATA section]]>
+
+
+    <container-element>
+        This inline-<inline-element>ele</inline-element>ment has no spaces around.
+    </container-element>
+
+        <![CDATA[Here comes a CDATA section]]>
+
+        <container-element>
+                    Yet another container-element having a
+            <!-- comment -->
+              inside, an <empty-element/> and a <![CDATA[Here comes a CDATA section]]>.
+
+    </container-element>
 </root>
