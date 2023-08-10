@@ -52,12 +52,13 @@
         This inline-<inline-element>ele</inline-element>ment has no spaces around.
     </container-element>
         <?a-random-processing-instruction "foo"?><inline-element>foo</inline-element>
-        <![CDATA[Here comes a small CDATA section]]><inline-element>foo</inline-element>
+        <![CDATA[Here comes a small CDATA section]]>
+    <inline-element>foo</inline-element>
         <container-element>
                     Yet another container-element having a
             <!-- comment --><inline-element>foo</inline-element>
             inside, an <empty-element> </empty-element> and a <![CDATA[Here comes <hi>another</hi> CDATA section]]>
-            <inline-element>foo</inline-element>.
+                <inline-element>foo</inline-element>.
 
     </container-element>
 </root>
