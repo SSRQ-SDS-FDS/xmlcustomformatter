@@ -1,6 +1,6 @@
+import re as regex
 from xml.dom import minidom
 from xmlformattingoptions import XMLFormattingOptions
-import re as regex
 
 
 class XMLCustomFormatter:
@@ -180,10 +180,3 @@ class XMLCustomFormatter:
     def calculate_indentation(self):
         number_of_spaces = self.indentation_level * self.formatting_options.indentation
         return number_of_spaces * ' '
-
-
-inline_elements = ['inline-element', 'empty-element']
-inline_elements = XMLFormattingOptions(
-    indentation=6,
-    inline_elements=inline_elements)
-XMLCustomFormatter('input.xml', 'output.xml', inline_elements)
