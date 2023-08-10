@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="style.xsl"?>
+<?xml-stylesheet type="text/xsl"   href="style.xsl"?>
 <!-- This is a comment outside the root-Element:
      After that we have a doctype declaration,
      and some notations -->
@@ -10,11 +10,14 @@
         <!ELEMENT empty-element EMPTY>
         <!ATTLIST container-element attribute1 CDATA #IMPLIED>
 
-
         <!ATTLIST container-element attribute2 CDATA #IMPLIED>
-
+              <!-- This is a comment inside the Doctype Declaration -->
         <!ATTLIST inline-element attribute1 CDATA #IMPLIED>
+
         <!ATTLIST inline-element attribute2 CDATA #IMPLIED>
+                <!NOTATION Foo    SYSTEM    "foo">
+        <!-- You may also have Processing Instructions inside the Doctype Declaration -->
+        <?foo ?>
         ]>
 <root>
     <!-- Single line comment -->

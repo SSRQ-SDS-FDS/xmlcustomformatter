@@ -1,37 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="style.xsl"?>
-<!-- This is a comment outside the root-Element: After that we have a doctype declaration, and some declarations -->
+<!-- This is a comment outside the root-Element: After that we have a doctype declaration, and some notations -->
 <!DOCTYPE root [
-      <!ELEMENT root ANY>
-      <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
-      <!ELEMENT inline-element (#PCDATA)>
-      <!ENTITY attributes "Attributes">
-      <!ELEMENT empty-element EMPTY>
-      <!ATTLIST container-element attribute1 CDATA #IMPLIED>
-      <!ATTLIST container-element attribute2 CDATA #IMPLIED>
-      <!ATTLIST inline-element attribute1 CDATA #IMPLIED>
-      <!ATTLIST inline-element attribute2 CDATA #IMPLIED>]>
+    <!ELEMENT root ANY>
+    <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
+    <!ELEMENT inline-element (#PCDATA)>
+    <!ENTITY attributes "Attributes">
+    <!ELEMENT empty-element EMPTY>
+    <!ATTLIST container-element attribute1 CDATA #IMPLIED>
+    <!ATTLIST container-element attribute2 CDATA #IMPLIED>
+    <!-- This is a comment inside the Doctype Declaration -->
+    <!ATTLIST inline-element attribute1 CDATA #IMPLIED>
+    <!ATTLIST inline-element attribute2 CDATA #IMPLIED>
+    <!NOTATION Foo SYSTEM "foo">
+    <!-- You may also have Processing Instructions inside the Doctype Declaration -->
+    <?foo ?>
+]>
 <root>
-      <!-- Single line comment -->
+    <!-- Single line comment -->
 <empty-element/>
-      <!-- Multiple line comment: Just because. -->
-      <container-element>
-            <container-element>
-                  But this is an <inline-element>inline-element</inline-element>, which should not cause a line break.
-            </container-element>
-      </container-element>
-      <container-element attribute1="value1" attribute2="value2">
-            Now with attributes, because <inline-element attribute1="value1" attribute2="value2">Attributes</inline-element> often cause line breaks.
-      </container-element>
-      <container-element>
-            This inline-<inline-element>ele</inline-element>ment has no spaces around.
-      </container-element>
-      <![CDATA[Here comes a CDATA section]]>
-      <container-element>
-            Yet another container-element having a
-            <!-- comment -->
-            inside, an <empty-element/> and a
-            <![CDATA[Here comes a CDATA section]]>
-            .
-      </container-element>
+    <!-- Multiple line comment: Just because. -->
+    <container-element>
+        <container-element>
+            But this is an <inline-element>inline-element</inline-element>, which should not cause a line break.
+        </container-element>
+    </container-element>
+    <container-element attribute1="value1" attribute2="value2">
+        Now with attributes, because <inline-element attribute1="value1" attribute2="value2">Attributes</inline-element> often cause line breaks.
+    </container-element>
+    <container-element>
+        This inline-<inline-element>ele</inline-element>ment has no spaces around.
+    </container-element>
+    <![CDATA[Here comes a small CDATA section]]>
+    <container-element>
+        Yet another container-element having a
+        <!-- comment -->
+        inside, an <empty-element/> and a
+        <![CDATA[Here comes another CDATA section]]>
+        .
+    </container-element>
 </root>
