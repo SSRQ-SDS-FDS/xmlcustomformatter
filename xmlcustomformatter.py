@@ -132,8 +132,13 @@ class XMLCustomFormatter:
         elif previous.nodeType in (4, 7, 8):
             self.result.append(self.calculate_indentation())
         # Indent if it follows a text node (3) consisting of whitespace that follows a comment or cdata node
-        elif (previous.nodeType == 3 and regex.match(r"\s+", previous.data)) \
+        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) \
                 and (previous.previousSibling is not None and previous.previousSibling.nodeType in (4, 7, 8)):
+            self.result.append(self.calculate_indentation())
+        # Indent if it follows a whitespace text node inside a container element
+        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) \
+                and previous.previousSibling is None \
+                and not self.is_empty_element(node.parentNode):
             self.result.append(self.calculate_indentation())
 
     def open_start_tag(self, node):
