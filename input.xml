@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="style.xsl"?>
 <!-- This is a comment outside the root-Element:
      After that we have a doctype declaration,
-     and some declarations -->
+     and some notations -->
 <!DOCTYPE root [
         <!ELEMENT root ANY>
           <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
@@ -37,12 +37,12 @@
         This inline-<inline-element>ele</inline-element>ment has no spaces around.
     </container-element>
 
-        <![CDATA[Here comes a CDATA section]]>
+        <![CDATA[Here comes a small CDATA section]]>
 
         <container-element>
                     Yet another container-element having a
             <!-- comment -->
-              inside, an <empty-element/> and a <![CDATA[Here comes a CDATA section]]>.
+              inside, an <empty-element/> and a <![CDATA[Here comes another CDATA section]]>.
 
     </container-element>
 </root>
