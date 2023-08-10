@@ -24,9 +24,10 @@ class XMLCustomFormatter:
         self.dom = minidom.parse(self.input_file)
 
     def add_xml_declaration(self):
-        # This is necessary because the XML DOM does not contain
-        # an XML-declaration. If there was one present in the
-        # input document, the parser would ignore it.
+        # This is necessary because XML DOM does process XML-declarations.
+        # If there was one present in the input document, the parser would
+        # just ignore it. Adding this declaration makes sure, that there
+        # is one in the output document.
         self.result = ['<?xml version="1.0" encoding="UTF-8"?>\n']
 
     def process(self, node):
@@ -79,8 +80,15 @@ class XMLCustomFormatter:
 
     def process_document_type_node(self, node):
         self.result.append("<!DOCTYPE " + node.name + " ")
+        self.process_document_type_external_id(node)
         self.process_document_type_internal_subset(node)
         self.result.append(">")
+
+    def process_document_type_external_id(self, node):
+        if node.publicId:
+            self.result.append('PUBLIC "' + node.publicId + '" "' + node.systemId + '" ')
+        elif node.systemId:
+            self.result.append('SYSTEM "' + node.systemId + '" ')
 
     def process_document_type_internal_subset(self, node):
         if node.internalSubset:

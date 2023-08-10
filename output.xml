@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="style.xsl"?>
 <!-- This is a comment outside the root-Element: After that we have a doctype declaration, and some notations -->
-<!DOCTYPE root [
+<!DOCTYPE root PUBLIC "hello" "foo" [
     <!ELEMENT root ANY>
     <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
     <!ELEMENT inline-element (#PCDATA)>
@@ -36,7 +36,7 @@
         Yet another container-element having a
         <!-- comment -->
         inside, an <empty-element/> and a
-        <![CDATA[Here comes another CDATA section]]>
+        <![CDATA[Here comes <hi>another</hi> CDATA section]]>
         .
     </container-element>
 </root>

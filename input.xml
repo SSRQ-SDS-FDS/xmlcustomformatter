@@ -3,7 +3,7 @@
 <!-- This is a comment outside the root-Element:
      After that we have a doctype declaration,
      and some notations -->
-<!DOCTYPE root [
+<!DOCTYPE root PUBLIC "hello" "foo" [
         <!ELEMENT root ANY>
           <!ELEMENT container-element (#PCDATA|inline-element|container-element|empty-element)*>
     <!ELEMENT inline-element (#PCDATA)><!ENTITY attributes "Attributes">
@@ -45,7 +45,7 @@
         <container-element>
                     Yet another container-element having a
             <!-- comment -->
-              inside, an <empty-element/> and a <![CDATA[Here comes another CDATA section]]>.
+              inside, an <empty-element/> and a <![CDATA[Here comes <hi>another</hi> CDATA section]]>.
 
     </container-element>
 </root>
