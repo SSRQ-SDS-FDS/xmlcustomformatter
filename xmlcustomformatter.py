@@ -173,17 +173,24 @@ class XMLCustomFormatter:
         self.result.append('\n' + self.calculate_indentation() + '<?' + node.target + ' ' + node.data + '?>\n')
 
     def process_text_node(self, node):
+        if self.is_inline_element(node.parentNode):
+            self.process_inline_element_text(node)
+        else:
+            self.process_container_element_text(node)
+
+    def process_container_element_text(self, node):
         node.data = self.reduce_redundant_whitespace(node.data)
         if node.data != " ":
-            if self.is_inline_element(node.parentNode):
-                node.data = node.data.strip()
-            else:
-                previous = node.previousSibling
-                if previous is None or previous.nodeType in (4, 7, 8) or \
-                        (previous.nodeType == 1 and not self.is_inline_element(previous)):
-                    node.data = node.data.lstrip()
-                    node.data = self.calculate_indentation() + node.data
+            previous = node.previousSibling
+            if previous is None or previous.nodeType in (4, 7, 8) or \
+                    (previous.nodeType == 1 and not self.is_inline_element(previous)):
+                node.data = self.calculate_indentation() + node.data.lstrip()
             self.result.append(node.data)
+
+    def process_inline_element_text(self, node):
+        node.data = self.reduce_redundant_whitespace(node.data)
+        node.data = node.data.strip()
+        self.result.append(node.data)
 
     def postprocess(self):
         self.result = self.convert_result_to_string(self.result)
