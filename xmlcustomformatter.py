@@ -198,18 +198,49 @@ class XMLCustomFormatter:
         self.result.append(node.data)
 
     def postprocess(self):
-        self.result = "".join(self.result).split('\n')
-        with open("result.log", 'w') as f:
-            for line in self.result:
-                length = len(line)
-                if length > self.formatting_options.max_line_length:
-                    print("Oh no: Diese Zeile ist zu lang (" + str(length) + "): " + line)
-                r = str(length) + ": " + line + "\n"
-                f.write(r)
+        self.postprocess_rearrange_result()
+        self.postprocess_result_lines()
         self.result = self.convert_result_to_string(self.result)
         self.result = self.remove_empty_lines(self.result)
         self.result = self.remove_whitespace_before_end_of_line(self.result)
         self.result = self.result.strip()
+
+    # Functions for postprocessing
+    def postprocess_rearrange_result(self):
+        self.result = "".join(self.result).split('\n')
+
+    def postprocess_result_lines(self):
+        lines = self.result
+        self.result = []
+        for line in lines:
+            self.postprocess_line(line)
+
+    def postprocess_line(self, line: str):
+        number_of_spaces = self.get_current_indentation(line)
+        if number_of_spaces > 0:
+            indentation = number_of_spaces * " "
+        else:
+            indentation = ""
+        if len(line) <= self.formatting_options.max_line_length:
+            self.result.append(line)
+        else:
+            if " " in line:
+                position = line.rfind(" ", number_of_spaces, self.formatting_options.max_line_length)
+                if position == -1:
+                    position = line.find(" ", self.formatting_options.max_line_length)
+                    if position == -1:
+                        self.result.append(line)
+                    else:
+                        self.result.append(line[0:position] + "\n")
+                        self.postprocess_line(indentation + line[position:].lstrip())
+                else:
+                    self.result.append(line[0:position] + "\n")
+                    self.postprocess_line(indentation + line[position:].lstrip())
+            else:
+                self.result.append(line)
+
+    def get_current_indentation(self, string):
+        return len(string) - len(string.lstrip())
 
     def write_to_output_file(self):
         with open(self.output_file, 'w') as output_file:
@@ -267,4 +298,4 @@ class XMLCustomFormatter:
     # Other functions
     @staticmethod
     def convert_result_to_string(result: list):
-        return "".join(result)
+        return "\n".join(result)
