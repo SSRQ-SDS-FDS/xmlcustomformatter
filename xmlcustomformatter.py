@@ -24,7 +24,7 @@ class XMLCustomFormatter:
         self.dom = minidom.parse(self.input_file)
 
     def add_xml_declaration(self):
-        # This is necessary because XML DOM does process XML-declarations.
+        # This is necessary because XML DOM does not process XML-declarations.
         # If there was one present in the input document, the parser would
         # just ignore it. Adding this declaration makes sure, that there
         # is one in the output document.
