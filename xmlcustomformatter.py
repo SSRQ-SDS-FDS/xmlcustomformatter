@@ -156,8 +156,8 @@ class XMLCustomFormatter:
                 self.process(node.attributes.item(i))
 
     def process_children(self, node):
-        for childNode in node.childNodes:
-            self.process(childNode)
+        for child_node in node.childNodes:
+            self.process(child_node)
 
     def process_element_end_tag(self, node):
         if self.is_inline_element(node):
@@ -198,6 +198,14 @@ class XMLCustomFormatter:
         self.result.append(node.data)
 
     def postprocess(self):
+        self.result = "".join(self.result).split('\n')
+        with open("result.log", 'w') as f:
+            for line in self.result:
+                length = len(line)
+                if length > self.formatting_options.max_line_length:
+                    print("Oh no: Diese Zeile ist zu lang (" + str(length) + "): " + line)
+                r = str(length) + ": " + line + "\n"
+                f.write(r)
         self.result = self.convert_result_to_string(self.result)
         self.result = self.remove_empty_lines(self.result)
         self.result = self.remove_whitespace_before_end_of_line(self.result)
