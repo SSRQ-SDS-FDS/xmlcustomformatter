@@ -1,6 +1,6 @@
 import re as regex
 from xml.dom import minidom
-from xmlformattingoptions import XMLFormattingOptions
+from xmldomformatter.options import XMLFormattingOptions
 
 
 class XMLCustomFormatter:
@@ -62,14 +62,18 @@ class XMLCustomFormatter:
                 pass
 
     def process_attribute_node(self, node):
-        self.result.append(' ' + node.nodeName + '="' + node.nodeValue + '"')
+        self.result.append(" " + node.nodeName + '="' + node.nodeValue + '"')
 
     def process_cdata_node(self, node):
-        self.result.append("\n" + self.calculate_indentation() + "<![CDATA[" + node.nodeValue + ']]>\n')
+        self.result.append(
+            "\n" + self.calculate_indentation() + "<![CDATA[" + node.nodeValue + "]]>\n"
+        )
 
     def process_comment_node(self, node):
         node.data = self.reduce_redundant_whitespace(node.data)
-        self.result.append('\n' + self.calculate_indentation() + '<!--' + node.data + '-->\n')
+        self.result.append(
+            "\n" + self.calculate_indentation() + "<!--" + node.data + "-->\n"
+        )
 
     def process_document_node(self, node):
         self.process_children(node)
@@ -82,7 +86,9 @@ class XMLCustomFormatter:
 
     def process_document_type_external_id(self, node):
         if node.publicId:
-            self.result.append('PUBLIC "' + node.publicId + '" "' + node.systemId + '" ')
+            self.result.append(
+                'PUBLIC "' + node.publicId + '" "' + node.systemId + '" '
+            )
         elif node.systemId:
             self.result.append('SYSTEM "' + node.systemId + '" ')
 
@@ -93,7 +99,7 @@ class XMLCustomFormatter:
             subset = " ".join(subset.split())
             subset = subset.replace("<!", "\n" + self.calculate_indentation() + "<!")
             subset = subset.replace("<?", "\n" + self.calculate_indentation() + "<?")
-            self.result.append('[' + subset + '\n]')
+            self.result.append("[" + subset + "\n]")
             self.decrease_indentation_level()
 
     def process_element_node(self, node):
@@ -109,10 +115,10 @@ class XMLCustomFormatter:
             self.process_container_element_start_tag(node)
 
     def process_container_element_start_tag(self, node):
-        self.result.append('\n' + self.calculate_indentation() + '<' + node.tagName)
+        self.result.append("\n" + self.calculate_indentation() + "<" + node.tagName)
         self.process_element_attributes(node)
         self.close_start_tag(node)
-        self.result.append('\n')
+        self.result.append("\n")
         if not self.is_empty_element(node):
             self.increase_indentation_level()
 
@@ -132,23 +138,27 @@ class XMLCustomFormatter:
         elif previous.nodeType in (4, 7, 8):
             self.result.append(self.calculate_indentation())
         # Indent if it follows a text node (3) consisting of whitespace that follows a comment or cdata node
-        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) \
-                and (previous.previousSibling is not None and previous.previousSibling.nodeType in (4, 7, 8)):
+        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) and (
+            previous.previousSibling is not None
+            and previous.previousSibling.nodeType in (4, 7, 8)
+        ):
             self.result.append(self.calculate_indentation())
         # Indent if it follows a whitespace text node inside a container element
-        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) \
-                and previous.previousSibling is None \
-                and not self.is_empty_element(node.parentNode):
+        elif (
+            (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data))
+            and previous.previousSibling is None
+            and not self.is_empty_element(node.parentNode)
+        ):
             self.result.append(self.calculate_indentation())
 
     def open_start_tag(self, node):
-        self.result.append('<' + node.tagName)
+        self.result.append("<" + node.tagName)
 
     def close_start_tag(self, node):
         if self.is_empty_element(node):
-            self.result.append('/>')
+            self.result.append("/>")
         else:
-            self.result.append('>')
+            self.result.append(">")
 
     def process_element_attributes(self, node):
         if node.hasAttributes:
@@ -167,15 +177,25 @@ class XMLCustomFormatter:
 
     def process_container_element_end_tag(self, node):
         self.decrease_indentation_level()
-        self.result.append('\n' + self.calculate_indentation() + '</' + node.tagName + '>\n')
+        self.result.append(
+            "\n" + self.calculate_indentation() + "</" + node.tagName + ">\n"
+        )
 
     def process_inline_element_end_tag(self, node):
-        self.result.append('</' + node.tagName + '>')
+        self.result.append("</" + node.tagName + ">")
 
     def process_processing_instruction_node(self, node):
         node.data = self.reduce_redundant_whitespace(node.data)
         node.data = node.data.strip()
-        self.result.append('\n' + self.calculate_indentation() + '<?' + node.target + ' ' + node.data + '?>\n')
+        self.result.append(
+            "\n"
+            + self.calculate_indentation()
+            + "<?"
+            + node.target
+            + " "
+            + node.data
+            + "?>\n"
+        )
 
     def process_text_node(self, node):
         if self.is_inline_element(node.parentNode):
@@ -187,8 +207,11 @@ class XMLCustomFormatter:
         node.data = self.reduce_redundant_whitespace(node.data)
         if node.data != " ":
             previous = node.previousSibling
-            if previous is None or previous.nodeType in (4, 7, 8) or \
-                    (previous.nodeType == 1 and not self.is_inline_element(previous)):
+            if (
+                previous is None
+                or previous.nodeType in (4, 7, 8)
+                or (previous.nodeType == 1 and not self.is_inline_element(previous))
+            ):
                 node.data = self.calculate_indentation() + node.data.lstrip()
             self.result.append(node.data)
 
@@ -207,7 +230,7 @@ class XMLCustomFormatter:
 
     # Functions for postprocessing
     def postprocess_rearrange_result(self):
-        self.result = "".join(self.result).split('\n')
+        self.result = "".join(self.result).split("\n")
 
     def postprocess_result_lines(self):
         lines = self.result
@@ -225,7 +248,9 @@ class XMLCustomFormatter:
             self.result.append(line)
         else:
             if " " in line:
-                position = line.rfind(" ", number_of_spaces, self.formatting_options.max_line_length)
+                position = line.rfind(
+                    " ", number_of_spaces, self.formatting_options.max_line_length
+                )
                 if position == -1:
                     position = line.find(" ", self.formatting_options.max_line_length)
                     if position == -1:
@@ -243,12 +268,12 @@ class XMLCustomFormatter:
         return len(string) - len(string.lstrip())
 
     def write_to_output_file(self):
-        with open(self.output_file, 'w') as output_file:
+        with open(self.output_file, "w") as output_file:
             output_file.write(self.result)
 
-    # Functions for processing the indentation
+    # Functions for processing the indentat«ion
     def calculate_indentation(self):
-        return self.indentation_level * self.formatting_options.indentation * ' '
+        return self.indentation_level * self.formatting_options.indentation * " "
 
     def decrease_indentation_level(self):
         self.indentation_level -= 1
@@ -265,7 +290,10 @@ class XMLCustomFormatter:
             case 0:
                 return True
             case 1:
-                if node.firstChild.nodeType == 3 and self.remove_whitespace(node.firstChild.data) == "":
+                if (
+                    node.firstChild.nodeType == 3
+                    and self.remove_whitespace(node.firstChild.data) == ""
+                ):
                     return True
                 else:
                     return False
