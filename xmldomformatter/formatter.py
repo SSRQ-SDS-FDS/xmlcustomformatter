@@ -1,7 +1,8 @@
-import re as regex
+import re
 from xml.dom import minidom
+
+from xmldomformatter.helpers import string_manipulation as sf
 from xmldomformatter.options import Options
-import xmldomformatter.string_functions as sf
 
 
 class XMLCustomFormatter:
@@ -100,14 +101,14 @@ class XMLCustomFormatter:
             self.result.append(self.calculate_indentation())
         # Indent if it follows a text node (3) consisting of whitespace that
         # follows a comment or cdata node
-        elif (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data)) and (
+        elif (previous.nodeType == 3 and re.match(r"^\s+$", previous.data)) and (
             previous.previousSibling is not None
             and previous.previousSibling.nodeType in (4, 7, 8)
         ):
             self.result.append(self.calculate_indentation())
         # Indent if it follows a whitespace text node inside a container element
         elif (
-            (previous.nodeType == 3 and regex.match(r"^\s+$", previous.data))
+            (previous.nodeType == 3 and re.match(r"^\s+$", previous.data))
             and previous.previousSibling is None
             and not self.is_empty_element(node.parentNode)
         ):
