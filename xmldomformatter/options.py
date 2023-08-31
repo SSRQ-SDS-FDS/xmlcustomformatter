@@ -1,8 +1,10 @@
-class XMLFormattingOptions:
-    def __init__(self,
-            max_line_length: int = 80,
-            indentation: int = 4,
-            inline_elements = list | None):
-        self.max_line_length = max_line_length
-        self.indentation = indentation
-        self.inline_elements = inline_elements
+from dataclasses import dataclass, field
+
+
+@dataclass(frozen=True)
+class Options:
+    """Options for the XML formatter."""
+
+    indentation: int = field(default=4)
+    inline_elements: list[str] | None = field(default=None)
+    max_line_length: int = field(default=80)
