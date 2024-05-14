@@ -1,6 +1,6 @@
 import argparse
 
-from xmldomformatter.options import XMLFormattingOptions
+from xmldomformatter.options import Options
 from xmldomformatter.formatter import XMLCustomFormatter
 
 
@@ -21,7 +21,7 @@ def main():
     output_file = args.input_file if args.output_file is None else args.output_file
 
     list_of_tags = args.inline_tags or []
-    formatting_options = XMLFormattingOptions(
+    formatting_options = Options(
         max_line_length=80, indentation=4, inline_elements=list_of_tags
     )
 
