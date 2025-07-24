@@ -17,24 +17,24 @@ class XMLCustomFormatter:
         self.dom = None
         self.format()
 
-    def format(self):
+    def format(self) -> None:
         self.read_input_file_to_dom()
         self.add_xml_declaration()
         self.process(self.dom)
         self.postprocess()
         self.write_to_output_file()
 
-    def read_input_file_to_dom(self):
+    def read_input_file_to_dom(self) -> None:
         self.dom = minidom.parse(self.input_file)
 
-    def add_xml_declaration(self):
+    def add_xml_declaration(self) -> None:
         # This is necessary, because XML DOM does not process XML-declarations.
         # If there was one present in the input document, the parser would
         # just ignore it. Adding this declaration makes sure, that there
         # is one in the output document.
         self.result = ['<?xml version="1.0" encoding="UTF-8"?>\n']
 
-    def process(self, node):
+    def process(self, node) -> None:
         match node.nodeType:
             case 1:
                 self.process_element_node(node)
@@ -61,24 +61,24 @@ class XMLCustomFormatter:
             case 12:
                 self.process_notation_node(node)
 
-    def process_element_node(self, node):
+    def process_element_node(self, node) -> None:
         self.process_element_start_tag(node)
         self.process_all_child_nodes(node)
         self.process_element_end_tag(node)
 
-    def process_element_start_tag(self, node):
+    def process_element_start_tag(self, node) -> None:
         if self.is_inline_element(node):
             self.process_inline_element_start_tag(node)
         else:
             self.process_container_element_start_tag(node)
 
-    def process_inline_element_start_tag(self, node):
+    def process_inline_element_start_tag(self, node) -> None:
         self.determine_inline_element_indentation(node)
         self.open_start_tag(node)
         self.process_element_attributes(node)
         self.close_start_tag(node)
 
-    def process_container_element_start_tag(self, node):
+    def process_container_element_start_tag(self, node) -> None:
         self.result.append("\n" + self.calculate_indentation())
         self.open_start_tag(node)
         self.process_element_attributes(node)
@@ -87,7 +87,7 @@ class XMLCustomFormatter:
         if not self.is_empty_element(node):
             self.increase_indentation_level()
 
-    def determine_inline_element_indentation(self, node):
+    def determine_inline_element_indentation(self, node) -> None:
         # ToDO: split this function up to make it more readable
         # Depending on its context in the parent node, an inline-element has
         # to be indented.
@@ -114,63 +114,63 @@ class XMLCustomFormatter:
         ):
             self.result.append(self.calculate_indentation())
 
-    def open_start_tag(self, node):
+    def open_start_tag(self, node) -> None:
         self.result.append("<" + node.tagName)
 
-    def process_element_attributes(self, node):
+    def process_element_attributes(self, node) -> None:
         if node.hasAttributes:
             for i in range(node.attributes.length):
                 self.process(node.attributes.item(i))
 
-    def close_start_tag(self, node):
+    def close_start_tag(self, node) -> None:
         if self.is_empty_element(node):
             self.result.append("/>")
         else:
             self.result.append(">")
 
-    def process_element_end_tag(self, node):
+    def process_element_end_tag(self, node) -> None:
         if not self.is_empty_element(node):
             if self.is_inline_element(node):
                 self.process_inline_element_end_tag(node)
             else:
                 self.process_container_element_end_tag(node)
 
-    def process_inline_element_end_tag(self, node):
+    def process_inline_element_end_tag(self, node) -> None:
         self.result.append("</" + node.tagName + ">")
 
-    def process_container_element_end_tag(self, node):
+    def process_container_element_end_tag(self, node) -> None:
         self.decrease_indentation_level()
         self.result.append(
             "\n" + self.calculate_indentation() + "</" + node.tagName + ">\n"
         )
 
-    def process_all_child_nodes(self, node):
+    def process_all_child_nodes(self, node) -> None:
         if not self.is_empty_element(node):
             for child_node in node.childNodes:
                 self.process(child_node)
 
-    def process_attribute_node(self, node):
+    def process_attribute_node(self, node) -> None:
         self.result.append(" " + node.nodeName + '="' + node.nodeValue + '"')
 
-    def process_text_node(self, node):
+    def process_text_node(self, node) -> None:
         if self.is_inline_element(node.parentNode):
             self.process_text_node_inside_inline_element(node)
         else:
             self.process_text_node_inside_container_element(node)
 
-    def process_text_node_inside_inline_element(self, node):
+    def process_text_node_inside_inline_element(self, node) -> None:
         node.data = sm.reduce_redundant_whitespace(node.data)
         node.data = node.data.strip()
         self.result.append(node.data)
 
-    def process_text_node_inside_container_element(self, node):
+    def process_text_node_inside_container_element(self, node) -> None:
         node.data = sm.reduce_redundant_whitespace(node.data)
         if node.data != " ":
             self.process_text_node_depending_on_context(node)
         else:
             pass
 
-    def process_text_node_depending_on_context(self, node):
+    def process_text_node_depending_on_context(self, node) -> None:
         if self.is_indentation_needed(node.previousSibling):
             node.data = self.calculate_indentation() + node.data.lstrip()
         self.result.append(node.data)
@@ -191,20 +191,20 @@ class XMLCustomFormatter:
         else:
             return False
 
-    def process_cdata_node(self, node):
+    def process_cdata_node(self, node) -> None:
         self.result.append(
             "\n" + self.calculate_indentation() + "<![CDATA[" + node.nodeValue + "]]>\n"
         )
 
-    def process_entity_reference_node(self, node):
+    def process_entity_reference_node(self, node) -> None:
         # ToDo: Implement this to support entity reference nodes
         pass
 
-    def process_entity_node(self, node):
+    def process_entity_node(self, node) -> None:
         # ToDo: Implement this to support entity nodes
         pass
 
-    def process_processing_instruction_node(self, node):
+    def process_processing_instruction_node(self, node) -> None:
         node.data = sm.reduce_redundant_whitespace(node.data)
         node.data = node.data.strip()
         self.result.append(
@@ -217,34 +217,34 @@ class XMLCustomFormatter:
             + "?>\n"
         )
 
-    def process_comment_node(self, node):
+    def process_comment_node(self, node) -> None:
         node.data = sm.reduce_redundant_whitespace(node.data)
         self.result.append(
             "\n" + self.calculate_indentation() + "<!--" + node.data + "-->\n"
         )
 
-    def process_document_node(self, node):
+    def process_document_node(self, node) -> None:
         self.process_all_child_nodes(node)
 
-    def process_document_type_node(self, node):
+    def process_document_type_node(self, node) -> None:
         self.result.append("<!DOCTYPE " + node.name + " ")
         self.process_document_type_external_id(node)
         self.process_document_type_internal_subset(node)
         self.result.append(">")
 
-    def process_document_type_external_id(self, node):
+    def process_document_type_external_id(self, node) -> None:
         if node.publicId:
             self.process_document_type_public_id(node)
         elif node.systemId:
             self.process_document_type_system_id(node)
 
-    def process_document_type_public_id(self, node):
+    def process_document_type_public_id(self, node) -> None:
         self.result.append('PUBLIC "' + node.publicId + '" "' + node.systemId + '" ')
 
-    def process_document_type_system_id(self, node):
+    def process_document_type_system_id(self, node) -> None:
         self.result.append('SYSTEM "' + node.systemId + '" ')
 
-    def process_document_type_internal_subset(self, node):
+    def process_document_type_internal_subset(self, node) -> None:
         # ToDO: split this function up to make it more readable
         if node.internalSubset:
             self.increase_indentation_level()
@@ -255,36 +255,36 @@ class XMLCustomFormatter:
             self.result.append("[" + subset + "\n]")
             self.decrease_indentation_level()
 
-    def process_document_fragment_node(self, node):
+    def process_document_fragment_node(self, node) -> None:
         # ToDo: Implement this to support document fragment nodes
         pass
 
-    def process_notation_node(self, node):
+    def process_notation_node(self, node) -> None:
         # ToDo: Implement this to support notation nodes
         pass
 
-    def postprocess(self):
+    def postprocess(self) -> None:
         self.postprocess_rearrange_result()
         self.postprocess_result_lines()
         self.postprocess_result_as_string()
 
     # Functions for postprocessing
-    def postprocess_rearrange_result(self):
+    def postprocess_rearrange_result(self) -> None:
         self.result = "".join(self.result).split("\n")
 
-    def postprocess_result_lines(self):
+    def postprocess_result_lines(self) -> None:
         lines = self.result
         self.result = []
         for line in lines:
             self.postprocess_line(line)
 
-    def postprocess_result_as_string(self):
+    def postprocess_result_as_string(self) -> None:
         self.result = sm.convert_list_to_string(self.result)
         self.result = sm.remove_empty_lines(self.result)
         self.result = sm.remove_whitespace_before_end_of_line(self.result)
         self.result = self.result.strip()
 
-    def postprocess_line(self, line: str):
+    def postprocess_line(self, line: str) -> None:
         # Todo: split this function up to make it more readable
         number_of_spaces = self.get_current_indentation(line)
         if number_of_spaces > 0:
@@ -312,21 +312,21 @@ class XMLCustomFormatter:
                 self.result.append(line)
 
     @staticmethod
-    def get_current_indentation(string):
+    def get_current_indentation(string) -> int:
         return len(string) - len(string.lstrip())
 
-    def write_to_output_file(self):
+    def write_to_output_file(self) -> None:
         with open(self.output_file, "w") as output_file:
             output_file.write(self.result)
 
     # Functions for processing the indentation
-    def calculate_indentation(self):
+    def calculate_indentation(self) -> int:
         return self.indentation_level * self.formatting_options.indentation * " "
 
-    def decrease_indentation_level(self):
+    def decrease_indentation_level(self) -> None:
         self.indentation_level -= 1
 
-    def increase_indentation_level(self):
+    def increase_indentation_level(self) -> None:
         self.indentation_level += 1
 
     # Functions for processing the different element types
