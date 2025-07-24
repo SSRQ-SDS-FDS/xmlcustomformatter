@@ -1,15 +1,20 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
-build/
-dist/
 wheels/
 *.egg-info
+
+# Builds, dokumentation pages and so on
+build/
+dist/
+site/
 
 # Virtual environments
 .venv
 
-# VS Code
-.vscode/
-# Pycharm
+# Pytest Coverage files
+.coverage
+
+# IDEs
+.vscode
 .idea
