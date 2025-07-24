@@ -1,8 +1,8 @@
 import re
 from xml.dom import minidom
 
-from src.xmlcustomformatter import string_manipulation as sf
-from src.xmlcustomformatter.options import Options
+from stringmanipulation import StringManipulation as sm
+from options import Options
 
 
 class XMLCustomFormatter:
@@ -159,12 +159,12 @@ class XMLCustomFormatter:
             self.process_text_node_inside_container_element(node)
 
     def process_text_node_inside_inline_element(self, node):
-        node.data = sf.reduce_redundant_whitespace(node.data)
+        node.data = sm.reduce_redundant_whitespace(node.data)
         node.data = node.data.strip()
         self.result.append(node.data)
 
     def process_text_node_inside_container_element(self, node):
-        node.data = sf.reduce_redundant_whitespace(node.data)
+        node.data = sm.reduce_redundant_whitespace(node.data)
         if node.data != " ":
             self.process_text_node_depending_on_context(node)
         else:
@@ -205,7 +205,7 @@ class XMLCustomFormatter:
         pass
 
     def process_processing_instruction_node(self, node):
-        node.data = sf.reduce_redundant_whitespace(node.data)
+        node.data = sm.reduce_redundant_whitespace(node.data)
         node.data = node.data.strip()
         self.result.append(
             "\n"
@@ -218,7 +218,7 @@ class XMLCustomFormatter:
         )
 
     def process_comment_node(self, node):
-        node.data = sf.reduce_redundant_whitespace(node.data)
+        node.data = sm.reduce_redundant_whitespace(node.data)
         self.result.append(
             "\n" + self.calculate_indentation() + "<!--" + node.data + "-->\n"
         )
@@ -279,9 +279,9 @@ class XMLCustomFormatter:
             self.postprocess_line(line)
 
     def postprocess_result_as_string(self):
-        self.result = sf.convert_list_to_string(self.result)
-        self.result = sf.remove_empty_lines(self.result)
-        self.result = sf.remove_whitespace_before_end_of_line(self.result)
+        self.result = sm.convert_list_to_string(self.result)
+        self.result = sm.remove_empty_lines(self.result)
+        self.result = sm.remove_whitespace_before_end_of_line(self.result)
         self.result = self.result.strip()
 
     def postprocess_line(self, line: str):
@@ -350,7 +350,7 @@ class XMLCustomFormatter:
     def check_if_node_is_whitespace_only(node) -> bool:
         if (
             node.firstChild.nodeType == 3
-            and sf.remove_whitespace(node.firstChild.data) == ""
+            and sm.remove_whitespace(node.firstChild.data) == ""
         ):
             return True
         else:

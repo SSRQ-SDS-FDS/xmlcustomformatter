@@ -19,8 +19,19 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=0.30.0",
     "mypy>=1.17.0",
+    "pre-commit>=4.2.0",
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
     "ruff>=0.12.4",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.mypy]
+files = ["src"]
+ignore_missing_imports = true
+strict = true

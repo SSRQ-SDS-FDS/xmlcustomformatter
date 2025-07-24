@@ -1,0 +1,17 @@
+site_name: xmlcustomformatter
+nav:
+  - Home: index.md
+  - Formatter: formatter.md
+  - Options: options.md
+  - Strings: strings.md
+theme:
+  name: mkdocs
+  color_mode: dark
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - src/xmlcustomformatter
