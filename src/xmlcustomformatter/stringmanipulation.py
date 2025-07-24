@@ -1,22 +1,27 @@
 import re
 
-EMPTY_LINES: re.Pattern = re.compile(r"\n+")
-WHITESPACES: re.Pattern = re.compile(r"\s+")
-WHITESPACE_EOL: re.Pattern = re.compile(r"\s+\n")
-
 
 class StringManipulation:
-    def convert_list_to_string(result: list[str]):
+    EMPTY_LINES: re.Pattern[str] = re.compile(r"\n+")
+    WHITESPACES: re.Pattern[str] = re.compile(r"\s+")
+    WHITESPACE_EOL: re.Pattern[str] = re.compile(r"\s+\n")
+
+    @classmethod
+    def convert_list_to_string(cls, result: list[str]) -> str:
         return "\n".join(result)
 
-    def reduce_redundant_whitespace(string: str):
-        return WHITESPACES.sub(" ", string)
+    @classmethod
+    def reduce_redundant_whitespace(cls, string: str) -> str:
+        return cls.WHITESPACES.sub(" ", string)
 
-    def remove_empty_lines(string: str):
-        return EMPTY_LINES.sub("\n", string)
+    @classmethod
+    def remove_empty_lines(cls, string: str) -> str:
+        return cls.EMPTY_LINES.sub("\n", string)
 
-    def remove_whitespace(string: str):
+    @classmethod
+    def remove_whitespace(cls, string: str) -> str:
         return string.replace(" ", "")
 
-    def remove_whitespace_before_end_of_line(string: str):
-        return WHITESPACE_EOL.sub("\n", string)
+    @classmethod
+    def remove_whitespace_before_end_of_line(cls, string: str) -> str:
+        return cls.WHITESPACE_EOL.sub("\n", string)
