@@ -1,8 +1,8 @@
 import re
 from xml.dom import minidom
 
-from xmldomformatter.helpers import string_manipulation as sf
-from xmldomformatter.options import Options
+from src.xmlcustomformatter import string_manipulation as sf
+from src.xmlcustomformatter.options import Options
 
 
 class XMLCustomFormatter:

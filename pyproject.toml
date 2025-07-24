@@ -1,22 +1,26 @@
-[tool.poetry]
-authors = ["Christian Sonder <christian.sonder@unisg.ch>", "Bastian Politycki <bastian.politycki@unisg.ch>"]
-description = "A customizable XML formatter based on Python's minidom."
-name = "xmldomformatter"
-readme = "README.md"
+[project]
+name = "xmlcustomformatter"
 version = "0.1.0"
+description = "A customizable formatter for XML-files"
+readme = "README.md"
+authors = [
+    { name = "Christian Sonder", email = "christian.sonder@unisg.ch" },
+    { name = "Bastian Politycki", email = "bastian.politycki@unisg.ch" },
+]
+requires-python = ">=3.13"
+dependencies = []
 
-[tool.poetry.scripts]
-xdf = "xmldomformatter.cli:main"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
-mypy = "^1.5.0"
-pytest = "^7.4.0"
-ruff = "^0.0.284"
+[project.scripts]
+xmlcustomformatter = "xmlcustomformatter:main"
 
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core"]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.0",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.12.4",
+]
