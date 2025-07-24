@@ -6,4 +6,5 @@ in a customizable way.
 # Underlying Technology
 
 The xmlcustomformatter is written in Python and uses the built-in package
-for the Document Object Model (DOM) API.
+[xml.dom.minidom](https://docs.python.org/3/library/xml.dom.minidom.html)
+for Pythons Document Object Model (DOM) API.
