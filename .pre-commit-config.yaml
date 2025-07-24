@@ -1,0 +1,34 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.4
+    hooks:
+      - id: ruff-check
+        name: Run ruff check before commit
+        args: [ --fix ]
+      - id: ruff-format
+        name: Run ruff format before commit
+
+  - repo: local
+    hooks:
+      - id: mkdocs
+        name: Run mkdocs before commit
+        entry: uv run mkdocs build
+        language: system
+        pass_filenames: false
+
+#     Change order: first mypy, then pytest, then mkdocs
+#     Uncomment, when ready to use
+
+#     - id: mypy
+#       name: Run mypy with uv
+#       entry: uv run mypy src/
+#       language: system
+#       types: [ python ]
+#       pass_filenames: false
+#
+#     - id: pytest
+#       name: Run pytest before commit
+#       entry: uv run pytest --cov=. --cov-report term-missing:skip-covered
+#       language: system
+#       types: [ python ]
+#       pass_filenames: false
