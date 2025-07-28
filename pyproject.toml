@@ -32,6 +32,6 @@ dev = [
 pythonpath = ["src"]
 
 [tool.mypy]
-files = ["src"]
+files = ["src", "tests"]
 ignore_missing_imports = true
 strict = true
