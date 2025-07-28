@@ -1,1 +1,1 @@
-**::: stringmanipulation.StringManipulation**
+::: stringmanipulation.StringManipulation
