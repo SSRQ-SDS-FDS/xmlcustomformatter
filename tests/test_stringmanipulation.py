@@ -4,20 +4,20 @@ from xmlcustomformatter.stringmanipulation import StringManipulation
 
 
 @pytest.mark.parametrize(
-    "input_list, expected",
+    "input, expected",
     [
         ([" a", "b c", "d"], " a\nb c\nd"),
         ([], ""),
         (["single"], "single"),
     ],
 )
-def test_convert_list_to_string(input_list, expected):
-    result = StringManipulation.convert_list_to_string(input_list)
+def test_convert_list_to_string(input: list[str], expected: str) -> None:
+    result = StringManipulation.convert_list_to_string(input)
     assert result == expected
 
 
 @pytest.mark.parametrize(
-    "input_str, expected",
+    "input, expected",
     [
         ("Hello   World", "Hello World"),
         ("Tabs\tand\nNewlines\n\n", "Tabs and Newlines "),
@@ -25,13 +25,13 @@ def test_convert_list_to_string(input_list, expected):
         ("Multiple \n\n\n Lines", "Multiple Lines"),
     ],
 )
-def test_reduce_redundant_whitespace(input_str, expected):
-    result = StringManipulation.reduce_redundant_whitespace(input_str)
+def test_reduce_redundant_whitespace(input: str, expected: str) -> None:
+    result = StringManipulation.reduce_redundant_whitespace(input)
     assert result == expected
 
 
 @pytest.mark.parametrize(
-    "input_str, expected",
+    "input, expected",
     [
         ("Line1\nLine2", "Line1\nLine2"),
         ("Line1\n\nLine2", "Line1\nLine2"),
@@ -40,13 +40,13 @@ def test_reduce_redundant_whitespace(input_str, expected):
         ("\n\n\nStart with empty lines", "\nStart with empty lines"),
     ],
 )
-def test_remove_empty_lines(input_str, expected):
-    result = StringManipulation.remove_empty_lines(input_str)
+def test_remove_empty_lines(input: str, expected: str) -> None:
+    result = StringManipulation.remove_empty_lines(input)
     assert result == expected
 
 
 @pytest.mark.parametrize(
-    "input_str, expected",
+    "input, expected",
     [
         ("Remove spaces", "Removespaces"),
         ("  Leading and trailing  ", "Leadingandtrailing"),
@@ -54,13 +54,13 @@ def test_remove_empty_lines(input_str, expected):
         ("NoSpaces", "NoSpaces"),
     ],
 )
-def test_remove_whitespace(input_str, expected):
-    result = StringManipulation.remove_whitespace(input_str)
+def test_remove_whitespace(input: str, expected: str) -> None:
+    result = StringManipulation.remove_whitespace(input)
     assert result == expected
 
 
 @pytest.mark.parametrize(
-    "input_str, expected",
+    "input, expected",
     [
         ("Text  \nNext line", "Text\nNext line"),
         ("Text  \t\nNext line", "Text\nNext line"),
@@ -68,6 +68,6 @@ def test_remove_whitespace(input_str, expected):
         ("Text\n Next line", "Text\n Next line"),
     ],
 )
-def test_remove_whitespace_before_end_of_line(input_str, expected):
-    result = StringManipulation.remove_whitespace_before_eol(input_str)
+def test_remove_whitespace_before_end_of_line(input: str, expected: str) -> None:
+    result = StringManipulation.remove_whitespace_before_eol(input)
     assert result == expected
