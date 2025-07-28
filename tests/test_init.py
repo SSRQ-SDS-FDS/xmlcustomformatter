@@ -1,12 +1,10 @@
 from xmlcustomformatter import main
+from pytest import MonkeyPatch, CaptureFixture
 
 
-def test_main_prints_hello(monkeypatch, capsys) -> None:
-    # Act
+def test_main_prints_hello(
+    monkeypatch: MonkeyPatch, capsys: CaptureFixture[str]
+) -> None:
     main()
-
-    # Capture printed output
     captured = capsys.readouterr()
-
-    # Assert
     assert captured.out.strip() == "Hello from xmlcustomformatter!"
