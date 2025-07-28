@@ -18,3 +18,6 @@ site/
 # IDEs
 .vscode
 .idea
+
+# Mac stuff
+.DS_Store
