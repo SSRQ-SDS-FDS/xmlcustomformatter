@@ -18,7 +18,7 @@ class TestXMLCustomFormatterInitialization:
     @pytest.fixture
     def xml_content(self) -> str:
         """Returns XML content as a string"""
-        return """<?xml version="1.0" encoding="UTF-8"?><root/>"""
+        return """<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><root/>"""
 
     @pytest.fixture
     def xml_file(self, tmp_path, xml_content) -> str:
