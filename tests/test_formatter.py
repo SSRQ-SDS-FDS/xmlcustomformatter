@@ -2,6 +2,7 @@ import pytest
 
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
+from xml.dom.minidom import Document
 
 
 class TestXMLCustomFormatterInitialization:
@@ -11,22 +12,36 @@ class TestXMLCustomFormatterInitialization:
 
     @pytest.fixture
     def options(self) -> Options:
-        """Return an Options object"""
+        """Returns an Options object"""
         return Options(2, 100, ("div", "span"))
 
     @pytest.fixture
-    def default_formatter(self) -> XMLCustomFormatter:
-        """Returns an instance with default formatting options."""
-        return XMLCustomFormatter("input.xml", "output.xml")
+    def xml_content(self) -> str:
+        """Returns XML content as a string"""
+        return """<?xml version="1.0" encoding="UTF-8"?><root/>"""
 
     @pytest.fixture
-    def custom_formatter(self, options: Options) -> XMLCustomFormatter:
-        """Returns an instance with custom formatting options."""
-        return XMLCustomFormatter("input.xml", "output.xml", options)
+    def xml_file(self, tmp_path, xml_content) -> str:
+        """Returns a file path as a string"""
+        file_path = tmp_path / "input.xml"
+        file_path.write_text(xml_content, encoding="utf-8")
+        return str(file_path)
 
-    def test_sets_input_file(self, default_formatter: XMLCustomFormatter) -> None:
+    @pytest.fixture
+    def default_formatter(self, xml_file) -> XMLCustomFormatter:
+        """Returns an instance with default formatting options."""
+        return XMLCustomFormatter(xml_file, "output.xml")
+
+    @pytest.fixture
+    def custom_formatter(self, options: Options, xml_file) -> XMLCustomFormatter:
+        """Returns an instance with custom formatting options."""
+        return XMLCustomFormatter(xml_file, "output.xml", options)
+
+    def test_sets_input_file(
+        self, default_formatter: XMLCustomFormatter, xml_file: str
+    ) -> None:
         """Checks that the input_file attribute is set correctly upon initialization."""
-        assert default_formatter.input_file == "input.xml"
+        assert default_formatter.input_file == xml_file
 
     def test_sets_output_file(self, default_formatter: XMLCustomFormatter) -> None:
         """Checks that the output_file attribute is set correctly upon initialization."""
@@ -67,3 +82,24 @@ class TestXMLCustomFormatterInitialization:
     ) -> None:
         """Checks that the inline_elements attribute is set correctly upon initialization."""
         assert custom_formatter.options.inline_elements == options.inline_elements
+
+    def test_dom_instance(self, default_formatter: XMLCustomFormatter) -> None:
+        """
+        Checks that the input file is correctly parsed to a Document object.
+        """
+        assert isinstance(default_formatter._dom, Document)
+
+    def test_dom_root_element(self, default_formatter: XMLCustomFormatter) -> None:
+        """
+        Checks that the root element is correctly parsed from the input file.
+        """
+        assert default_formatter._dom.documentElement.tagName == "root"
+
+    def test_file_not_found(self) -> None:
+        """
+        Test that initializing XMLCustomFormatter with a non-existent input file
+        raises a FileNotFoundError.
+        """
+        non_existing_path = "does_not_exist.xml"
+        with pytest.raises(FileNotFoundError):
+            XMLCustomFormatter(non_existing_path, "output.xml")

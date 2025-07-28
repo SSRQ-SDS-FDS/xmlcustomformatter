@@ -31,20 +31,17 @@ class XMLCustomFormatter:
         self.input_file = input_file
         self.output_file = output_file
         self.options = formatting_options or Options()
+        self._dom = minidom.parse(self.input_file)
         self._indentation_level = 0
         self._result = None
-        self._dom = None
+
         # self.format()
 
     def format(self) -> None:
-        self.read_input_file_to_dom()
         self.add_xml_declaration()
         self.process(self._dom)
         self.postprocess()
         self.write_to_output_file()
-
-    def read_input_file_to_dom(self) -> None:
-        self._dom = minidom.parse(self.input_file)
 
     def add_xml_declaration(self) -> None:
         # This is necessary, because XML DOM does not process XML-declarations.
