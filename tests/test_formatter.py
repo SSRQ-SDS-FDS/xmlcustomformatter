@@ -103,3 +103,11 @@ class TestXMLCustomFormatterInitialization:
         non_existing_path = "does_not_exist.xml"
         with pytest.raises(FileNotFoundError):
             XMLCustomFormatter(non_existing_path, "output.xml")
+
+    def test_indentation_level_at_start(
+        self, default_formatter: XMLCustomFormatter
+    ) -> None:
+        assert default_formatter._indentation_level == 0
+
+    def test_result_at_start(self, default_formatter: XMLCustomFormatter) -> None:
+        assert default_formatter._result == list[str]
