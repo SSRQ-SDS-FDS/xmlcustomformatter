@@ -14,17 +14,17 @@ repos:
         language: system
         pass_filenames: false
 
-      - id: mkdocs
-        name: Run mkdocs before commit
-        entry: uv run mkdocs build
-        language: system
-        pass_filenames: false
-
       - id: pytest
         name: Run pytest before commit
         entry: uv run pytest --cov=. --cov-report term-missing:skip-covered
         language: system
         types: [ python ]
+        pass_filenames: false
+
+      - id: mkdocs
+        name: Run mkdocs before commit
+        entry: uv run mkdocs build
+        language: system
         pass_filenames: false
 
 #     Change order: first mypy, then pytest, then mkdocs
