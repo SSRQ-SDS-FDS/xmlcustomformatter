@@ -17,7 +17,7 @@ class Options:
     max_line_length: int = field(default=80)
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         Validates that all elements in `inline_elements` are of type `str`.
 
