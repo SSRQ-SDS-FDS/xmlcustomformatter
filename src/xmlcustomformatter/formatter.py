@@ -281,7 +281,7 @@ class XMLCustomFormatter:
     def postprocess_result_as_string(self) -> None:
         self.result = sm.convert_list_to_string(self.result)
         self.result = sm.remove_empty_lines(self.result)
-        self.result = sm.remove_whitespace_before_end_of_line(self.result)
+        self.result = sm.remove_whitespace_before_eol(self.result)
         self.result = self.result.strip()
 
     def postprocess_line(self, line: str) -> None:

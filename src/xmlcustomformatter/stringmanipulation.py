@@ -67,7 +67,7 @@ class StringManipulation:
         return string.replace(" ", "")
 
     @classmethod
-    def remove_whitespace_before_end_of_line(cls, string: str) -> str:
+    def remove_whitespace_before_eol(cls, string: str) -> str:
         """
         Remove whitespace that appears immediately before a newline character.
 

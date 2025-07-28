@@ -69,5 +69,5 @@ def test_remove_whitespace(input_str, expected):
     ],
 )
 def test_remove_whitespace_before_end_of_line(input_str, expected):
-    result = StringManipulation.remove_whitespace_before_end_of_line(input_str)
+    result = StringManipulation.remove_whitespace_before_eol(input_str)
     assert result == expected
