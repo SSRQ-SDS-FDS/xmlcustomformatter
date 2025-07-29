@@ -11,6 +11,14 @@ class TestXMLCustomFormatterInitialization:
     """
 
     @pytest.fixture
+    def indentation_at_start(self) -> int:
+        return 0
+
+    @pytest.fixture
+    def result_at_start(self) -> list[str]:
+        return list[str]
+
+    @pytest.fixture
     def options(self) -> Options:
         """Returns an Options object"""
         return Options(2, 100, ("div", "span"))
@@ -105,9 +113,11 @@ class TestXMLCustomFormatterInitialization:
             XMLCustomFormatter(non_existing_path, "output.xml")
 
     def test_indentation_level_at_start(
-        self, default_formatter: XMLCustomFormatter
+        self, default_formatter: XMLCustomFormatter, indentation_at_start
     ) -> None:
-        assert default_formatter._indentation_level == 0
+        assert default_formatter._indentation_level == indentation_at_start
 
-    def test_result_at_start(self, default_formatter: XMLCustomFormatter) -> None:
-        assert default_formatter._result == list[str]
+    def test_result_at_start(
+        self, default_formatter: XMLCustomFormatter, result_at_start
+    ) -> None:
+        assert default_formatter._result == result_at_start
