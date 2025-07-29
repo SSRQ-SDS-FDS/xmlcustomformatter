@@ -14,6 +14,13 @@ repos:
         language: system
         pass_filenames: false
 
+      - id: mypy
+        name: Run mypy with uv
+        entry: uv run mypy
+        language: system
+        types: [ python ]
+        pass_filenames: false
+
       - id: pytest
         name: Run pytest before commit
         entry: uv run pytest --cov=. --cov-report term-missing:skip-covered
@@ -26,13 +33,3 @@ repos:
         entry: uv run mkdocs build
         language: system
         pass_filenames: false
-
-#     Change order: first mypy, then pytest, then mkdocs
-#     Uncomment, when ready to use
-
-#     - id: mypy
-#       name: Run mypy with uv
-#       entry: uv run mypy src/
-#       language: system
-#       types: [ python ]
-#       pass_filenames: false
