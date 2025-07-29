@@ -33,7 +33,7 @@ class XMLCustomFormatter:
         self.options = formatting_options or Options()
         self._dom = minidom.parse(self.input_file)
         self._indentation_level = 0
-        self._result = list[str]
+        self._result: list[str] = []
 
     def format(self) -> None:
         self.add_xml_declaration()

@@ -52,7 +52,7 @@ class TestDefaultOptions:
         assert default_options.max_line_length == default_max_line_length
 
     def test_default_inline_elements(
-        self, default_options: Options, default_inline_elements
+        self, default_options: Options, default_inline_elements: tuple[()]
     ) -> None:
         """
         Tests that the default inline_elements tuple is correctly set.
@@ -102,7 +102,7 @@ class TestCustomOptions:
             [True],  # includes boolean
         ],
     )
-    def test_custom_invalid_inline_elements(self, invalid_input: list) -> None:
+    def test_custom_invalid_inline_elements(self, invalid_input: list[str]) -> None:
         """
         Tests that custom invalid inline_elements raise a TypeError.
         """

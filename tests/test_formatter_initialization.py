@@ -1,5 +1,6 @@
 import pytest
 
+from pathlib import Path
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
 from xml.dom.minidom import Document
@@ -12,11 +13,13 @@ class TestXMLCustomFormatterInitialization:
 
     @pytest.fixture
     def indentation_at_start(self) -> int:
+        """Returns the indentation level at the start of the formatting process."""
         return 0
 
     @pytest.fixture
     def result_at_start(self) -> list[str]:
-        return list[str]
+        """Returns the empty result at the start of the formatting process."""
+        return list()
 
     @pytest.fixture
     def options(self) -> Options:
@@ -29,19 +32,19 @@ class TestXMLCustomFormatterInitialization:
         return """<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><root/>"""
 
     @pytest.fixture
-    def xml_file(self, tmp_path, xml_content) -> str:
+    def xml_file(self, tmp_path: Path, xml_content: str) -> str:
         """Returns a file path as a string"""
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content, encoding="utf-8")
         return str(file_path)
 
     @pytest.fixture
-    def default_formatter(self, xml_file) -> XMLCustomFormatter:
+    def default_formatter(self, xml_file: str) -> XMLCustomFormatter:
         """Returns an instance with default formatting options."""
         return XMLCustomFormatter(xml_file, "output.xml")
 
     @pytest.fixture
-    def custom_formatter(self, options: Options, xml_file) -> XMLCustomFormatter:
+    def custom_formatter(self, options: Options, xml_file: str) -> XMLCustomFormatter:
         """Returns an instance with custom formatting options."""
         return XMLCustomFormatter(xml_file, "output.xml", options)
 
@@ -97,11 +100,22 @@ class TestXMLCustomFormatterInitialization:
         """
         assert isinstance(default_formatter._dom, Document)
 
-    def test_dom_root_element(self, default_formatter: XMLCustomFormatter) -> None:
+    def test_dom_root_element_is_not_none(
+        self, default_formatter: XMLCustomFormatter
+    ) -> None:
         """
         Checks that the root element is correctly parsed from the input file.
         """
-        assert default_formatter._dom.documentElement.tagName == "root"
+        assert default_formatter._dom.documentElement is not None
+
+    def test_dom_root_element_is_root(
+        self, default_formatter: XMLCustomFormatter
+    ) -> None:
+        """
+        Checks that the root element is correctly parsed from the input file.
+        """
+        if default_formatter._dom.documentElement is not None:
+            assert default_formatter._dom.documentElement.tagName == "root"
 
     def test_file_not_found(self) -> None:
         """
@@ -113,11 +127,11 @@ class TestXMLCustomFormatterInitialization:
             XMLCustomFormatter(non_existing_path, "output.xml")
 
     def test_indentation_level_at_start(
-        self, default_formatter: XMLCustomFormatter, indentation_at_start
+        self, default_formatter: XMLCustomFormatter, indentation_at_start: int
     ) -> None:
         assert default_formatter._indentation_level == indentation_at_start
 
     def test_result_at_start(
-        self, default_formatter: XMLCustomFormatter, result_at_start
+        self, default_formatter: XMLCustomFormatter, result_at_start: list[str]
     ) -> None:
         assert default_formatter._result == result_at_start
