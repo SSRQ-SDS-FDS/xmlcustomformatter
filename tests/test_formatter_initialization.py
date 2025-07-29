@@ -19,7 +19,7 @@ class TestXMLCustomFormatterInitialization:
     @pytest.fixture
     def result_at_start(self) -> list[str]:
         """Returns the empty result at the start of the formatting process."""
-        return list()
+        return ['<?xml version="1.0" encoding="UTF-8"?>']
 
     @pytest.fixture
     def options(self) -> Options:
@@ -29,7 +29,7 @@ class TestXMLCustomFormatterInitialization:
     @pytest.fixture
     def xml_content(self) -> str:
         """Returns XML content as a string"""
-        return """<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><root/>"""
+        return """<?xml version="1.0" encoding="UTF-8"?><root/>"""
 
     @pytest.fixture
     def xml_file(self, tmp_path: Path, xml_content: str) -> str:
@@ -134,4 +134,5 @@ class TestXMLCustomFormatterInitialization:
     def test_result_at_start(
         self, default_formatter: XMLCustomFormatter, result_at_start: list[str]
     ) -> None:
+        print(repr(default_formatter._dom.standalone))
         assert default_formatter._result == result_at_start

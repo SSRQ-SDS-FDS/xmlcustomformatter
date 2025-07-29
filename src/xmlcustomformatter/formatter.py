@@ -20,6 +20,9 @@ class XMLCustomFormatter:
         options (Options): Formatting options object.
     """
 
+    default_version: str = "1.0"
+    default_encoding: str = "UTF-8"
+
     def __init__(
         self,
         input_file: str,
@@ -32,20 +35,31 @@ class XMLCustomFormatter:
         self._dom = minidom.parse(self.input_file)
         self._indentation_level = 0
         self._result: list[str] = []
+        self._format()
 
-    # def format(self) -> None:
-    #     self.add_xml_declaration()
-    #     self.process(self._dom)
-    #     self.postprocess()
-    #     self.write_to_output_file()
-    #
-    # def add_xml_declaration(self) -> None:
-    #     # This is necessary, because XML DOM does not process XML-declarations.
-    #     # If there was one present in the input document, the parser would
-    #     # just ignore it. Adding this declaration makes sure that there
-    #     # is one in the output document.
-    #     self._result = ['<?xml version="1.0" encoding="UTF-8"?>\n']
-    #
+    def _format(self) -> None:
+        self._process_xml_declaration()
+        #     self.process(self._dom)
+        #     self.postprocess()
+        #     self.write_to_output_file()
+
+    def _process_xml_declaration(self) -> None:
+        if self._dom.version is None:
+            self._dom.version = self.default_version
+
+        if self._dom.encoding is None:
+            self._dom.encoding = self.default_encoding
+
+        if self._dom.standalone is None:
+            declaration = (
+                f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}"?>'
+            )
+        elif self._dom.standalone:
+            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}" standalone="yes"?>'
+        else:
+            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}" standalone="no"?>'
+        self._result.append(declaration)
+
     # def process(self, node) -> None:
     #     match node.nodeType:
     #         case 1:
