@@ -48,9 +48,7 @@ class TestXMLCustomFormatterInitialization:
         """Returns an instance with custom formatting options."""
         return XMLCustomFormatter(xml_file, "output.xml", options)
 
-    def test_sets_input_file(
-        self, default_formatter: XMLCustomFormatter, xml_file: str
-    ) -> None:
+    def test_sets_input_file(self, default_formatter: XMLCustomFormatter, xml_file: str) -> None:
         """Checks that the input_file attribute is set correctly upon initialization."""
         assert default_formatter.input_file == xml_file
 
@@ -58,15 +56,11 @@ class TestXMLCustomFormatterInitialization:
         """Checks that the output_file attribute is set correctly upon initialization."""
         assert default_formatter.output_file == "output.xml"
 
-    def test_sets_default_formatting_options(
-        self, default_formatter: XMLCustomFormatter
-    ) -> None:
+    def test_sets_default_formatting_options(self, default_formatter: XMLCustomFormatter) -> None:
         """Verifies that the default Options object is used if no custom options are provided."""
         assert isinstance(default_formatter.options, Options)
 
-    def test_custom_formatter_is_instance(
-        self, custom_formatter: XMLCustomFormatter
-    ) -> None:
+    def test_custom_formatter_is_instance(self, custom_formatter: XMLCustomFormatter) -> None:
         """Ensures that a custom Options object is correctly assigned to the formatter."""
         assert isinstance(custom_formatter.options, Options)
 
@@ -100,17 +94,13 @@ class TestXMLCustomFormatterInitialization:
         """
         assert isinstance(default_formatter._dom, Document)
 
-    def test_dom_root_element_is_not_none(
-        self, default_formatter: XMLCustomFormatter
-    ) -> None:
+    def test_dom_root_element_is_not_none(self, default_formatter: XMLCustomFormatter) -> None:
         """
         Checks that the root element is correctly parsed from the input file.
         """
         assert default_formatter._dom.documentElement is not None
 
-    def test_dom_root_element_is_root(
-        self, default_formatter: XMLCustomFormatter
-    ) -> None:
+    def test_dom_root_element_is_root(self, default_formatter: XMLCustomFormatter) -> None:
         """
         Checks that the root element is correctly parsed from the input file.
         """

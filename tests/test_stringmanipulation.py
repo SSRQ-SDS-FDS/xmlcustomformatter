@@ -83,9 +83,7 @@ class TestStringManipulation:
             ("Text\n Next line", "Text\n Next line"),
         ],
     )
-    def test_remove_whitespace_before_end_of_line(
-        self, input: str, expected: str
-    ) -> None:
+    def test_remove_whitespace_before_end_of_line(self, input: str, expected: str) -> None:
         """
         Tests removal of trailing whitespace that occurs just before a newline character.
         """

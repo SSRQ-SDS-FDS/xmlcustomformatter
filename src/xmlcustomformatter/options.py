@@ -26,6 +26,4 @@ class Options:
         """
         invalid = [el for el in self.inline_elements if not isinstance(el, str)]
         if invalid:
-            raise TypeError(
-                f"inline_elements must contain only strings. Invalid: {invalid}"
-            )
+            raise TypeError(f"inline_elements must contain only strings. Invalid: {invalid}")

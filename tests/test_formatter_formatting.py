@@ -72,9 +72,7 @@ class TestXMLCustomFormatterFormatting:
         file_path.write_text(xml_content, encoding=encoding)
         return str(file_path)
 
-    def test_xml_declaration(
-        self, xml_test_case: tuple[str, str, str, str], xml_file: str
-    ) -> None:
+    def test_xml_declaration(self, xml_test_case: tuple[str, str, str, str], xml_file: str) -> None:
         test_name, _, _, expected = xml_test_case
         formatter = XMLCustomFormatter(xml_file, "output.xml")
         assert formatter._result[0] == expected

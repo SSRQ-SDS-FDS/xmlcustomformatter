@@ -28,10 +28,13 @@ dev = [
     "ruff>=0.12.4",
 ]
 
-[tool.pytest.ini_options]
-pythonpath = ["src"]
-
 [tool.mypy]
 files = ["src", "tests"]
 ignore_missing_imports = true
 strict = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100

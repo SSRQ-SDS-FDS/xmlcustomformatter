@@ -51,13 +51,19 @@ class XMLCustomFormatter:
             self._dom.encoding = self.default_encoding
 
         if self._dom.standalone is None:
-            declaration = (
-                f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}"?>'
-            )
+            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}"?>'
         elif self._dom.standalone:
-            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}" standalone="yes"?>'
+            declaration = (
+                f'<?xml version="{self._dom.version}" '
+                f'encoding="{self._dom.encoding}" '
+                f'standalone="yes"?>'
+            )
         else:
-            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}" standalone="no"?>'
+            declaration = (
+                f'<?xml version="{self._dom.version}" '
+                f'encoding="{self._dom.encoding}" '
+                f'standalone="no"?>'
+            )
         self._result.append(declaration)
 
     # def process(self, node) -> None:

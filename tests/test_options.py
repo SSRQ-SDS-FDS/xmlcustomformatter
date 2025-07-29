@@ -35,9 +35,7 @@ class TestDefaultOptions:
         """
         return ()
 
-    def test_default_indentation(
-        self, default_options: Options, default_indentation: int
-    ) -> None:
+    def test_default_indentation(self, default_options: Options, default_indentation: int) -> None:
         """
         Tests that the default indentation value is correctly set.
         """
@@ -106,7 +104,5 @@ class TestCustomOptions:
         """
         Tests that custom invalid inline_elements raise a TypeError.
         """
-        with pytest.raises(
-            TypeError, match="inline_elements must contain only strings"
-        ):
+        with pytest.raises(TypeError, match="inline_elements must contain only strings"):
             Options(inline_elements=tuple(invalid_input))
