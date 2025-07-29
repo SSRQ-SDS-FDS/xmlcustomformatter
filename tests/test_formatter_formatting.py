@@ -60,19 +60,21 @@ class TestXMLCustomFormatterFormatting:
             ),
         ]
     )
-    def xml_test_case(self, request: FixtureRequest) -> tuple[str, str, str, str]:
-        """Yields test_name, encoding, xml_content, expected_result"""
+    def xml_declarations(self, request: FixtureRequest) -> tuple[str, str, str, str]:
+        """Yields test_name, encoding, XML declaration, expected_result"""
         return cast(tuple[str, str, str, str], request.param)
 
     @pytest.fixture
-    def xml_file(self, tmp_path: Path, xml_test_case: tuple[str, str, str, str]) -> str:
+    def xml_file(self, tmp_path: Path, xml_declarations: tuple[str, str, str, str]) -> str:
         """Writes the XML content to a temp file and returns the path as a string."""
-        _, encoding, xml_content, _ = xml_test_case
+        _, encoding, xml_content, _ = xml_declarations
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content, encoding=encoding)
         return str(file_path)
 
-    def test_xml_declaration(self, xml_test_case: tuple[str, str, str, str], xml_file: str) -> None:
-        test_name, _, _, expected = xml_test_case
+    def test_xml_declaration(
+        self, xml_declarations: tuple[str, str, str, str], xml_file: str
+    ) -> None:
+        test_name, _, _, expected = xml_declarations
         formatter = XMLCustomFormatter(xml_file, "output.xml")
         assert formatter._result[0] == expected

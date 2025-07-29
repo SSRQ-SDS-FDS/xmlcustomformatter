@@ -44,27 +44,32 @@ class XMLCustomFormatter:
         #     self.write_to_output_file()
 
     def _process_xml_declaration(self) -> None:
-        if self._dom.version is None:
-            self._dom.version = self.default_version
+        version = self._normalize_version()
+        encoding = self._normalize_encoding()
+        standalone = self._normalize_standalone()
+        xml_declaration = self._construct_xml_declaration(version, encoding, standalone)
+        self._result.append(xml_declaration)
 
+    def _construct_xml_declaration(self, version: str, encoding: str, standalone: str) -> str:
+        return f"<?xml{version}{encoding}{standalone}?>"
+
+    def _normalize_encoding(self) -> str:
         if self._dom.encoding is None:
             self._dom.encoding = self.default_encoding
+        return f' encoding="{self._dom.encoding}"'
 
+    def _normalize_standalone(self) -> str:
         if self._dom.standalone is None:
-            declaration = f'<?xml version="{self._dom.version}" encoding="{self._dom.encoding}"?>'
+            return ""
         elif self._dom.standalone:
-            declaration = (
-                f'<?xml version="{self._dom.version}" '
-                f'encoding="{self._dom.encoding}" '
-                f'standalone="yes"?>'
-            )
+            return ' standalone="yes"'
         else:
-            declaration = (
-                f'<?xml version="{self._dom.version}" '
-                f'encoding="{self._dom.encoding}" '
-                f'standalone="no"?>'
-            )
-        self._result.append(declaration)
+            return ' standalone="no"'
+
+    def _normalize_version(self) -> str:
+        if self._dom.version is None:
+            self._dom.version = self.default_version
+        return f' version="{self._dom.version}"'
 
     # def process(self, node) -> None:
     #     match node.nodeType:
