@@ -1,5 +1,19 @@
 from typing import Optional
 from xml.dom import minidom
+from xml.dom.minidom import (
+    Node,
+    Element,
+    Attr,
+    Text,
+    CDATASection,
+    Entity,
+    ProcessingInstruction,
+    Comment,
+    Document,
+    DocumentType,
+    DocumentFragment,
+    Notation,
+)
 
 from xmlcustomformatter.options import Options
 
@@ -18,6 +32,10 @@ class XMLCustomFormatter:
         input_file (str): Input XML file path.
         output_file (str): Output file path.
         options (Options): Formatting options object.
+
+    Default values:
+        If no information is provided in the XML file which is to be processed
+        XML Version 1.0 and encoding UTF-8 are used.
     """
 
     default_version: str = "1.0"
@@ -29,17 +47,19 @@ class XMLCustomFormatter:
         output_file: str,
         formatting_options: Optional[Options] = None,
     ):
+        """
+        Initializes a XMLCustomFormatter instance.
+        The input XML file is automatically parsed with the built-in
+        minidom parser and formatted.
+        """
         self.input_file = input_file
         self.output_file = output_file
         self.options = formatting_options or Options()
         self._dom = minidom.parse(self.input_file)
         self._indentation_level = 0
         self._result: list[str] = []
-        self._format()
-
-    def _format(self) -> None:
         self._process_xml_declaration()
-        #     self.process(self._dom)
+        self._process_node(self._dom)
         #     self.postprocess()
         #     self.write_to_output_file()
 
@@ -71,33 +91,73 @@ class XMLCustomFormatter:
             self._dom.version = self.default_version
         return f' version="{self._dom.version}"'
 
-    # def process(self, node) -> None:
-    #     match node.nodeType:
-    #         case 1:
-    #             self.process_element_node(node)
-    #         case 2:
-    #             self.process_attribute_node(node)
-    #         case 3:
-    #             self.process_text_node(node)
-    #         case 4:
-    #             self.process_cdata_node(node)
-    #         case 5:
-    #             self.process_entity_reference_node(node)
-    #         case 6:
-    #             self.process_entity_node(node)
-    #         case 7:
-    #             self.process_processing_instruction_node(node)
-    #         case 8:
-    #             self.process_comment_node(node)
-    #         case 9:
-    #             self.process_document_node(node)
-    #         case 10:
-    #             self.process_document_type_node(node)
-    #         case 11:
-    #             self.process_document_fragment_node(node)
-    #         case 12:
-    #             self.process_notation_node(node)
-    #
+    def _process_node(self, node: Node) -> None:
+        """Delegates processing of nodes to specialized methods."""
+        match node:
+            case Element():
+                self._process_element_node(node)
+            case Attr():
+                self._process_attribute_node(node)
+            case Text():
+                self._process_text_node(node)
+            case CDATASection():
+                self._process_cdata_section_node(node)
+            # The following case is commented out, because xml.dom.minidom
+            # uses an expat-based parser, which will resolve all
+            # entity references. Thus, EntityReference is not
+            # implemented in xml.dom.minidom - added for completeness.
+            # case EntityReference():
+            #    self._process_entity_reference_node(node)
+            case Entity():
+                self._process_entity_node(node)
+            case ProcessingInstruction():
+                self._process_processing_instruction_node(node)
+            case Comment():
+                self._process_comment_node(node)
+            case Document():
+                self._process_document_node(node)
+            case DocumentType():
+                self._process_document_type_node(node)
+            case DocumentFragment():
+                self._process_document_fragment_node(node)
+            case Notation():
+                self._process_notation_node(node)
+            case _:
+                raise TypeError(f"Wrong node type: {repr(node)}")
+
+    def _process_element_node(self, node: Element) -> None:
+        raise NotImplementedError("_process_element_node is not implemented")
+
+    def _process_attribute_node(self, node: Attr) -> None:
+        raise NotImplementedError("_process_attribute_node is not implemented")
+
+    def _process_text_node(self, node: Text) -> None:
+        raise NotImplementedError("_process_text_node is not implemented")
+
+    def _process_cdata_section_node(self, node: CDATASection) -> None:
+        raise NotImplementedError("_process_cdata_section_node is not implemented")
+
+    def _process_entity_node(self, node: Entity) -> None:
+        raise NotImplementedError("_process_entity_node is not implemented")
+
+    def _process_processing_instruction_node(self, node: ProcessingInstruction) -> None:
+        raise NotImplementedError("_process_processing_instruction_node is not implemented")
+
+    def _process_comment_node(self, node: Comment) -> None:
+        raise NotImplementedError("_process_comment_node is not implemented")
+
+    def _process_document_node(self, node: Document) -> None:
+        pass
+
+    def _process_document_type_node(self, node: DocumentType) -> None:
+        raise NotImplementedError("_process_document_type_node is not implemented")
+
+    def _process_document_fragment_node(self, node: DocumentFragment) -> None:
+        raise NotImplementedError("_process_document_fragment_node is not implemented")
+
+    def _process_notation_node(self, node: Notation) -> None:
+        raise NotImplementedError("_process_notation_node is not implemented")
+
     # def process_element_node(self, node) -> None:
     #     self.process_element_start_tag(node)
     #     self.process_all_child_nodes(node)
