@@ -64,6 +64,10 @@ class XMLCustomFormatter:
         #     self.write_to_output_file()
 
     def _process_xml_declaration(self) -> None:
+        """
+        Processes the XML declaration. If version, encoding or standalone are not
+        set, then default values will be used. The declaration is append to the result.
+        """
         version = self._normalize_version()
         encoding = self._normalize_encoding()
         standalone = self._normalize_standalone()
@@ -71,14 +75,20 @@ class XMLCustomFormatter:
         self._result.append(xml_declaration)
 
     def _construct_xml_declaration(self, version: str, encoding: str, standalone: str) -> str:
+        """Constructs the XML declaration."""
         return f"<?xml{version}{encoding}{standalone}?>"
 
     def _normalize_encoding(self) -> str:
+        """Normalizes the encoding part of the XML declaration."""
         if self._dom.encoding is None:
             self._dom.encoding = self.default_encoding
         return f' encoding="{self._dom.encoding}"'
 
     def _normalize_standalone(self) -> str:
+        """
+        Normalizes the standalone part of the XML declaration.
+        If there is none, no default value will be used, because standalone is optional.
+        """
         if self._dom.standalone is None:
             return ""
         elif self._dom.standalone:
@@ -87,21 +97,28 @@ class XMLCustomFormatter:
             return ' standalone="no"'
 
     def _normalize_version(self) -> str:
+        """Normalizes the version part of the XML declaration."""
         if self._dom.version is None:
             self._dom.version = self.default_version
         return f' version="{self._dom.version}"'
 
     def _process_node(self, node: Node) -> None:
-        """Delegates processing of nodes to specialized methods."""
+        """Delegates the processing of nodes to specialized methods."""
         match node:
             case Element():
                 self._process_element_node(node)
             case Attr():
                 self._process_attribute_node(node)
             case Text():
-                self._process_text_node(node)
-            case CDATASection():
-                self._process_cdata_section_node(node)
+                # CDATASection() shares the same interface as Text()
+                # as CDATASection is a child class of Text().
+                # Therefore CDATASection() will be treated as an instance
+                # of Text() by minidom. So you have to distinguish by
+                # nodeType. These two cases are exhaustive.
+                if node.nodeType == Node.TEXT_NODE:
+                    self._process_text_node(node)
+                else:
+                    self._process_cdata_section_node(node)
             # The following case is commented out, because xml.dom.minidom
             # uses an expat-based parser, which will resolve all
             # entity references. Thus, EntityReference is not

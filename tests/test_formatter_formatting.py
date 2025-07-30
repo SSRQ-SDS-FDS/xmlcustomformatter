@@ -11,6 +11,7 @@ from xml.dom.minidom import (
     Notation,
     ProcessingInstruction,
     Text,
+    Node,
 )
 
 import pytest
@@ -88,12 +89,14 @@ class TestXMLCustomFormatterFormatting:
     def test_xml_declaration(
         self, xml_declarations: tuple[str, str, str, str], xml_file: str
     ) -> None:
+        """Tests the XML declaration is being constructed correctly."""
         test_name, _, _, expected = xml_declarations
         formatter = XMLCustomFormatter(xml_file, "output.xml")
         assert formatter._result[0] == expected
 
     @pytest.fixture
     def xml_dummy(self, tmp_path: Path) -> XMLCustomFormatter:
+        """Yields an instance of the XMLCustomFormatter class."""
         xml = "<root/>"
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml, encoding="UTF-8")
@@ -141,3 +144,8 @@ class TestXMLCustomFormatterFormatting:
     def test_xml_text(self, xml_dummy: XMLCustomFormatter) -> None:
         with pytest.raises(NotImplementedError):
             xml_dummy._process_node(Text())
+
+    def test_xml_wrong_node(self, xml_dummy: XMLCustomFormatter) -> None:
+        """Tests that an unhandled node type raises an exception."""
+        with pytest.raises(TypeError):
+            xml_dummy._process_node(Node())
