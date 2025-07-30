@@ -66,7 +66,7 @@ class XMLCustomFormatter:
     def _process_xml_declaration(self) -> None:
         """
         Processes the XML declaration. If version, encoding or standalone are not
-        set, then default values will be used. The declaration is append to the result.
+        set, then default values will be used. The declaration is appended to the result.
         """
         version = self._normalize_version()
         encoding = self._normalize_encoding()
