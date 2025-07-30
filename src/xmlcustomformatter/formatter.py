@@ -56,7 +56,7 @@ class XMLCustomFormatter:
         self.output_file = output_file
         self.options = formatting_options or Options()
         self._dom = minidom.parse(self.input_file)
-        self._indentation_level = 0
+        self._indentation_level: int = 0
         self._result: list[str] = []
         self._process_xml_declaration()
         self._process_node(self._dom)
@@ -437,12 +437,18 @@ class XMLCustomFormatter:
     # def calculate_indentation(self) -> int:
     #     return self._indentation_level * self.options.indentation * " "
     #
-    # def decrease_indentation_level(self) -> None:
-    #     self._indentation_level -= 1
-    #
-    # def increase_indentation_level(self) -> None:
-    #     self._indentation_level += 1
-    #
+    def _decrease_indentation_level(self) -> None:
+        """Decreases the indentation level by 1 as long as the indentation level is >= 0."""
+        if self._indentation_level == 0:
+            raise ValueError(
+                f"Indentation level cannot be lower then zero {self._indentation_level}"
+            )
+        self._indentation_level -= 1
+
+    def _increase_indentation_level(self) -> None:
+        """Increases the indentation level by 1"""
+        self._indentation_level += 1
+
     # # Functions for processing the different element types
     # def is_empty_element(self, node) -> bool:
     #     # An element is empty if one of these requirements is met:
