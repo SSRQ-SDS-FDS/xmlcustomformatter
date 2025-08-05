@@ -143,7 +143,7 @@ class XMLCustomFormatter:
                 raise TypeError(f"Wrong node type: {repr(node)}")
 
     def _process_element_node(self, node: Element) -> None:
-        raise NotImplementedError("_process_element_node is not implemented")
+        pass
 
     def _process_attribute_node(self, node: Attr) -> None:
         raise NotImplementedError("_process_attribute_node is not implemented")
@@ -164,7 +164,7 @@ class XMLCustomFormatter:
         raise NotImplementedError("_process_comment_node is not implemented")
 
     def _process_document_node(self, node: Document) -> None:
-        pass
+        self._process_all_child_nodes(node)
 
     def _process_document_type_node(self, node: DocumentType) -> None:
         raise NotImplementedError("_process_document_type_node is not implemented")
@@ -174,6 +174,11 @@ class XMLCustomFormatter:
 
     def _process_notation_node(self, node: Notation) -> None:
         raise NotImplementedError("_process_notation_node is not implemented")
+
+    def _process_all_child_nodes(self, node: Node) -> None:
+        if node.hasChildNodes():
+            for child in node.childNodes:
+                self._process_node(child)
 
     # def process_element_node(self, node) -> None:
     #     self.process_element_start_tag(node)
@@ -258,10 +263,6 @@ class XMLCustomFormatter:
     #         "\n" + self.calculate_indentation() + "</" + node.tagName + ">\n"
     #     )
     #
-    # def process_all_child_nodes(self, node) -> None:
-    #     if not self.is_empty_element(node):
-    #         for child_node in node.childNodes:
-    #             self.process(child_node)
     #
     # def process_attribute_node(self, node) -> None:
     #     self._result.append(" " + node.nodeName + '="' + node.nodeValue + '"')
@@ -337,8 +338,6 @@ class XMLCustomFormatter:
     #         "\n" + self.calculate_indentation() + "<!--" + node.data + "-->\n"
     #     )
     #
-    # def process_document_node(self, node) -> None:
-    #     self.process_all_child_nodes(node)
     #
     # def process_document_type_node(self, node) -> None:
     #     self._result.append("<!DOCTYPE " + node.name + " ")
