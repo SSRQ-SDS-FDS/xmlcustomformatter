@@ -162,10 +162,7 @@ class XMLCustomFormatter:
         raise NotImplementedError("_process_processing_instruction_node is not implemented")
 
     def _process_comment_node(self, comment: Comment) -> None:
-        """
-        Processes comment nodes:
-        Current behaviour: Comments start on a new line, do not increase indentation,
-        """
+        """Processes comment nodes."""
         if self.options.comments_have_trailing_spaces:
             start = "<!-- "
             end = " -->"
@@ -173,8 +170,13 @@ class XMLCustomFormatter:
             start = "<!--"
             end = "-->"
 
+        if self.options.comments_start_new_lines:
+            newline = "\n"
+        else:
+            newline = ""
+
         self._result.append(
-            "\n"
+            newline
             + self._indentation(self._calculate_indentation())
             + start
             + SM.reduce_redundant_whitespace(comment.data).strip()

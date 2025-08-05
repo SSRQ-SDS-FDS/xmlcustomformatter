@@ -60,6 +60,12 @@ class TestXMLCustomFormatterComments:
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!--Foo Bar-->""",
                 Options(comments_have_trailing_spaces=False),
             ),
+            (
+                "comments_don't_start_newlines",
+                """<!--  Foo  Bar  --><root/>""",
+                """<?xml version="1.0" encoding="UTF-8"?><!--Foo Bar-->""",
+                Options(comments_have_trailing_spaces=False, comments_start_new_lines=False),
+            ),
         ]
     )
     def comments(self, request: FixtureRequest) -> tuple[str, str, str, Options]:

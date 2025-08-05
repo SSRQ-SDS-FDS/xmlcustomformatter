@@ -22,6 +22,7 @@ class Options:
 
     # Options for comments
     comments_have_trailing_spaces: bool = field(default=True)
+    comments_start_new_lines: bool = field(default=True)
 
     def __post_init__(self) -> None:
         """
