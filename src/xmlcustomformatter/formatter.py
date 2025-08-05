@@ -144,44 +144,49 @@ class XMLCustomFormatter:
                 raise TypeError(f"Wrong node type: {repr(node)}")
 
     def _process_element_node(self, node: Element) -> None:
+        """ToDo: Implement this"""
         pass
 
     def _process_attribute_node(self, node: Attr) -> None:
+        """ToDo: Implement this"""
         raise NotImplementedError("_process_attribute_node is not implemented")
 
     def _process_text_node(self, node: Text) -> None:
+        """ToDo: Implement this"""
         raise NotImplementedError("_process_text_node is not implemented")
 
     def _process_cdata_section_node(self, node: CDATASection) -> None:
+        """ToDo: Implement this"""
         raise NotImplementedError("_process_cdata_section_node is not implemented")
 
     def _process_entity_node(self, node: Entity) -> None:
+        """ToDo: Implement this"""
         raise NotImplementedError("_process_entity_node is not implemented")
 
     def _process_processing_instruction_node(self, node: ProcessingInstruction) -> None:
+        """ToDo: Implement this"""
         raise NotImplementedError("_process_processing_instruction_node is not implemented")
 
     def _process_comment_node(self, comment: Comment) -> None:
         """Processes comment nodes."""
-        if self.options.comments_have_trailing_spaces:
-            start = "<!-- "
-            end = " -->"
-        else:
-            start = "<!--"
-            end = "-->"
+        newline = self._set_comment_newline()
+        indentation = self._indentation(self._calculate_indentation())
+        start = self._set_comment_start()
+        data = self._normalize_comment_data(comment)
+        end = self._set_comment_end()
+        self._result.append(newline + indentation + start + data + end)
 
-        if self.options.comments_start_new_lines:
-            newline = "\n"
-        else:
-            newline = ""
+    def _normalize_comment_data(self, comment: Comment) -> str:
+        return SM.reduce_redundant_whitespace(comment.data).strip()
 
-        self._result.append(
-            newline
-            + self._indentation(self._calculate_indentation())
-            + start
-            + SM.reduce_redundant_whitespace(comment.data).strip()
-            + end
-        )
+    def _set_comment_newline(self) -> str:
+        return "\n" if self.options.comments_start_new_lines else ""
+
+    def _set_comment_start(self) -> str:
+        return "<!-- " if self.options.comments_have_trailing_spaces else "<!--"
+
+    def _set_comment_end(self) -> str:
+        return " -->" if self.options.comments_have_trailing_spaces else "-->"
 
     def _process_document_node(self, node: Document) -> None:
         self._process_all_child_nodes(node)
