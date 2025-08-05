@@ -436,6 +436,9 @@ class XMLCustomFormatter:
     # def calculate_indentation(self) -> int:
     #     return self._indentation_level * self.options.indentation * " "
     #
+    def _calculate_indentation(self) -> int:
+        return self._indentation_level * self.options.indentation
+
     def _decrease_indentation_level(self) -> None:
         """Decreases the indentation level by 1 as long as the indentation level is >= 0."""
         if self._indentation_level == 0:

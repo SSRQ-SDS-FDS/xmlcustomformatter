@@ -54,3 +54,21 @@ class TestXMLCustomFormatterIndentation:
         formatter._decrease_indentation_level()
         formatter._decrease_indentation_level()
         assert formatter._indentation_level == 0
+
+    def test_calculate_indentation_at_start(self, xml_file: str) -> None:
+        """Tests that the calculation of the indentation is correct."""
+        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        assert formatter._calculate_indentation() == 0
+
+    def test_calculate_indentation_after_increasing(self, xml_file: str) -> None:
+        """Tests that the calculation of the indentation is correct."""
+        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        formatter._increase_indentation_level()
+        assert formatter._calculate_indentation() == formatter.options.indentation
+
+    def test_calculate_indentation_after_decreasing(self, xml_file: str) -> None:
+        """Tests that the calculation of the indentation is correct."""
+        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        formatter._increase_indentation_level()
+        formatter._decrease_indentation_level()
+        assert formatter._calculate_indentation() == 0
