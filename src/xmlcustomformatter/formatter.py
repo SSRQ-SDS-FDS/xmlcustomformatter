@@ -171,10 +171,10 @@ class XMLCustomFormatter:
         target = pi.target
         data = self._normalize_processing_instruction_data(pi)
         end = "?>"
-        self._result.append(newline + indentation + start + target + " " + data + end + newline)
+        self._result.append(newline + indentation + start + target + data + end + newline)
 
     def _normalize_processing_instruction_data(self, pi: ProcessingInstruction) -> str:
-        return SM.reduce_redundant_whitespace(pi.data).strip()
+        return " " + SM.reduce_redundant_whitespace(pi.data).strip()
 
     def _set_processing_instruction_newline(self) -> str:
         return "\n" if self.options.processing_instructions_start_new_lines else ""
