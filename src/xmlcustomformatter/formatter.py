@@ -168,10 +168,10 @@ class XMLCustomFormatter:
         newline = self._set_processing_instruction_newline()
         indentation = self._indentation(self._calculate_indentation())
         start = "<?"
-        target = pi.target + " "
+        target = pi.target
         data = self._normalize_processing_instruction_data(pi)
         end = "?>"
-        self._result.append(newline + indentation + start + target + data + end)
+        self._result.append(newline + indentation + start + target + " " + data + end + newline)
 
     def _normalize_processing_instruction_data(self, pi: ProcessingInstruction) -> str:
         return SM.reduce_redundant_whitespace(pi.data).strip()
@@ -186,7 +186,7 @@ class XMLCustomFormatter:
         start = self._set_comment_start()
         data = self._normalize_comment_data(comment)
         end = self._set_comment_end()
-        self._result.append(newline + indentation + start + data + end)
+        self._result.append(newline + indentation + start + data + end + newline)
 
     def _normalize_comment_data(self, comment: Comment) -> str:
         return SM.reduce_redundant_whitespace(comment.data).strip()
@@ -300,7 +300,6 @@ class XMLCustomFormatter:
     #         "\n" + self.calculate_indentation() + "</" + node.tagName + ">\n"
     #     )
     #
-    #
     # def process_attribute_node(self, node) -> None:
     #     self._result.append(" " + node.nodeName + '="' + node.nodeValue + '"')
     #
@@ -355,19 +354,6 @@ class XMLCustomFormatter:
     # def process_entity_node(self, node) -> None:
     #     # ToDo: Implement this to support entity nodes
     #     pass
-    #
-    # def process_processing_instruction_node(self, node) -> None:
-    #     node.data = sm.reduce_redundant_whitespace(node.data)
-    #     node.data = node.data.strip()
-    #     self._result.append(
-    #         "\n"
-    #         + self.calculate_indentation()
-    #         + "<?"
-    #         + node.target
-    #         + " "
-    #         + node.data
-    #         + "?>\n"
-    #     )
     #
     # def process_document_type_node(self, node) -> None:
     #     self._result.append("<!DOCTYPE " + node.name + " ")

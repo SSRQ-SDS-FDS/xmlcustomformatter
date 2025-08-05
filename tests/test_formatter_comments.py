@@ -15,13 +15,13 @@ class TestXMLCustomFormatterComments:
             (
                 "comment_before_root",
                 """<!--Foo--><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n""",
                 Options(),
             ),
             (
                 "comment_after_declaration",
                 """<?xml version="1.0"?><!--Foo--><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n""",
                 Options(),
             ),
             (  # ToDo: Yet to implement when elements are being processes
@@ -33,31 +33,31 @@ class TestXMLCustomFormatterComments:
             (
                 "comment_after_root",
                 """<root/><!--Foo-->""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n""",
                 Options(),
             ),
             (
                 "comment_with_trailing_spaces",
                 """<!--  Foo  --><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n""",
                 Options(),
             ),
             (
                 "comment_with_line_breaks_spaces",
                 """<!--\nFoo\n--><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n""",
                 Options(),
             ),
             (
                 "comment_with_normalized_spaces",
                 """<!--  Foo  \n Bar  --><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo Bar -->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo Bar -->\n""",
                 Options(),
             ),
             (
                 "comment_with_normalized_spaces_no_trailing_spaces",
                 """<!--  Foo  \n Bar  --><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<!--Foo Bar-->""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!--Foo Bar-->\n""",
                 Options(comments_have_trailing_spaces=False),
             ),
             (
@@ -81,7 +81,7 @@ class TestXMLCustomFormatterComments:
         return str(file_path)
 
     def test_xml_comment(self, comments: tuple[str, str, str, Options], xml_file: str) -> None:
-        """Tests Comment nodes are formatted correctly."""
+        """Checks that comment nodes are formatted correctly."""
         test_name, _, expected, options = comments
         formatter = XMLCustomFormatter(xml_file, "output.xml", options)
         assert "".join(formatter._result) == expected

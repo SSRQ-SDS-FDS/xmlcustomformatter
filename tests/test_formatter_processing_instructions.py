@@ -15,13 +15,13 @@ class TestXMLCustomFormatterProcessingInstructions:
             (
                 "pi_before_root",
                 """<?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
                 Options(),
             ),
             (
                 "pi_after_declaration",
                 """<?xml version="1.0"?><?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
                 Options(),
             ),
             (  # ToDo: Yet to implement when elements are being processes
@@ -33,19 +33,19 @@ class TestXMLCustomFormatterProcessingInstructions:
             (
                 "pi_after_root",
                 """<root/><?foo bar?>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
                 Options(),
             ),
             (
                 "pi_with_line_breaks_spaces",
                 """<?foo bar\n   baz\n  bat?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar baz bat?>""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar baz bat?>\n""",
                 Options(),
             ),
             (
                 "pi_with_normalized_spaces",
                 """<?foo  \n bar \n  ?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
                 Options(),
             ),
             (
