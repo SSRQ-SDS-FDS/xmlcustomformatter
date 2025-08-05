@@ -434,11 +434,13 @@ class XMLCustomFormatter:
     #
 
     def _indentation(self, count: int) -> str:
+        """Returns a string consisting of count space characters."""
         if count < 0:
             raise ValueError("Indentation may not be negative.")
         return count * " "
 
     def _calculate_indentation(self) -> int:
+        """Calculates the indentation depending on the indentation level and the Options."""
         return self._indentation_level * self.options.indentation
 
     def _decrease_indentation_level(self) -> None:
