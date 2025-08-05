@@ -1,7 +1,6 @@
 from xml.dom.minidom import (
     Attr,
     CDATASection,
-    Comment,
     Document,
     DocumentFragment,
     DocumentType,
@@ -33,10 +32,6 @@ class TestXMLCustomFormatterFormatting:
     def test_xml_cdata_section(self, xml_dummy: XMLCustomFormatter) -> None:
         with pytest.raises(NotImplementedError):
             xml_dummy._process_node(CDATASection())
-
-    def test_xml_comment(self, xml_dummy: XMLCustomFormatter) -> None:
-        with pytest.raises(NotImplementedError):
-            xml_dummy._process_node(Comment(""))
 
     def test_xml_document(self, xml_dummy: XMLCustomFormatter) -> None:
         xml_dummy._process_node(Document())

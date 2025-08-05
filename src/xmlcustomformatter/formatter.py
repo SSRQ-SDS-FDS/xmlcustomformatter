@@ -16,6 +16,7 @@ from xml.dom.minidom import (
 )
 
 from xmlcustomformatter.options import Options
+from xmlcustomformatter.stringmanipulation import StringManipulation as SM
 
 
 class XMLCustomFormatter:
@@ -160,8 +161,20 @@ class XMLCustomFormatter:
     def _process_processing_instruction_node(self, node: ProcessingInstruction) -> None:
         raise NotImplementedError("_process_processing_instruction_node is not implemented")
 
-    def _process_comment_node(self, node: Comment) -> None:
-        raise NotImplementedError("_process_comment_node is not implemented")
+    def _process_comment_node(self, comment: Comment) -> None:
+        """
+        Processes comment nodes:
+        Current behaviour: Comments start on a new line, do not increase indentation,
+        and have a single blank space at the beginning and the end.
+        May be customizable with the help of the Options object.
+        """
+        self._result.append(
+            "\n"
+            + self._indentation(self._calculate_indentation())
+            + "<!-- "
+            + SM.reduce_redundant_whitespace(comment.data).strip()
+            + " -->"
+        )
 
     def _process_document_node(self, node: Document) -> None:
         self._process_all_child_nodes(node)
@@ -331,13 +344,6 @@ class XMLCustomFormatter:
     #         + node.data
     #         + "?>\n"
     #     )
-    #
-    # def process_comment_node(self, node) -> None:
-    #     node.data = sm.reduce_redundant_whitespace(node.data)
-    #     self._result.append(
-    #         "\n" + self.calculate_indentation() + "<!--" + node.data + "-->\n"
-    #     )
-    #
     #
     # def process_document_type_node(self, node) -> None:
     #     self._result.append("<!DOCTYPE " + node.name + " ")
