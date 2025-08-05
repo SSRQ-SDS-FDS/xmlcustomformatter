@@ -432,10 +432,12 @@ class XMLCustomFormatter:
     #     with open(self.output_file, "w") as output_file:
     #         output_file.write(self._result)
     #
-    # # Functions for processing the indentation
-    # def calculate_indentation(self) -> int:
-    #     return self._indentation_level * self.options.indentation * " "
-    #
+
+    def _indentation(self, count: int) -> str:
+        if count < 0:
+            raise ValueError("Indentation may not be negative.")
+        return count * " "
+
     def _calculate_indentation(self) -> int:
         return self._indentation_level * self.options.indentation
 

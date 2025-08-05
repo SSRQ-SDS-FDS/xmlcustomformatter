@@ -72,3 +72,22 @@ class TestXMLCustomFormatterIndentation:
         formatter._increase_indentation_level()
         formatter._decrease_indentation_level()
         assert formatter._calculate_indentation() == 0
+
+    @pytest.mark.parametrize(
+        "count, expected",
+        [
+            (0, ""),
+            (4, "    "),
+            (8, "        "),
+        ],
+    )
+    def test_indentation_(self, xml_file: str, count: int, expected: str) -> None:
+        """Tests that the indentation is returned correctly."""
+        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        assert formatter._indentation(count) == expected
+
+    def test_negative_indentation_(self, xml_file: str) -> None:
+        """Tests that negative indentation raises a ValueError."""
+        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        with pytest.raises(ValueError):
+            formatter._indentation(-1)
