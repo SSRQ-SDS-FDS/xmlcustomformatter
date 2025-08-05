@@ -163,9 +163,21 @@ class XMLCustomFormatter:
         """ToDo: Implement this"""
         raise NotImplementedError("_process_entity_node is not implemented")
 
-    def _process_processing_instruction_node(self, node: ProcessingInstruction) -> None:
-        """ToDo: Implement this"""
-        raise NotImplementedError("_process_processing_instruction_node is not implemented")
+    def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
+        """Processes comment nodes."""
+        newline = self._set_processing_instruction_newline()
+        start = "<?"
+        target = pi.target
+        data = self._normalize_processing_instruction_data(pi)
+        indentation = self._indentation(self._calculate_indentation())
+        end = "?>"
+        self._result.append(newline + indentation + start + target + " " + data + end)
+
+    def _normalize_processing_instruction_data(self, pi: ProcessingInstruction) -> str:
+        return SM.reduce_redundant_whitespace(pi.data).strip()
+
+    def _set_processing_instruction_newline(self) -> str:
+        return "\n" if self.options.processing_instructions_start_new_lines else ""
 
     def _process_comment_node(self, comment: Comment) -> None:
         """Processes comment nodes."""

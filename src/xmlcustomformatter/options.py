@@ -24,6 +24,9 @@ class Options:
     comments_have_trailing_spaces: bool = field(default=True)
     comments_start_new_lines: bool = field(default=True)
 
+    # Options for processing instructions
+    processing_instructions_start_new_lines: bool = field(default=True)
+
     def __post_init__(self) -> None:
         """
         Validates that all elements in `inline_elements` are of type `str`.

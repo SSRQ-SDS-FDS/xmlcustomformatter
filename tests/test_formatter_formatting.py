@@ -6,7 +6,6 @@ from xml.dom.minidom import (
     DocumentType,
     Entity,
     Notation,
-    ProcessingInstruction,
     Text,
     Node,
 )
@@ -55,10 +54,6 @@ class TestXMLCustomFormatterFormatting:
     def test_xml_notation(self, xml_dummy: XMLCustomFormatter) -> None:
         with pytest.raises(NotImplementedError):
             xml_dummy._process_node(Notation("name", "foo", "bar"))
-
-    def test_xml_processing_instruction(self, xml_dummy: XMLCustomFormatter) -> None:
-        with pytest.raises(NotImplementedError):
-            xml_dummy._process_node(ProcessingInstruction("target", "data"))
 
     def test_xml_text(self, xml_dummy: XMLCustomFormatter) -> None:
         with pytest.raises(NotImplementedError):
