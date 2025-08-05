@@ -13,9 +13,15 @@ class Options:
             during formatting. All elements must be strings.
     """
 
+    # Main options
     indentation: int = field(default=4)
     max_line_length: int = field(default=80)
+
+    # Options for elements
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
+
+    # Options for comments
+    comments_have_trailing_spaces: bool = field(default=True)
 
     def __post_init__(self) -> None:
         """

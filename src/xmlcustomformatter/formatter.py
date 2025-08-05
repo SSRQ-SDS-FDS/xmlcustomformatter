@@ -165,15 +165,20 @@ class XMLCustomFormatter:
         """
         Processes comment nodes:
         Current behaviour: Comments start on a new line, do not increase indentation,
-        and have a single blank space at the beginning and the end.
-        May be customizable with the help of the Options object.
         """
+        if self.options.comments_have_trailing_spaces:
+            start = "<!-- "
+            end = " -->"
+        else:
+            start = "<!--"
+            end = "-->"
+
         self._result.append(
             "\n"
             + self._indentation(self._calculate_indentation())
-            + "<!-- "
+            + start
             + SM.reduce_redundant_whitespace(comment.data).strip()
-            + " -->"
+            + end
         )
 
     def _process_document_node(self, node: Document) -> None:
