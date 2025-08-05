@@ -164,14 +164,14 @@ class XMLCustomFormatter:
         raise NotImplementedError("_process_entity_node is not implemented")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
-        """Processes comment nodes."""
+        """Processes processing instruction nodes."""
         newline = self._set_processing_instruction_newline()
-        start = "<?"
-        target = pi.target
-        data = self._normalize_processing_instruction_data(pi)
         indentation = self._indentation(self._calculate_indentation())
+        start = "<?"
+        target = pi.target + " "
+        data = self._normalize_processing_instruction_data(pi)
         end = "?>"
-        self._result.append(newline + indentation + start + target + " " + data + end)
+        self._result.append(newline + indentation + start + target + data + end)
 
     def _normalize_processing_instruction_data(self, pi: ProcessingInstruction) -> str:
         return SM.reduce_redundant_whitespace(pi.data).strip()
