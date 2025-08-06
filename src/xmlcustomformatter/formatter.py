@@ -471,33 +471,10 @@ class XMLCustomFormatter:
         """Increases the indentation level by 1"""
         self._indentation_level += 1
 
-    # # Functions for processing the different element types
-    # def is_empty_element(self, node) -> bool:
-    #     # An element is empty if one of these requirements is met:
-    #     # 1) it has no child nodes at all
-    #     # 2) it has exactly one child node, that is a text (3) node consisting
-    #     #    of whitespace only
-    #     match node.childNodes.length:
-    #         case 0:
-    #             return True
-    #         case 1:
-    #             if self.check_if_node_is_whitespace_only(node):
-    #                 return True
-    #             else:
-    #                 return False
-    #         case _:
-    #             return False
-    #
-    # @staticmethod
-    # def check_if_node_is_whitespace_only(node) -> bool:
-    #     if (
-    #         node.firstChild.nodeType == 3
-    #         and sm.remove_whitespace(node.firstChild.data) == ""
-    #     ):
-    #         return True
-    #     else:
-    #         return False
-    #
+    @staticmethod
+    def _is_empty_element(element: Element) -> bool:
+        return not element.hasChildNodes()
+
     # def is_inline_element(self, node: minidom.Element) -> bool:
     #     if (
     #         self.options.inline_elements is not None
