@@ -14,7 +14,7 @@ class StringManipulation:
     @classmethod
     def convert_list_to_string(cls, result: list[str]) -> str:
         """
-        Join a list of strings into a single string separated by newlines.
+        Joins a list of strings into a single string separated by newlines.
 
         Args:
             result (list[str]): The list of strings to join.
@@ -27,7 +27,7 @@ class StringManipulation:
     @classmethod
     def reduce_redundant_whitespace(cls, string: str) -> str:
         """
-        Replace consecutive whitespace characters with a single space.
+        Replaces consecutive whitespace characters with a single space.
 
         Args:
             string (str): The input string containing redundant whitespace.
@@ -40,7 +40,7 @@ class StringManipulation:
     @classmethod
     def remove_empty_lines(cls, string: str) -> str:
         """
-        Remove consecutive empty lines by collapsing multiple newlines into one.
+        Removes consecutive empty lines by collapsing multiple newlines into one.
 
         Args:
             string (str): The input string potentially containing empty lines.
@@ -53,7 +53,7 @@ class StringManipulation:
     @classmethod
     def remove_whitespace(cls, string: str) -> str:
         """
-        Remove all space characters from the input string.
+        Removes all space characters from the input string.
 
         Note:
             This does not remove tabs or newline characters, only spaces.
@@ -69,7 +69,7 @@ class StringManipulation:
     @classmethod
     def remove_whitespace_before_eol(cls, string: str) -> str:
         """
-        Remove whitespace that appears immediately before a newline character.
+        Removes whitespace that appears immediately before a newline character.
 
         Args:
             string (str): The input string that may contain trailing whitespace.
@@ -78,3 +78,16 @@ class StringManipulation:
             str: A string where whitespace before line breaks is removed.
         """
         return cls.WHITESPACE_EOL.sub("\n", string)
+
+    @classmethod
+    def escape_double_quotes(cls, string: str) -> str:
+        """
+        Escapes double quote charaters by their entity representation.
+
+        Args:
+            string (str): The input string that may contain quotes.
+
+        Returns:
+            str: A string where quotes are escaped.
+        """
+        return string.replace('"', "&quot;")

@@ -89,3 +89,18 @@ class TestStringManipulation:
         """
         result = StringManipulation.remove_whitespace_before_eol(input)
         assert result == expected
+
+    @pytest.mark.parametrize(
+        "input, expected",
+        [
+            ("Text text text", "Text text text"),
+            ("Text 'text' text", "Text 'text' text"),
+            ('Text "text" text', "Text &quot;text&quot; text"),
+        ],
+    )
+    def test_escape_double_quotes(self, input: str, expected: str) -> None:
+        """
+        Tests escaping of double quotes.
+        """
+        result = StringManipulation.escape_double_quotes(input)
+        assert result == expected
