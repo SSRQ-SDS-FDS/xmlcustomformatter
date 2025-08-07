@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, cast
 from xml.dom import minidom
 from xml.dom.minidom import (
     Node,
@@ -6,13 +6,10 @@ from xml.dom.minidom import (
     Attr,
     Text,
     CDATASection,
-    Entity,
     ProcessingInstruction,
     Comment,
     Document,
     DocumentType,
-    DocumentFragment,
-    Notation,
 )
 
 from xmlcustomformatter.options import Options
@@ -75,7 +72,8 @@ class XMLCustomFormatter:
         xml_declaration = self._construct_xml_declaration(version, encoding, standalone)
         self._result.append(xml_declaration)
 
-    def _construct_xml_declaration(self, version: str, encoding: str, standalone: str) -> str:
+    @staticmethod
+    def _construct_xml_declaration(version: str, encoding: str, standalone: str) -> str:
         """Constructs the XML declaration."""
         return f"<?xml{version}{encoding}{standalone}?>"
 
@@ -106,62 +104,135 @@ class XMLCustomFormatter:
     def _process_node(self, node: Node) -> None:
         """Delegates the processing of nodes to specialized methods."""
         match node:
-            case Element():
-                self._process_element_node(node)
             case Attr():
                 self._process_attribute_node(node)
-            case Text():
-                # CDATASection() shares the same interface as Text()
-                # as CDATASection is a child class of Text().
-                # Therefore CDATASection() will be treated as an instance
-                # of Text() by minidom. So you have to distinguish by
-                # nodeType. These two cases are exhaustive.
-                if node.nodeType == Node.TEXT_NODE:
-                    self._process_text_node(node)
-                else:
-                    self._process_cdata_section_node(node)
-            # The following case is commented out, because xml.dom.minidom
-            # uses an expat-based parser, which will resolve all
-            # entity references. Thus, EntityReference is not
-            # implemented in xml.dom.minidom - added for completeness.
-            # case EntityReference():
-            #    self._process_entity_reference_node(node)
-            case Entity():
-                self._process_entity_node(node)
-            case ProcessingInstruction():
-                self._process_processing_instruction_node(node)
             case Comment():
                 self._process_comment_node(node)
             case Document():
                 self._process_document_node(node)
             case DocumentType():
                 self._process_document_type_node(node)
-            case DocumentFragment():
-                self._process_document_fragment_node(node)
-            case Notation():
-                self._process_notation_node(node)
+            case Element():
+                self._process_element_node(node)
+            case ProcessingInstruction():
+                self._process_processing_instruction_node(node)
+            case Text():
+                # CDATASection() shares the same interface as Text().
+                # Therefore CDATASection() will be treated as an instance
+                # of Text() by minidom. So you have to distinguish by the
+                # nodeType property. These two cases are exhaustive.
+                if node.nodeType == Node.TEXT_NODE:
+                    self._process_text_node(node)
+                else:
+                    self._process_cdata_section_node(node)
             case _:
                 raise TypeError(f"Wrong node type: {repr(node)}")
+            #
+            # The following cases are commented out because of different reasons:
+            #
+            # case CDATASection():
+            #     # This case cannot be reached as CDATASection is a child class
+            #     # of Text. Every CDATASection in the XML will be parsed into
+            #     # a Text object. Therefore cf. case Text() for processing of
+            #     # CDATASections.
+            #     self._process_cdatasection_node(node)
+            #
+            # case DocumentFragment():
+            #     # The following case is commented out, because xml.dom.miniom
+            #     # DocumentFragment as a helper class when constructing
+            #     # structures to be added to an existing Document object.
+            #     # This node type cannot be found in a parsed XML file.
+            #     self._process_document_fragment_node(node)
+            #
+            # case Entity():
+            #     # This case is commented out, because xml.dom.minidom
+            #     # uses the class Entity as a helper class, if one wants to
+            #     # manually create such nodes.
+            #     # This node type may be found in the DocumentType.entities node map,
+            #     # but because it is part of the document type declaration,
+            #     # it will also be part of the DocumentType.internalSubset property.
+            #     # Thus it is not necessary to process this kind of node while formatting.
+            #     self._process_entity_node(node)
+            #
+            # case EntityReference():
+            #     # This case cannot be reaches as xml.dom.minidom uses an expat-based
+            #     # parser, which will resolve all entity references. Thus, EntityReference
+            #     # is not implemented in xml.dom.minidom.
+            #     self._process_entity_reference_node(node)
+            #
+            # case Notation():
+            #     # The following case is commented out, because xml.dom.minidom
+            #     # uses the class Notation as a helper class, if one wants to
+            #     # manually create such nodes.
+            #     # This node type may be found in the DocumentType.notations node map,
+            #     # but because it is part of the document type declaration,
+            #     # it will also be part of DocumentType.internalSubset property.
+            #     # Thus it is not necessary to process this kind of node while formatting.
+            #     self._process_notation_node(node)
 
-    def _process_element_node(self, node: Element) -> None:
-        """ToDo: Implement this"""
-        pass
+    def _process_element_node(self, element: Element) -> None:
+        """Processes all element nodes depending on emptyness."""
+        if self._is_empty_element(element):
+            self._process_empty_element(element)
+        else:
+            self._process_non_empty_element(element)
 
-    def _process_attribute_node(self, node: Attr) -> None:
-        """ToDo: Implement this"""
-        raise NotImplementedError("_process_attribute_node is not implemented")
+    def _process_non_empty_element(self, element: Element) -> None:
+        self._process_element_start_tag(element)
+        self._process_all_child_nodes(element)
+        self._process_element_end_tag(element)
 
-    def _process_text_node(self, node: Text) -> None:
-        """ToDo: Implement this"""
-        raise NotImplementedError("_process_text_node is not implemented")
+    def _process_element_start_tag(self, element: Element) -> None:
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_start_tag()
 
-    def _process_cdata_section_node(self, node: CDATASection) -> None:
-        """ToDo: Implement this"""
-        raise NotImplementedError("_process_cdata_section_node is not implemented")
+    def _process_element_end_tag(self, element: Element) -> None:
+        self._result.append("</" + element.tagName + ">")
 
-    def _process_entity_node(self, node: Entity) -> None:
-        """ToDo: Implement this"""
-        raise NotImplementedError("_process_entity_node is not implemented")
+    def _process_empty_element(self, element: Element) -> None:
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_empty_tag()
+
+    def _open_start_tag(self, element: Element) -> None:
+        self._result.append("<" + element.tagName)
+
+    def _close_start_tag(self) -> None:
+        self._result.append(">")
+
+    def _close_empty_tag(self) -> None:
+        self._result.append("/>")
+
+    def _process_attributes(self, element: Element) -> None:
+        if element.hasAttributes():
+            if self.options.ordered_attributes:
+                attributes = self._sorted_attributes(element)
+                for attribute in attributes.values():
+                    self._process_node(attribute)
+            else:
+                for i in range(element.attributes.length):
+                    attribute = cast(Attr, element.attributes.item(i))
+                    self._process_node(attribute)
+
+    @staticmethod
+    def _sorted_attributes(element: Element) -> dict[str, Attr]:
+        attributes = {}
+        for i in range(element.attributes.length):
+            attribute = cast(Attr, element.attributes.item(i))
+            if attribute is not None:
+                attributes[attribute.name] = attribute
+        return dict(sorted(attributes.items()))
+
+    def _process_attribute_node(self, attribute: Attr) -> None:
+        value = SM.escape_double_quotes(attribute.value)
+        self._result.append(" " + attribute.name + '="' + value + '"')
+
+    def _process_text_node(self, text: Text) -> None:
+        self._result.append(text.data)
+
+    def _process_cdata_section_node(self, cdata: CDATASection) -> None:
+        self._result.append("<![CDATA[" + cdata.data + "]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
@@ -173,7 +244,8 @@ class XMLCustomFormatter:
         end = "?>"
         self._result.append(newline + indentation + start + target + data + end + newline)
 
-    def _normalize_processing_instruction_data(self, pi: ProcessingInstruction) -> str:
+    @staticmethod
+    def _normalize_processing_instruction_data(pi: ProcessingInstruction) -> str:
         return " " + SM.reduce_redundant_whitespace(pi.data).strip()
 
     def _set_processing_instruction_newline(self) -> str:
@@ -188,7 +260,8 @@ class XMLCustomFormatter:
         end = self._set_comment_end()
         self._result.append(newline + indentation + start + data + end + newline)
 
-    def _normalize_comment_data(self, comment: Comment) -> str:
+    @staticmethod
+    def _normalize_comment_data(comment: Comment) -> str:
         return SM.reduce_redundant_whitespace(comment.data).strip()
 
     def _set_comment_newline(self) -> str:
@@ -203,195 +276,64 @@ class XMLCustomFormatter:
     def _process_document_node(self, node: Document) -> None:
         self._process_all_child_nodes(node)
 
-    def _process_document_type_node(self, node: DocumentType) -> None:
-        raise NotImplementedError("_process_document_type_node is not implemented")
+    def _process_document_type_node(self, doc_type: DocumentType) -> None:
+        self._result.append(self._set_doctype_content(doc_type))
 
-    def _process_document_fragment_node(self, node: DocumentFragment) -> None:
-        raise NotImplementedError("_process_document_fragment_node is not implemented")
+    def _set_doctype_content(self, doc_type: DocumentType) -> str:
+        newline = self._set_doctype_newline()
+        public_id = doc_type.publicId
+        system_id = doc_type.systemId
+        internal_subset = doc_type.internalSubset
+        start = f"<!DOCTYPE {doc_type.name}"
+        content = ""
+        end = ">"
 
-    def _process_notation_node(self, node: Notation) -> None:
-        raise NotImplementedError("_process_notation_node is not implemented")
+        if public_id is not None:
+            content += f' PUBLIC "{public_id}" "{system_id}"'
+
+        elif system_id is not None:
+            content += f' SYSTEM "{system_id}"'
+
+        if internal_subset is not None:
+            content += f" [{internal_subset}]"
+
+        return f"{newline}{start}{content}{end}{newline}"
+
+    def _set_doctype_newline(self) -> str:
+        return "\n" if self.options.doctype_declaration_starts_new_line else ""
 
     def _process_all_child_nodes(self, node: Node) -> None:
         if node.hasChildNodes():
             for child in node.childNodes:
                 self._process_node(child)
 
-    # def process_element_node(self, node) -> None:
-    #     self.process_element_start_tag(node)
-    #     self.process_all_child_nodes(node)
-    #     self.process_element_end_tag(node)
-    #
-    # def process_element_start_tag(self, node) -> None:
-    #     if self.is_inline_element(node):
-    #         self.process_inline_element_start_tag(node)
-    #     else:
-    #         self.process_container_element_start_tag(node)
-    #
-    # def process_inline_element_start_tag(self, node) -> None:
-    #     self.determine_inline_element_indentation(node)
-    #     self.open_start_tag(node)
-    #     self.process_element_attributes(node)
-    #     self.close_start_tag(node)
-    #
-    # def process_container_element_start_tag(self, node) -> None:
-    #     self._result.append("\n" + self.calculate_indentation())
-    #     self.open_start_tag(node)
-    #     self.process_element_attributes(node)
-    #     self.close_start_tag(node)
-    #     self._result.append("\n")
-    #     if not self.is_empty_element(node):
-    #         self.increase_indentation_level()
-    #
-    # def determine_inline_element_indentation(self, node) -> None:
-    #     # ToDO: split this function up to make it more readable
-    #     # Depending on its context in the parent node, an inline-element has
-    #     # to be indented.
-    #     previous = node.previousSibling
-    #     # Indent if it is the first child of its parent
-    #     if previous is None:
-    #         self._result.append(self.calculate_indentation())
-    #     # Indent if it follows immediately after a comment (4),
-    #     # processing instruction (7) or cdata (8) node
-    #     elif previous.nodeType in (4, 7, 8):
-    #         self._result.append(self.calculate_indentation())
-    #     # Indent if it follows a text node (3) consisting of whitespace that
-    #     # follows a comment or cdata node
-    #     elif (previous.nodeType == 3 and re.match(r"^\s+$", previous.data)) and (
-    #         previous.previousSibling is not None
-    #         and previous.previousSibling.nodeType in (4, 7, 8)
-    #     ):
-    #         self._result.append(self.calculate_indentation())
-    #     # Indent if it follows a whitespace text node inside a container element
-    #     elif (
-    #         (previous.nodeType == 3 and re.match(r"^\s+$", previous.data))
-    #         and previous.previousSibling is None
-    #         and not self.is_empty_element(node.parentNode)
-    #     ):
-    #         self._result.append(self.calculate_indentation())
-    #
-    # def open_start_tag(self, node) -> None:
-    #     self._result.append("<" + node.tagName)
-    #
-    # def process_element_attributes(self, node) -> None:
-    #     if node.hasAttributes:
-    #         for i in range(node.attributes.length):
-    #             self.process(node.attributes.item(i))
-    #
-    # def close_start_tag(self, node) -> None:
-    #     if self.is_empty_element(node):
-    #         self._result.append("/>")
-    #     else:
-    #         self._result.append(">")
-    #
-    # def process_element_end_tag(self, node) -> None:
-    #     if not self.is_empty_element(node):
-    #         if self.is_inline_element(node):
-    #             self.process_inline_element_end_tag(node)
-    #         else:
-    #             self.process_container_element_end_tag(node)
-    #
-    # def process_inline_element_end_tag(self, node) -> None:
-    #     self._result.append("</" + node.tagName + ">")
-    #
-    # def process_container_element_end_tag(self, node) -> None:
-    #     self.decrease_indentation_level()
-    #     self._result.append(
-    #         "\n" + self.calculate_indentation() + "</" + node.tagName + ">\n"
-    #     )
-    #
-    # def process_attribute_node(self, node) -> None:
-    #     self._result.append(" " + node.nodeName + '="' + node.nodeValue + '"')
-    #
-    # def process_text_node(self, node) -> None:
-    #     if self.is_inline_element(node.parentNode):
-    #         self.process_text_node_inside_inline_element(node)
-    #     else:
-    #         self.process_text_node_inside_container_element(node)
-    #
-    # def process_text_node_inside_inline_element(self, node) -> None:
-    #     node.data = sm.reduce_redundant_whitespace(node.data)
-    #     node.data = node.data.strip()
-    #     self._result.append(node.data)
-    #
-    # def process_text_node_inside_container_element(self, node) -> None:
-    #     node.data = sm.reduce_redundant_whitespace(node.data)
-    #     if node.data != " ":
-    #         self.process_text_node_depending_on_context(node)
-    #     else:
-    #         pass
-    #
-    # def process_text_node_depending_on_context(self, node) -> None:
-    #     if self.is_indentation_needed(node.previousSibling):
-    #         node.data = self.calculate_indentation() + node.data.lstrip()
-    #     self._result.append(node.data)
-    #
-    # def is_indentation_needed(self, context) -> bool:
-    #     # A text node inside a container element should be indented when one of
-    #     # these context requirements is met:
-    #     # 1) It is the first child node of its parent
-    #     # 2) The previous node is a CDATA (4), processing instruction (7) or
-    #     #    comment (8) node,
-    #     # 3) The previous node is a container element (1)
-    #     if (
-    #         context is None
-    #         or context.nodeType in (4, 7, 8)
-    #         or (context.nodeType == 1 and not self.is_inline_element(context))
-    #     ):
-    #         return True
-    #     else:
-    #         return False
-    #
-    # def process_cdata_node(self, node) -> None:
-    #     self._result.append(
-    #         "\n" + self.calculate_indentation() + "<![CDATA[" + node.nodeValue + "]]>\n"
-    #     )
-    #
-    # def process_entity_reference_node(self, node) -> None:
-    #     # ToDo: Implement this to support entity reference nodes
-    #     pass
-    #
-    # def process_entity_node(self, node) -> None:
-    #     # ToDo: Implement this to support entity nodes
-    #     pass
-    #
-    # def process_document_type_node(self, node) -> None:
-    #     self._result.append("<!DOCTYPE " + node.name + " ")
-    #     self.process_document_type_external_id(node)
-    #     self.process_document_type_internal_subset(node)
-    #     self._result.append(">")
-    #
-    # def process_document_type_external_id(self, node) -> None:
-    #     if node.publicId:
-    #         self.process_document_type_public_id(node)
-    #     elif node.systemId:
-    #         self.process_document_type_system_id(node)
-    #
-    # def process_document_type_public_id(self, node) -> None:
-    #     self._result.append('PUBLIC "' + node.publicId + '" "' + node.systemId + '" ')
-    #
-    # def process_document_type_system_id(self, node) -> None:
-    #     self._result.append('SYSTEM "' + node.systemId + '" ')
-    #
-    # def process_document_type_internal_subset(self, node) -> None:
-    #     # ToDO: split this function up to make it more readable
-    #     if node.internalSubset:
-    #         self.increase_indentation_level()
-    #         subset = node.internalSubset
-    #         subset = " ".join(subset.split())
-    #         subset = subset.replace("<!", "\n" + self.calculate_indentation() + "<!")
-    #         subset = subset.replace("<?", "\n" + self.calculate_indentation() + "<?")
-    #         self._result.append("[" + subset + "\n]")
-    #         self.decrease_indentation_level()
-    #
-    # def process_document_fragment_node(self, node) -> None:
-    #     # ToDo: Implement this to support document fragment nodes
-    #     pass
-    #
-    # def process_notation_node(self, node) -> None:
-    #     # ToDo: Implement this to support notation nodes
-    #     pass
-    #
+    @staticmethod
+    def _indentation(count: int) -> str:
+        """Returns a string consisting of count space characters."""
+        if count < 0:
+            raise ValueError("Indentation may not be negative.")
+        return count * " "
+
+    def _calculate_indentation(self) -> int:
+        """Calculates the indentation depending on the indentation level and the Options."""
+        return self._indentation_level * self.options.indentation
+
+    def _decrease_indentation_level(self) -> None:
+        """Decreases the indentation level by 1 as long as the indentation level is >= 0."""
+        if self._indentation_level == 0:
+            raise ValueError(
+                f"Indentation level cannot be lower then zero {self._indentation_level}"
+            )
+        self._indentation_level -= 1
+
+    def _increase_indentation_level(self) -> None:
+        """Increases the indentation level by 1"""
+        self._indentation_level += 1
+
+    @staticmethod
+    def _is_empty_element(element: Element) -> bool:
+        return not element.hasChildNodes()
+
     # def postprocess(self) -> None:
     #     self.postprocess_rearrange_result()
     #     self.postprocess_result_lines()
@@ -448,33 +390,6 @@ class XMLCustomFormatter:
     #     with open(self.output_file, "w") as output_file:
     #         output_file.write(self._result)
     #
-
-    def _indentation(self, count: int) -> str:
-        """Returns a string consisting of count space characters."""
-        if count < 0:
-            raise ValueError("Indentation may not be negative.")
-        return count * " "
-
-    def _calculate_indentation(self) -> int:
-        """Calculates the indentation depending on the indentation level and the Options."""
-        return self._indentation_level * self.options.indentation
-
-    def _decrease_indentation_level(self) -> None:
-        """Decreases the indentation level by 1 as long as the indentation level is >= 0."""
-        if self._indentation_level == 0:
-            raise ValueError(
-                f"Indentation level cannot be lower then zero {self._indentation_level}"
-            )
-        self._indentation_level -= 1
-
-    def _increase_indentation_level(self) -> None:
-        """Increases the indentation level by 1"""
-        self._indentation_level += 1
-
-    @staticmethod
-    def _is_empty_element(element: Element) -> bool:
-        return not element.hasChildNodes()
-
     # def is_inline_element(self, node: minidom.Element) -> bool:
     #     if (
     #         self.options.inline_elements is not None

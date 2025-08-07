@@ -20,9 +20,15 @@ class Options:
     # Options for elements
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
 
+    # Options for attributes
+    ordered_attributes: bool = field(default=True)
+
     # Options for comments
     comments_have_trailing_spaces: bool = field(default=True)
     comments_start_new_lines: bool = field(default=True)
+
+    # Options for doctype declarations
+    doctype_declaration_starts_new_line: bool = field(default=True)
 
     # Options for processing instructions
     processing_instructions_start_new_lines: bool = field(default=True)

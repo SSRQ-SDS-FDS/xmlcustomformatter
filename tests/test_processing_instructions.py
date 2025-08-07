@@ -15,43 +15,43 @@ class TestXMLCustomFormatterProcessingInstructions:
             (
                 "pi_before_root",
                 """<?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
                 Options(),
             ),
             (
                 "pi_after_declaration",
                 """<?xml version="1.0"?><?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
                 Options(),
             ),
-            (  # ToDo: Yet to implement when elements are being processes
+            (
                 "pi_inside_element",
                 """<root><?foo bar?></root>""",
-                """<?xml version="1.0" encoding="UTF-8"?>""",
+                """<?xml version="1.0" encoding="UTF-8"?><root>\n<?foo bar?>\n</root>""",
                 Options(),
             ),
             (
                 "pi_after_root",
                 """<root/><?foo bar?>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?><root/>\n<?foo bar?>\n""",
                 Options(),
             ),
             (
                 "pi_with_line_breaks_spaces",
                 """<?foo bar\n   baz\n  bat?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar baz bat?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar baz bat?>\n<root/>""",
                 Options(),
             ),
             (
                 "pi_with_normalized_spaces",
                 """<?foo  \n bar \n  ?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
                 Options(),
             ),
             (
                 "pis_don't_start_newlines",
                 """<?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?><?foo bar?>""",
+                """<?xml version="1.0" encoding="UTF-8"?><?foo bar?><root/>""",
                 Options(processing_instructions_start_new_lines=False),
             ),
         ]

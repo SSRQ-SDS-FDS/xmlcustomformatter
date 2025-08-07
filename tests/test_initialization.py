@@ -17,9 +17,9 @@ class TestXMLCustomFormatterInitialization:
         return 0
 
     @pytest.fixture
-    def result_at_start(self) -> list[str]:
+    def result_at_start(self) -> str:
         """Returns the empty result at the start of the formatting process."""
-        return ['<?xml version="1.0" encoding="UTF-8"?>']
+        return '<?xml version="1.0" encoding="UTF-8"?>'
 
     @pytest.fixture
     def options(self) -> Options:
@@ -122,7 +122,7 @@ class TestXMLCustomFormatterInitialization:
         assert default_formatter._indentation_level == indentation_at_start
 
     def test_result_at_start(
-        self, default_formatter: XMLCustomFormatter, result_at_start: list[str]
+        self, default_formatter: XMLCustomFormatter, result_at_start: str
     ) -> None:
         print(repr(default_formatter._dom.standalone))
-        assert default_formatter._result == result_at_start
+        assert default_formatter._result[0] == result_at_start
