@@ -287,26 +287,29 @@ class XMLCustomFormatter:
 
     def _set_doctype_content(self, doc_type: DocumentType) -> str:
         newline = self._set_doctype_newline()
-        public_id = doc_type.publicId
-        system_id = doc_type.systemId
-        internal_subset = doc_type.internalSubset
-        start = f"<!DOCTYPE {doc_type.name}"
-        content = ""
-        end = ">"
-
-        if public_id is not None:
-            content += f' PUBLIC "{public_id}" "{system_id}"'
-
-        elif system_id is not None:
-            content += f' SYSTEM "{system_id}"'
-
-        if internal_subset is not None:
-            content += f" [{internal_subset}]"
-
-        return f"{newline}{start}{content}{end}{newline}"
+        name = doc_type.name
+        external_id = self._construct_external_id(doc_type.publicId, doc_type.systemId)
+        subset = self._normalize_internal_subset(doc_type.internalSubset)
+        return f"{newline}<!DOCTYPE {name}{external_id}{subset}>{newline}"
 
     def _set_doctype_newline(self) -> str:
         return "\n" if self.options.doctype_declaration_starts_new_line else ""
+
+    @staticmethod
+    def _normalize_internal_subset(subset: str | None) -> str:
+        if subset is None:
+            return ""
+        return f" [{subset}]"
+
+    @staticmethod
+    def _construct_external_id(public_id: str | None, system_id: str | None) -> str:
+        if public_id is not None:
+            return f' PUBLIC "{public_id}" "{system_id}"'
+
+        elif system_id is not None:
+            return f' SYSTEM "{system_id}"'
+
+        return ""
 
     @staticmethod
     def _indentation(count: int) -> str:
