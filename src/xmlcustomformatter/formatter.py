@@ -1,3 +1,4 @@
+import re
 from typing import Optional, cast
 from xml.dom import minidom
 from xml.dom.minidom import (
@@ -294,11 +295,32 @@ class XMLCustomFormatter:
     def _set_doctype_newline(self) -> str:
         return "\n" if self.options.doctype_declaration_starts_new_line else ""
 
-    @staticmethod
-    def _normalize_internal_subset(subset: str | None) -> str:
-        if subset is None:
+    def _normalize_internal_subset(self, subset: str | None) -> str:
+        if subset is None or subset == "":
             return ""
-        return f" [{subset}]"
+
+        if not self.options.doctype_subset_parts_start_new_lines:
+            return f" [{subset}]"
+
+        self._increase_indentation_level()
+        indentation = self._indentation(self._calculate_indentation())
+        self._decrease_indentation_level()
+
+        patterns = [
+            r"<!ELEMENT[^>]*?>",  # element declarations
+            r"<!ENTITY[^>]*?>",  # entity declarations
+            r"<!ATTLIST[^>]*?>",  # attlist declarations
+            r"<!NOTATION[^>]*?>",  # notation declarations
+            r"<!--.*?-->",  # comments
+            r"<\?.*?\?>",  # processing instructions
+            r"%\w+;",  # pereferences
+        ]
+        combined_pattern = f"({'|'.join(patterns)})"
+        parts = re.findall(combined_pattern, subset, re.DOTALL)
+        formatted_lines = []
+        for part in parts:
+            formatted_lines.append(indentation + part.strip())
+        return f" [\n{'\n'.join(formatted_lines)}\n]"
 
     @staticmethod
     def _construct_external_id(public_id: str | None, system_id: str | None) -> str:

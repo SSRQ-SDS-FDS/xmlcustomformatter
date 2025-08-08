@@ -29,6 +29,7 @@ class Options:
 
     # Options for doctype declarations
     doctype_declaration_starts_new_line: bool = field(default=True)
+    doctype_subset_parts_start_new_lines: bool = field(default=True)
 
     # Options for processing instructions
     processing_instructions_start_new_lines: bool = field(default=True)
