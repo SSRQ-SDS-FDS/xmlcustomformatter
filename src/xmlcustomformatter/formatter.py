@@ -168,15 +168,13 @@ class XMLCustomFormatter:
     def _process_empty_element(self, element: Element) -> None:
         """Processes empty elements."""
         self._open_start_tag(element)
-        if element.hasAttributes():
-            self._process_attributes(element)
+        self._process_attributes(element)
         self._close_empty_tag()
 
     def _process_non_empty_element(self, element: Element) -> None:
         """Processes all non-empty elements.."""
         self._open_start_tag(element)
-        if element.hasAttributes():
-            self._process_attributes(element)
+        self._process_attributes(element)
         self._close_start_tag()
         self._process_all_child_nodes(element)
         self._process_element_end_tag(element)
@@ -195,17 +193,18 @@ class XMLCustomFormatter:
 
     def _process_attributes(self, element: Element) -> None:
         """Processes attributes of the given element, optionally sorted by name."""
-        attributes = []
-        for i in range(element.attributes.length):
-            attribute = element.attributes.item(i)
-            if attribute is not None:
-                attributes.append(cast(Attr, attribute))
+        if element.hasAttributes():
+            attributes = []
+            for i in range(element.attributes.length):
+                attribute = element.attributes.item(i)
+                if attribute is not None:
+                    attributes.append(cast(Attr, attribute))
 
-        if self.options.sorted_attributes:
-            attributes.sort(key=lambda attr: attr.name)
+            if self.options.sorted_attributes:
+                attributes.sort(key=lambda attr: attr.name)
 
-        for attribute in attributes:
-            self._process_node(attribute)
+            for attribute in attributes:
+                self._process_node(attribute)
 
     def _process_attribute_node(self, attribute: Attr) -> None:
         """Processes an attribute node, escaping double quotes."""
