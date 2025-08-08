@@ -91,6 +91,11 @@ class XMLCustomFormatter:
             return f' version="{self.default_version}"'
         return f' version="{self._dom.version}"'
 
+    def _process_all_child_nodes(self, node: Node) -> None:
+        if node.hasChildNodes():
+            for child in node.childNodes:
+                self._process_node(child)
+
     def _process_node(self, node: Node) -> None:
         """Delegates the processing of nodes to specialized methods."""
         match node:
@@ -224,9 +229,11 @@ class XMLCustomFormatter:
             self._process_cdata_section(text)
 
     def _process_text(self, text: Text) -> None:
+        # ToDo: Normalization of text nodes
         self._result.append(text.data)
 
     def _process_cdata_section(self, cdata: Text) -> None:
+        # ToDo: Normalization of cdata nodes
         self._result.append(f"<![CDATA[{cdata.data}]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
@@ -301,11 +308,6 @@ class XMLCustomFormatter:
     def _set_doctype_newline(self) -> str:
         return "\n" if self.options.doctype_declaration_starts_new_line else ""
 
-    def _process_all_child_nodes(self, node: Node) -> None:
-        if node.hasChildNodes():
-            for child in node.childNodes:
-                self._process_node(child)
-
     @staticmethod
     def _indentation(count: int) -> str:
         """Returns a string consisting of count space characters."""
@@ -320,9 +322,7 @@ class XMLCustomFormatter:
     def _decrease_indentation_level(self) -> None:
         """Decreases the indentation level by 1 as long as the indentation level is >= 0."""
         if self._indentation_level == 0:
-            raise ValueError(
-                f"Indentation level cannot be lower then zero {self._indentation_level}"
-            )
+            raise ValueError("Indentation level cannot be lower than zero")
         self._indentation_level -= 1
 
     def _increase_indentation_level(self) -> None:
