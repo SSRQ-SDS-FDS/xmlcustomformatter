@@ -107,15 +107,7 @@ class XMLCustomFormatter:
             case ProcessingInstruction():
                 self._process_processing_instruction_node(node)
             case Text():
-                # CDATASection shares the same interface as Text.
-                # Therefore, CDATASection will be treated as an instance
-                # of Text by minidom. So you have to disambiguate any Text
-                # object by its nodeType property.
-                # These two cases are exhaustive.
-                if node.nodeType == Node.TEXT_NODE:
-                    self._process_text_node(node)
-                else:
-                    self._process_cdata_section_node(node)
+                self._process_text_node(node)
             case _:
                 raise TypeError(f"Wrong node type: {repr(node)}")
             #
@@ -221,9 +213,20 @@ class XMLCustomFormatter:
         return f' {name}="{value}"'
 
     def _process_text_node(self, text: Text) -> None:
+        # CDATASection shares the same interface as Text.
+        # Therefore, CDATASection will be treated as an instance
+        # of Text by minidom. So you have to disambiguate any Text
+        # object by its nodeType property.
+        # These two cases are exhaustive.
+        if text.nodeType == Node.TEXT_NODE:
+            self._process_text(text)
+        else:
+            self._process_cdata_section(text)
+
+    def _process_text(self, text: Text) -> None:
         self._result.append(text.data)
 
-    def _process_cdata_section_node(self, cdata: Text) -> None:
+    def _process_cdata_section(self, cdata: Text) -> None:
         self._result.append("<![CDATA[" + cdata.data + "]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
