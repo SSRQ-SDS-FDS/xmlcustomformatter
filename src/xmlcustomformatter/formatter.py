@@ -162,32 +162,31 @@ class XMLCustomFormatter:
             #     pass
 
     def _process_element_node(self, element: Element) -> None:
-        """Processes all element nodes depending on emptyness."""
+        """Processes all element nodes depending on emptiness."""
         if self._is_empty_element(element):
             self._process_empty_element(element)
         else:
             self._process_non_empty_element(element)
 
-    def _process_non_empty_element(self, element: Element) -> None:
-        self._process_element_start_tag(element)
-        self._process_all_child_nodes(element)
-        self._process_element_end_tag(element)
-
-    def _process_element_start_tag(self, element: Element) -> None:
-        self._open_start_tag(element)
-        self._process_attributes(element)
-        self._close_start_tag()
-
-    def _process_element_end_tag(self, element: Element) -> None:
-        self._result.append("</" + element.tagName + ">")
-
     def _process_empty_element(self, element: Element) -> None:
+        """Processes empty elements."""
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_empty_tag()
 
+    def _process_non_empty_element(self, element: Element) -> None:
+        """Processes all non-empty elements.."""
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_start_tag()
+        self._process_all_child_nodes(element)
+        self._process_element_end_tag(element)
+
+    def _process_element_end_tag(self, element: Element) -> None:
+        self._result.append(f"</{element.tagName}>")
+
     def _open_start_tag(self, element: Element) -> None:
-        self._result.append("<" + element.tagName)
+        self._result.append(f"<{element.tagName}")
 
     def _close_start_tag(self) -> None:
         self._result.append(">")
