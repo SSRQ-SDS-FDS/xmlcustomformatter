@@ -249,12 +249,15 @@ class XMLCustomFormatter:
 
     def _process_comment_node(self, comment: Comment) -> None:
         """Processes comment nodes."""
+        self._result.append(self._construct_comment(comment))
+
+    def _construct_comment(self, comment: Comment) -> str:
         newline = self._set_comment_newline()
         indentation = self._indentation(self._calculate_indentation())
         start = self._set_comment_start()
         data = self._normalize_comment_data(comment)
         end = self._set_comment_end()
-        self._result.append(newline + indentation + start + data + end + newline)
+        return f"{newline}{indentation}{start}{data}{end}{newline}"
 
     @staticmethod
     def _normalize_comment_data(comment: Comment) -> str:
