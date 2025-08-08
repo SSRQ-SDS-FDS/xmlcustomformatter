@@ -23,27 +23,23 @@ class XMLCustomFormatter:
     Args:
         input_file (str): Path to the input XML file to be read.
         output_file (str): Path to the output XML file where the formatted XML will be saved.
-        formatting_options (Options, optional): Configuration options for formatting.
+        options (Options, optional): Configuration options for formatting.
             If not provided, default Options() will be used.
 
-    Attributes:
-        input_file (str): Input XML file path.
-        output_file (str): Output file path.
-        options (Options): Formatting options object.
-
     Default values:
-        If no information is provided in the XML file which is to be processed
-        XML Version 1.0 and encoding UTF-8 are used.
+        If no information is provided in the XML file to be processed, then
+        XML Version 1.0, encoding UTF-8 and an empty standalone declaration are used.
     """
 
     default_version: str = "1.0"
     default_encoding: str = "UTF-8"
+    default_standalone: str = ""
 
     def __init__(
         self,
         input_file: str,
         output_file: str,
-        formatting_options: Optional[Options] = None,
+        options: Optional[Options] = None,
     ):
         """
         Initializes a XMLCustomFormatter instance.
@@ -52,7 +48,7 @@ class XMLCustomFormatter:
         """
         self.input_file = input_file
         self.output_file = output_file
-        self.options = formatting_options or Options()
+        self.options = options or Options()
         self._dom = minidom.parse(self.input_file)
         self._indentation_level: int = 0
         self._result: list[str] = []
@@ -66,39 +62,34 @@ class XMLCustomFormatter:
         Processes the XML declaration. If version, encoding or standalone are not
         set, then default values will be used. The declaration is appended to the result.
         """
-        version = self._normalize_version()
-        encoding = self._normalize_encoding()
-        standalone = self._normalize_standalone()
-        xml_declaration = self._construct_xml_declaration(version, encoding, standalone)
-        self._result.append(xml_declaration)
+        self._result.append(self._construct_xml_declaration())
 
-    @staticmethod
-    def _construct_xml_declaration(version: str, encoding: str, standalone: str) -> str:
+    def _construct_xml_declaration(self) -> str:
         """Constructs the XML declaration."""
+        version = self._set_version()
+        encoding = self._set_encoding()
+        standalone = self._set_standalone()
         return f"<?xml{version}{encoding}{standalone}?>"
 
-    def _normalize_encoding(self) -> str:
-        """Normalizes the encoding part of the XML declaration."""
+    def _set_encoding(self) -> str:
+        """Sets the encoding part of the XML declaration."""
         if self._dom.encoding is None:
-            self._dom.encoding = self.default_encoding
+            return f' encoding="{self.default_encoding}"'
         return f' encoding="{self._dom.encoding}"'
 
-    def _normalize_standalone(self) -> str:
-        """
-        Normalizes the standalone part of the XML declaration.
-        If there is none, no default value will be used, because standalone is optional.
-        """
+    def _set_standalone(self) -> str:
+        """Sets the standalone part of the XML declaration."""
         if self._dom.standalone is None:
-            return ""
+            return self.default_standalone
         elif self._dom.standalone:
             return ' standalone="yes"'
         else:
             return ' standalone="no"'
 
-    def _normalize_version(self) -> str:
-        """Normalizes the version part of the XML declaration."""
+    def _set_version(self) -> str:
+        """Sets the version part of the XML declaration."""
         if self._dom.version is None:
-            self._dom.version = self.default_version
+            return f' version="{self.default_version}"'
         return f' version="{self._dom.version}"'
 
     def _process_node(self, node: Node) -> None:
