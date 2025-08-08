@@ -228,13 +228,14 @@ class XMLCustomFormatter:
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
+        self._result.append(self._construct_processing_instructio(pi))
+
+    def _construct_processing_instructio(self, pi: ProcessingInstruction) -> str:
         newline = self._set_processing_instruction_newline()
         indentation = self._indentation(self._calculate_indentation())
-        start = "<?"
         target = pi.target
         data = self._normalize_processing_instruction_data(pi)
-        end = "?>"
-        self._result.append(newline + indentation + start + target + data + end + newline)
+        return f"{newline}{indentation}<?{target}{data}?>{newline}"
 
     @staticmethod
     def _normalize_processing_instruction_data(pi: ProcessingInstruction) -> str:
