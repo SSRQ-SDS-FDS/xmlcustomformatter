@@ -9,8 +9,16 @@ class Options:
     Attributes:
         indentation: Number of spaces used for indentation.
         max_line_length: Maximum allowed line length before wrapping occurs.
-        inline_elements: A tuple of element tag names that should be treated as inline
-            during formatting. All elements must be strings.
+        inline_elements: A tuple of element names that should be treated as inline
+            during formatting. All element names must be strings.
+        sorted_attributes: Attributes may be sorted by name in alphabetical order.
+        comments_have_trailing_spaces: Comments may have spaces between their content
+            and their delimiters.
+        comments_start_new_lines: Comments may start on a new line.
+        doctype_declaration_starts_new_line: Doctype declarations may start on a new line.
+        doctype_subset_parts_start_new_lines: All parts of the doctype declarations internal
+            subset may start on a new line.
+        processing_instructions_start_new_lines: Processing instructions may start on a new line.
     """
 
     # Main options

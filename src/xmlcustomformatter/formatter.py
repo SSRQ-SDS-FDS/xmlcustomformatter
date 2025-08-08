@@ -287,10 +287,9 @@ class XMLCustomFormatter:
 
     def _set_doctype_content(self, doc_type: DocumentType) -> str:
         newline = self._set_doctype_newline()
-        name = doc_type.name
         external_id = self._construct_external_id(doc_type.publicId, doc_type.systemId)
         subset = self._normalize_internal_subset(doc_type.internalSubset)
-        return f"{newline}<!DOCTYPE {name}{external_id}{subset}>{newline}"
+        return f"{newline}<!DOCTYPE {doc_type.name}{external_id}{subset}>{newline}"
 
     def _set_doctype_newline(self) -> str:
         return "\n" if self.options.doctype_declaration_starts_new_line else ""
@@ -306,6 +305,8 @@ class XMLCustomFormatter:
         indentation = self._indentation(self._calculate_indentation())
         self._decrease_indentation_level()
 
+        # These are all valid constituents of a doctype declaration
+        # according to xml version 1.0 spezification
         patterns = [
             r"<!ELEMENT[^>]*?>",  # element declarations
             r"<!ENTITY[^>]*?>",  # entity declarations
