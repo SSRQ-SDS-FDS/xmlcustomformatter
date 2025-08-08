@@ -32,7 +32,7 @@ class TestXMLCustomFormatterAttribute:
                 "two_attributes_not_ordered_alphabetical",
                 """<root b="c" a="b"/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root b="c" a="b"/>""",
-                Options(ordered_attributes=False),
+                Options(sorted_attributes=False),
             ),
             (
                 "attribute_with_single_quotes",

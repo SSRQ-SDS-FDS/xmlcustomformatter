@@ -21,7 +21,7 @@ class Options:
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
 
     # Options for attributes
-    ordered_attributes: bool = field(default=True)
+    sorted_attributes: bool = field(default=True)
 
     # Options for comments
     comments_have_trailing_spaces: bool = field(default=True)

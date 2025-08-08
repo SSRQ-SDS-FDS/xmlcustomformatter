@@ -171,13 +171,15 @@ class XMLCustomFormatter:
     def _process_empty_element(self, element: Element) -> None:
         """Processes empty elements."""
         self._open_start_tag(element)
-        self._process_attributes(element)
+        if element.hasAttributes():
+            self._process_attributes(element)
         self._close_empty_tag()
 
     def _process_non_empty_element(self, element: Element) -> None:
         """Processes all non-empty elements.."""
         self._open_start_tag(element)
-        self._process_attributes(element)
+        if element.hasAttributes():
+            self._process_attributes(element)
         self._close_start_tag()
         self._process_all_child_nodes(element)
         self._process_element_end_tag(element)
@@ -195,28 +197,28 @@ class XMLCustomFormatter:
         self._result.append("/>")
 
     def _process_attributes(self, element: Element) -> None:
-        if element.hasAttributes():
-            if self.options.ordered_attributes:
-                attributes = self._sorted_attributes(element)
-                for attribute in attributes.values():
-                    self._process_node(attribute)
-            else:
-                for i in range(element.attributes.length):
-                    attribute = cast(Attr, element.attributes.item(i))
-                    self._process_node(attribute)
-
-    @staticmethod
-    def _sorted_attributes(element: Element) -> dict[str, Attr]:
-        attributes = {}
+        """Processes attributes of the given element, optionally sorted by name."""
+        attributes = []
         for i in range(element.attributes.length):
-            attribute = cast(Attr, element.attributes.item(i))
+            attribute = element.attributes.item(i)
             if attribute is not None:
-                attributes[attribute.name] = attribute
-        return dict(sorted(attributes.items()))
+                attributes.append(cast(Attr, attribute))
+
+        if self.options.sorted_attributes:
+            attributes.sort(key=lambda attr: attr.name)
+
+        for attribute in attributes:
+            self._process_node(attribute)
 
     def _process_attribute_node(self, attribute: Attr) -> None:
+        """Processes an attribute node, escaping double quotes."""
+        self._result.append(self._construct_attribute(attribute))
+
+    @staticmethod
+    def _construct_attribute(attribute: Attr) -> str:
+        name = attribute.name
         value = SM.escape_double_quotes(attribute.value)
-        self._result.append(" " + attribute.name + '="' + value + '"')
+        return f' {name}="{value}"'
 
     def _process_text_node(self, text: Text) -> None:
         self._result.append(text.data)
