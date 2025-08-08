@@ -227,7 +227,7 @@ class XMLCustomFormatter:
         self._result.append(text.data)
 
     def _process_cdata_section(self, cdata: Text) -> None:
-        self._result.append("<![CDATA[" + cdata.data + "]]>")
+        self._result.append(f"<![CDATA[{cdata.data}]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
