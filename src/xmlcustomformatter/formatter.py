@@ -5,7 +5,6 @@ from xml.dom.minidom import (
     Element,
     Attr,
     Text,
-    CDATASection,
     ProcessingInstruction,
     Comment,
     Document,
@@ -108,10 +107,11 @@ class XMLCustomFormatter:
             case ProcessingInstruction():
                 self._process_processing_instruction_node(node)
             case Text():
-                # CDATASection() shares the same interface as Text().
-                # Therefore CDATASection() will be treated as an instance
-                # of Text() by minidom. So you have to distinguish by the
-                # nodeType property. These two cases are exhaustive.
+                # CDATASection shares the same interface as Text.
+                # Therefore, CDATASection will be treated as an instance
+                # of Text by minidom. So you have to disambiguate any Text
+                # object by its nodeType property.
+                # These two cases are exhaustive.
                 if node.nodeType == Node.TEXT_NODE:
                     self._process_text_node(node)
                 else:
@@ -123,43 +123,43 @@ class XMLCustomFormatter:
             #
             # case CDATASection():
             #     # This case cannot be reached as CDATASection is a child class
-            #     # of Text. Every CDATASection in the XML will be parsed into
-            #     # a Text object. Therefore cf. case Text() for processing of
-            #     # CDATASections.
-            #     self._process_cdatasection_node(node)
+            #     # of Text sharing the same interface as Text. Thus, every CDATASection
+            #     # in the XML will be parsed into a Text object. Therefore, cf.
+            #     # case Text() for processing of CDATASections.
+            #     pass
             #
             # case DocumentFragment():
-            #     # The following case is commented out, because xml.dom.miniom
-            #     # DocumentFragment as a helper class when constructing
+            #     # The following case is commented out, because xml.dom.minidom
+            #     # uses DocumentFragment as a helper class when constructing
             #     # structures to be added to an existing Document object.
             #     # This node type cannot be found in a parsed XML file.
-            #     self._process_document_fragment_node(node)
+            #     pass
             #
             # case Entity():
             #     # This case is commented out, because xml.dom.minidom
             #     # uses the class Entity as a helper class, if one wants to
             #     # manually create such nodes.
             #     # This node type may be found in the DocumentType.entities node map,
-            #     # but because it is part of the document type declaration,
-            #     # it will also be part of the DocumentType.internalSubset property.
+            #     # but because it is also part of the document type declaration,
+            #     # it will be part of the DocumentType.internalSubset property.
             #     # Thus it is not necessary to process this kind of node while formatting.
-            #     self._process_entity_node(node)
+            #     pass
             #
             # case EntityReference():
-            #     # This case cannot be reaches as xml.dom.minidom uses an expat-based
+            #     # This case cannot be reached as xml.dom.minidom uses an expat-based
             #     # parser, which will resolve all entity references. Thus, EntityReference
             #     # is not implemented in xml.dom.minidom.
-            #     self._process_entity_reference_node(node)
+            #     pass
             #
             # case Notation():
             #     # The following case is commented out, because xml.dom.minidom
             #     # uses the class Notation as a helper class, if one wants to
             #     # manually create such nodes.
             #     # This node type may be found in the DocumentType.notations node map,
-            #     # but because it is part of the document type declaration,
-            #     # it will also be part of DocumentType.internalSubset property.
+            #     # but because it is also part of the document type declaration,
+            #     # it will be part of DocumentType.internalSubset property.
             #     # Thus it is not necessary to process this kind of node while formatting.
-            #     self._process_notation_node(node)
+            #     pass
 
     def _process_element_node(self, element: Element) -> None:
         """Processes all element nodes depending on emptyness."""
@@ -222,7 +222,7 @@ class XMLCustomFormatter:
     def _process_text_node(self, text: Text) -> None:
         self._result.append(text.data)
 
-    def _process_cdata_section_node(self, cdata: CDATASection) -> None:
+    def _process_cdata_section_node(self, cdata: Text) -> None:
         self._result.append("<![CDATA[" + cdata.data + "]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
