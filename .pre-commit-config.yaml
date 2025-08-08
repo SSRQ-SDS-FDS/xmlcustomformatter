@@ -23,7 +23,7 @@ repos:
 
       - id: pytest
         name: Run pytest before commit
-        entry: uv run pytest --cov=. --cov-report term-missing:skip-covered
+        entry: uv run pytest --cov=. --cov-report term-missing:skip-covered --cov-fail-under=100
         language: system
         types: [ python ]
         pass_filenames: false
