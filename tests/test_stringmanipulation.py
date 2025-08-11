@@ -8,6 +8,7 @@ from xmlcustomformatter.stringmanipulation import StringManipulation
 class TestStringManipulation:
     """This class tests the functionality of the StringManipulation class."""
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -17,11 +18,12 @@ class TestStringManipulation:
         ],
         ids=["list of strings", "empty-list", "list of string"],
     )
-    def test_convert_list_to_string(self, input_string: list[str], expected: str) -> None:
+    def test_convert_list_to_string(input_string: list[str], expected: str) -> None:
         """Tests conversion of a list of strings into a single newline-separated string."""
         result = StringManipulation.convert_list_to_string(input_string)
         assert result == expected
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -32,7 +34,7 @@ class TestStringManipulation:
         ],
         ids=["multiple spaces", "tags", "trailing spaces", "linebreaks"],
     )
-    def test_reduce_redundant_whitespace(self, input_string: str, expected: str) -> None:
+    def test_reduce_redundant_whitespace(input_string: str, expected: str) -> None:
         """
         Tests removal of redundant whitespace by collapsing multiple spaces
         or tabs into single spaces.
@@ -40,6 +42,7 @@ class TestStringManipulation:
         result = StringManipulation.reduce_redundant_whitespace(input_string)
         assert result == expected
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -57,11 +60,12 @@ class TestStringManipulation:
             "leading line breaks",
         ],
     )
-    def test_remove_empty_lines(self, input_string: str, expected: str) -> None:
+    def test_remove_empty_lines(input_string: str, expected: str) -> None:
         """Tests removal of consecutive empty lines by reducing them to a single newline."""
         result = StringManipulation.remove_empty_lines(input_string)
         assert result == expected
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -72,7 +76,7 @@ class TestStringManipulation:
         ],
         ids=["spaces in between", "leading and trailing spaces", "tabs and newlines", "no spaces"],
     )
-    def test_remove_whitespace(self, input_string: str, expected: str) -> None:
+    def test_remove_whitespace(input_string: str, expected: str) -> None:
         """
         Tests removal of all whitespace characters from the input string
         except tabs and newline characters.
@@ -80,6 +84,7 @@ class TestStringManipulation:
         result = StringManipulation.remove_whitespace(input_string)
         assert result == expected
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -90,11 +95,12 @@ class TestStringManipulation:
         ],
         ids=["whitespace", "tabs", "no space before", "space after"],
     )
-    def test_remove_whitespace_before_end_of_line(self, input_string: str, expected: str) -> None:
+    def test_remove_whitespace_before_end_of_line(input_string: str, expected: str) -> None:
         """Tests removal of trailing whitespace that occurs just before a newline character."""
         result = StringManipulation.remove_whitespace_before_eol(input_string)
         assert result == expected
 
+    @staticmethod
     @pytest.mark.parametrize(
         "input_string, expected",
         [
@@ -104,7 +110,7 @@ class TestStringManipulation:
         ],
         ids=["no quotes", "single quotes", "double quotes"],
     )
-    def test_escape_double_quotes(self, input_string: str, expected: str) -> None:
+    def test_escape_double_quotes(input_string: str, expected: str) -> None:
         """Tests escaping of double quotes."""
         result = StringManipulation.escape_double_quotes(input_string)
         assert result == expected

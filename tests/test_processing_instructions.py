@@ -14,6 +14,7 @@ from xmlcustomformatter.options import Options
 class TestXMLCustomFormatterProcessingInstructions:
     """This class tests processing of processing instructions."""
 
+    @staticmethod
     @pytest.fixture(
         params=[
             (
@@ -62,19 +63,21 @@ class TestXMLCustomFormatterProcessingInstructions:
             "pis_don't_start_newlines",
         ],
     )
-    def pis(self, request: FixtureRequest) -> tuple[str, str, Options]:
+    def pis(request: FixtureRequest) -> tuple[str, str, Options]:
         """Yields xml_content, expected_result"""
         return cast(tuple[str, str, Options], request.param)
 
+    @staticmethod
     @pytest.fixture
-    def xml_file(self, tmp_path: Path, pis: tuple[str, str, Options]) -> str:
+    def xml_file(tmp_path: Path, pis: tuple[str, str, Options]) -> str:
         """Writes the XML content to a temp file and returns the path as a string."""
         xml_content, _, _ = pis
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content)
         return str(file_path)
 
-    def test_xml_pi(self, pis: tuple[str, str, Options], xml_file: str) -> None:
+    @staticmethod
+    def test_xml_pi(pis: tuple[str, str, Options], xml_file: str) -> None:
         """Checks that comment nodes are formatted correctly."""
         _, expected, options = pis
         formatter = XMLCustomFormatter(xml_file, "output.xml", options)

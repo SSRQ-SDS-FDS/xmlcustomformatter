@@ -1,8 +1,11 @@
 """This module tests the processing of doctype declarations."""
 
 from pathlib import Path
+from typing import cast
 
 import pytest
+
+from pytest import FixtureRequest
 
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
@@ -11,9 +14,9 @@ from xmlcustomformatter.options import Options
 class TestXMLCustomFormatterDocumentTypes:
     """This class tests the processing of doctype declarations."""
 
-    @pytest.mark.parametrize(
-        "xml_content, expected, options",
-        [
+    @staticmethod
+    @pytest.fixture(
+        params=[
             (
                 """<!DOCTYPE root><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root>\n<root/>""",
@@ -125,7 +128,7 @@ class TestXMLCustomFormatterDocumentTypes:
             "doctype_with_external_id_system",
             "doctype_with_external_id_public",
             "doctype_with_empty_internal_subset",
-            "doctype_with_internal_subset_with_pereference",
+            "doctype_with_internal_subset_with_pe_reference",
             "doctype_with_internal_subset_with_pi",
             "doctype_with_internal_subset_with_comment",
             "doctype_with_internal_subset_with_notation",
@@ -136,11 +139,22 @@ class TestXMLCustomFormatterDocumentTypes:
             "doctype_with_all_kinds_of_content",
         ],
     )
-    def test_document_types(
-        self, tmp_path: Path, xml_content: str, expected: str, options: Options
-    ) -> None:
-        """Tests the processing of doctype declarations."""
+    def doctypes(request: FixtureRequest) -> tuple[str, str, Options]:
+        """Yields xml_content, expected_result and an Options object"""
+        return cast(tuple[str, str, Options], request.param)
+
+    @staticmethod
+    @pytest.fixture
+    def xml_file(tmp_path: Path, doctypes: tuple[str, str, Options]) -> str:
+        """Writes the XML content to a temp file and returns the path as a string."""
+        xml_content, _, _ = doctypes
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content)
-        formatter = XMLCustomFormatter(str(file_path), "output.xml", options)
-        assert "".join(formatter._result) == expected
+        return str(file_path)
+
+    @staticmethod
+    def test_doctypes(doctypes: tuple[str, str, Options], xml_file: str) -> None:
+        """Checks that comment nodes are formatted correctly."""
+        _, expected, options = doctypes
+        formatter = XMLCustomFormatter(xml_file, "output.xml", options)
+        assert formatter.get_result_as_string() == expected

@@ -11,6 +11,7 @@ from xmlcustomformatter.formatter import XMLCustomFormatter
 class TestXMLCustomFormatterXMLDeclarations:
     """This class tests the processing/construction of XML declarations."""
 
+    @staticmethod
     @pytest.fixture(
         params=[
             (
@@ -65,19 +66,21 @@ class TestXMLCustomFormatterXMLDeclarations:
             "standalone_no",
         ],
     )
-    def xml_declarations(self, request: FixtureRequest) -> tuple[str, str, str]:
+    def xml_declarations(request: FixtureRequest) -> tuple[str, str, str]:
         """Yields test_name, encoding, XML declaration, expected_result"""
         return cast(tuple[str, str, str], request.param)
 
+    @staticmethod
     @pytest.fixture
-    def xml_file(self, tmp_path: Path, xml_declarations: tuple[str, str, str]) -> str:
+    def xml_file(tmp_path: Path, xml_declarations: tuple[str, str, str]) -> str:
         """Writes the XML content to a temp file and returns the path as a string."""
         encoding, xml_content, _ = xml_declarations
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content, encoding=encoding)
         return str(file_path)
 
-    def test_xml_declaration(self, xml_declarations: tuple[str, str, str], xml_file: str) -> None:
+    @staticmethod
+    def test_xml_declaration(xml_declarations: tuple[str, str, str], xml_file: str) -> None:
         """Tests the XML declaration is being constructed correctly."""
         _, _, expected = xml_declarations
         formatter = XMLCustomFormatter(xml_file, "output.xml")

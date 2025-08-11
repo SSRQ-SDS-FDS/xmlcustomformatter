@@ -1,8 +1,11 @@
 """This module tests the processing of attributes."""
 
 from pathlib import Path
+from typing import cast
 
 import pytest
+
+from pytest import FixtureRequest
 
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
@@ -11,48 +14,39 @@ from xmlcustomformatter.options import Options
 class TestXMLCustomFormatterAttribute:
     """This class tests the processing of attributes."""
 
-    @pytest.mark.parametrize(
-        "xml_content, expected",
-        [
+    @staticmethod
+    @pytest.fixture(
+        params=[
             (
                 """<root a="b"/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="b"/>""",
+                Options(),
             ),
             (
                 """<root a="b" b="c"/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="b" b="c"/>""",
+                Options(),
             ),
             (
                 """<root a='b'/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="b"/>""",
+                Options(),
             ),
             (
                 """<root a="'b'"/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="'b'"/>""",
+                Options(),
             ),
             (
                 """<root a='"b"'/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="&quot;b&quot;"/>""",
+                Options(),
             ),
-        ],
-        ids=[
-            "one_attribute",
-            "two_attributes",
-            "attribute_with_single_quotes",
-            "attribute_with_single_quotes_inside_double_quotes",
-            "attribute_with_double_quotes_inside_single_quotes",
-        ],
-    )
-    def test_attributes(self, tmp_path: Path, xml_content: str, expected: str) -> None:
-        """Tests that attributes are processed correctly."""
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content)
-        formatter = XMLCustomFormatter(str(file_path), "output.xml")
-        assert "".join(formatter._result) == expected
-
-    @pytest.mark.parametrize(
-        "xml_content, expected, options",
-        [
+            (
+                """<root    a="b"   />""",
+                """<?xml version="1.0" encoding="UTF-8"?><root a="b"/>""",
+                Options(),
+            ),
             (
                 """<root b="c" a="b"/>""",
                 """<?xml version="1.0" encoding="UTF-8"?><root a="b" b="c"/>""",
@@ -65,15 +59,32 @@ class TestXMLCustomFormatterAttribute:
             ),
         ],
         ids=[
+            "one_attribute",
+            "two_attributes",
+            "attribute_with_single_quotes",
+            "attribute_with_single_quotes_inside_double_quotes",
+            "attribute_with_double_quotes_inside_single_quotes",
+            "attribute_with_spaces_around",
             "two_attributes_ordered_alphabetical",
             "two_attributes_not_ordered_alphabetical",
         ],
     )
-    def test_attribute_ordering(
-        self, tmp_path: Path, xml_content: str, expected: str, options: Options
-    ) -> None:
-        """Tests the ordering of attributes"""
+    def attributes(request: FixtureRequest) -> tuple[str, str, Options]:
+        """Yields xml_content, expected result and options."""
+        return cast(tuple[str, str, Options], request.param)
+
+    @staticmethod
+    @pytest.fixture
+    def xml_file(tmp_path: Path, attributes: tuple[str, str, Options]) -> str:
+        """Writes the XML content to a temp file and returns the path as a string."""
+        xml_content, _, _ = attributes
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content)
-        formatter = XMLCustomFormatter(str(file_path), "output.xml", options)
-        assert "".join(formatter._result) == expected
+        return str(file_path)
+
+    @staticmethod
+    def test_attributes(attributes: tuple[str, str, Options], xml_file: str) -> None:
+        """Tests that attributes are processed correctly, including ordering."""
+        _, expected, options = attributes
+        formatter = XMLCustomFormatter(xml_file, "output.xml", options)
+        assert formatter.get_result_as_string() == expected

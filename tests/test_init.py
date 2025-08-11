@@ -8,7 +8,8 @@ from xmlcustomformatter import main
 class TestInit:
     """This class tests the entry point."""
 
-    def test_main_prints_hello(self, capsys: CaptureFixture[str]) -> None:
+    @staticmethod
+    def test_main_prints_hello(capsys: CaptureFixture[str]) -> None:
         """Tests that the main function prints correctly."""
         main()
         captured = capsys.readouterr()

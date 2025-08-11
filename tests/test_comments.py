@@ -7,7 +7,6 @@ import pytest
 
 from pytest import FixtureRequest
 
-
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
 
@@ -89,7 +88,8 @@ class TestXMLCustomFormatterComments:
         file_path.write_text(xml_content)
         return str(file_path)
 
-    def test_xml_comment(self, comments: tuple[str, str, Options], xml_file: str) -> None:
+    @staticmethod
+    def test_xml_comment(comments: tuple[str, str, Options], xml_file: str) -> None:
         """Checks that comment nodes are formatted correctly."""
         _, expected, options = comments
         formatter = XMLCustomFormatter(xml_file, "output.xml", options)
