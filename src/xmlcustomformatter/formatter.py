@@ -54,7 +54,6 @@ class XMLCustomFormatter:
         self._dom = minidom.parse(self.input_file)
         self._indentation_level: int = 0
         self._result: list[str] = []
-        self._process_xml_declaration()
         self._process_node(self._dom)
         #     self.postprocess()
         #     self.write_to_output_file()
@@ -66,42 +65,6 @@ class XMLCustomFormatter:
     def get_result_as_string(self) -> str:
         """Returns the result as a concatenated string."""
         return "".join(self._result)
-
-    def _process_xml_declaration(self) -> None:
-        """
-        Processes the XML declaration. If version, encoding or standalone are not
-        set, then default values will be used. The declaration is appended to the result.
-        """
-        self._result.append(self._construct_xml_declaration())
-
-    def _construct_xml_declaration(self) -> str:
-        """Constructs the XML declaration."""
-        version = self._set_version()
-        encoding = self._set_encoding()
-        standalone = self._set_standalone()
-        return f"<?xml{version}{encoding}{standalone}?>"
-
-    def _set_encoding(self) -> str:
-        """Sets the encoding part of the XML declaration."""
-        if self._dom.encoding is None:
-            return f' encoding="{self.default_encoding}"'
-        return f' encoding="{self._dom.encoding}"'
-
-    def _set_standalone(self) -> str:
-        """Sets the standalone part of the XML declaration."""
-        if self._dom.standalone is None:
-            return self.default_standalone
-
-        if self._dom.standalone:
-            return ' standalone="yes"'
-
-        return ' standalone="no"'
-
-    def _set_version(self) -> str:
-        """Sets the version part of the XML declaration."""
-        if self._dom.version is None:
-            return f' version="{self.default_version}"'
-        return f' version="{self._dom.version}"'
 
     def _process_all_child_nodes(self, node: Node) -> None:
         if node.hasChildNodes():
@@ -292,7 +255,44 @@ class XMLCustomFormatter:
         return " -->" if self.options.comments_have_trailing_spaces else "-->"
 
     def _process_document_node(self, node: Document) -> None:
+        self._process_xml_declaration()
         self._process_all_child_nodes(node)
+
+    def _process_xml_declaration(self) -> None:
+        """
+        Processes the XML declaration. If version, encoding or standalone are not
+        set, then default values will be used. The declaration is appended to the result.
+        """
+        self._result.append(self._construct_xml_declaration())
+
+    def _construct_xml_declaration(self) -> str:
+        """Constructs the XML declaration."""
+        version = self._set_version()
+        encoding = self._set_encoding()
+        standalone = self._set_standalone()
+        return f"<?xml{version}{encoding}{standalone}?>"
+
+    def _set_encoding(self) -> str:
+        """Sets the encoding part of the XML declaration."""
+        if self._dom.encoding is None:
+            return f' encoding="{self.default_encoding}"'
+        return f' encoding="{self._dom.encoding}"'
+
+    def _set_standalone(self) -> str:
+        """Sets the standalone part of the XML declaration."""
+        if self._dom.standalone is None:
+            return self.default_standalone
+
+        if self._dom.standalone:
+            return ' standalone="yes"'
+
+        return ' standalone="no"'
+
+    def _set_version(self) -> str:
+        """Sets the version part of the XML declaration."""
+        if self._dom.version is None:
+            return f' version="{self.default_version}"'
+        return f' version="{self._dom.version}"'
 
     def _process_document_type_node(self, doc_type: DocumentType) -> None:
         self._result.append(self._set_doctype_content(doc_type))
