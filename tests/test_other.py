@@ -1,13 +1,16 @@
-from xml.dom.minidom import (
-    Node,
-)
+"""This class contains various other tests."""
+
+from xml.dom.minidom import Node
+from pathlib import Path
 
 import pytest
-from pathlib import Path
+
 from xmlcustomformatter.formatter import XMLCustomFormatter
 
 
-class TestXMLCustomFormatterFormatting:
+class TestXMLCustomFormatterOther:
+    """This class contains various other tests."""
+
     @pytest.fixture
     def xml_dummy(self, tmp_path: Path) -> XMLCustomFormatter:
         """Yields an instance of the XMLCustomFormatter class."""
@@ -15,6 +18,16 @@ class TestXMLCustomFormatterFormatting:
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml, encoding="UTF-8")
         return XMLCustomFormatter(str(file_path), "output.xml")
+
+    def test_get_result_as_list(self, xml_dummy: XMLCustomFormatter) -> None:
+        """Tests the result as a list of strings."""
+        expected = ['<?xml version="1.0" encoding="UTF-8"?>', "<root", "/>"]
+        assert xml_dummy.get_result_as_list() == expected
+
+    def test_get_result_as_string(self, xml_dummy: XMLCustomFormatter) -> None:
+        """Tests the result as a string."""
+        expected = """<?xml version="1.0" encoding="UTF-8"?><root/>"""
+        assert xml_dummy.get_result_as_string() == expected
 
     def test_xml_wrong_node(self, xml_dummy: XMLCustomFormatter) -> None:
         """Tests that an unhandled node type raises an exception."""

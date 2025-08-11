@@ -15,11 +15,18 @@ repos:
         pass_filenames: false
 
       - id: mypy
-        name: Run mypy with uv
+        name: Run mypy before commit
         entry: uv run mypy
         language: system
         types: [ python ]
         pass_filenames: false
+
+      - id: pylint
+        name: Run pylint before commit
+        entry: uv run pylint
+        language: system
+        types: [python]
+        pass_filenames: true
 
       - id: pytest
         name: Run pytest before commit

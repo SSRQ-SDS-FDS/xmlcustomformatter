@@ -1,8 +1,13 @@
+"""
+This module contains the Options helper class which is used to customize
+the XMLCustomFormatter class.
+"""
+
 from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
-class Options:
+class Options:  # pylint: disable=too-many-instance-attributes
     """
     Configuration options for the XML formatter.
 

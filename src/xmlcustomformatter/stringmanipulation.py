@@ -1,3 +1,5 @@
+"""This module contains the utility class StringManipulation."""
+
 import re
 
 

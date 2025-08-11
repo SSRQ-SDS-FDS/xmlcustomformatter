@@ -1,3 +1,5 @@
+"""This module tests the processing of doctype declarations."""
+
 from pathlib import Path
 
 import pytest
@@ -7,84 +9,74 @@ from xmlcustomformatter.options import Options
 
 
 class TestXMLCustomFormatterDocumentTypes:
+    """This class tests the processing of doctype declarations."""
+
     @pytest.mark.parametrize(
-        "test_name, xml_content, expected, options",
+        "xml_content, expected, options",
         [
             (
-                "minimal_doctype",
                 """<!DOCTYPE root><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root>\n<root/>""",
                 Options(),
             ),
             (
-                "doctype_with_external_id_system",
                 """<!DOCTYPE root SYSTEM "foo"><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root SYSTEM "foo">\n<root/>""",
                 Options(),
             ),
             (
-                "doctype_with_external_id_public",
                 """<!DOCTYPE root PUBLIC "foo" "bar"><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root PUBLIC "foo" "bar">'
                 "\n<root/>",
                 Options(),
             ),
             (
-                "doctype_with_empty_internal_subset",
                 """<!DOCTYPE root []><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root>\n<root/>""",
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_pereference",
                 """<!DOCTYPE root [%foo;]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root [\n    %foo;\n]>\n<root/>',
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_pi",
                 """<!DOCTYPE root [<?foo bar?>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <?foo bar?>\n]>\n<root/>",
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_comment",
                 """<!DOCTYPE root [<!--foo-->]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!--foo-->\n]>\n<root/>",
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_notation",
                 """<!DOCTYPE root [<!NOTATION foo SYSTEM "foo">]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 '\n    <!NOTATION foo SYSTEM "foo">\n]>\n<root/>',
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_entity",
                 """<!DOCTYPE root [<!ENTITY foo "foo">]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 '\n    <!ENTITY foo "foo">\n]>\n<root/>',
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_element",
                 """<!DOCTYPE root [<!ELEMENT root EMPTY>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!ELEMENT root EMPTY>\n]>\n<root/>",
                 Options(),
             ),
             (
-                "doctype_with_internal_subset_with_attlist",
                 """<!DOCTYPE root [<!ATTLIST root>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!ATTLIST root>\n]>\n<root/>",
                 Options(),
             ),
             (
-                "doctype_with_all_kinds_of_content",
                 '<!DOCTYPE root PUBLIC "foo" "bar" ['
                 "<!ELEMENT root EMPTY>"
                 "<!ATTLIST root>"
@@ -105,7 +97,6 @@ class TestXMLCustomFormatterDocumentTypes:
                 Options(),
             ),
             (
-                "doctype_with_all_kinds_of_content",
                 '<!DOCTYPE root PUBLIC "foo" "bar" ['
                 "<!ELEMENT root EMPTY>"
                 "<!ATTLIST root>"
@@ -129,10 +120,26 @@ class TestXMLCustomFormatterDocumentTypes:
                 ),
             ),
         ],
+        ids=[
+            "minimal_doctype",
+            "doctype_with_external_id_system",
+            "doctype_with_external_id_public",
+            "doctype_with_empty_internal_subset",
+            "doctype_with_internal_subset_with_pereference",
+            "doctype_with_internal_subset_with_pi",
+            "doctype_with_internal_subset_with_comment",
+            "doctype_with_internal_subset_with_notation",
+            "doctype_with_internal_subset_with_entity",
+            "doctype_with_internal_subset_with_element",
+            "doctype_with_internal_subset_with_attlist",
+            "doctype_with_all_kinds_of_content",
+            "doctype_with_all_kinds_of_content",
+        ],
     )
     def test_document_types(
-        self, tmp_path: Path, test_name: str, xml_content: str, expected: str, options: Options
+        self, tmp_path: Path, xml_content: str, expected: str, options: Options
     ) -> None:
+        """Tests the processing of doctype declarations."""
         file_path = tmp_path / "input.xml"
         file_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(file_path), "output.xml", options)

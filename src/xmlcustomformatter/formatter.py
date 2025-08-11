@@ -1,3 +1,5 @@
+"""This module contains the XMLCustomFormatter class."""
+
 import re
 from typing import Optional, cast
 from xml.dom import minidom
@@ -57,6 +59,14 @@ class XMLCustomFormatter:
         #     self.postprocess()
         #     self.write_to_output_file()
 
+    def get_result_as_list(self) -> list[str]:
+        """Returns the result as a list of strings."""
+        return self._result
+
+    def get_result_as_string(self) -> str:
+        """Returns the result as a concatenated string."""
+        return "".join(self._result)
+
     def _process_xml_declaration(self) -> None:
         """
         Processes the XML declaration. If version, encoding or standalone are not
@@ -81,10 +91,11 @@ class XMLCustomFormatter:
         """Sets the standalone part of the XML declaration."""
         if self._dom.standalone is None:
             return self.default_standalone
-        elif self._dom.standalone:
+
+        if self._dom.standalone:
             return ' standalone="yes"'
-        else:
-            return ' standalone="no"'
+
+        return ' standalone="no"'
 
     def _set_version(self) -> str:
         """Sets the version part of the XML declaration."""
@@ -238,9 +249,9 @@ class XMLCustomFormatter:
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
-        self._result.append(self._construct_processing_instructio(pi))
+        self._result.append(self._construct_processing_instruction(pi))
 
-    def _construct_processing_instructio(self, pi: ProcessingInstruction) -> str:
+    def _construct_processing_instruction(self, pi: ProcessingInstruction) -> str:
         newline = self._set_processing_instruction_newline()
         indentation = self._indentation(self._calculate_indentation())
         target = pi.target
@@ -306,7 +317,7 @@ class XMLCustomFormatter:
         self._decrease_indentation_level()
 
         # These are all valid constituents of a doctype declaration
-        # according to xml version 1.0 spezification
+        # according to xml version 1.0 specification
         patterns = [
             r"<!ELEMENT[^>]*?>",  # element declarations
             r"<!ENTITY[^>]*?>",  # entity declarations
@@ -314,7 +325,7 @@ class XMLCustomFormatter:
             r"<!NOTATION[^>]*?>",  # notation declarations
             r"<!--.*?-->",  # comments
             r"<\?.*?\?>",  # processing instructions
-            r"%\w+;",  # pereferences
+            r"%\w+;",  # preferences
         ]
         combined_pattern = f"({'|'.join(patterns)})"
         parts = re.findall(combined_pattern, subset, re.DOTALL)
@@ -328,7 +339,7 @@ class XMLCustomFormatter:
         if public_id is not None:
             return f' PUBLIC "{public_id}" "{system_id}"'
 
-        elif system_id is not None:
+        if system_id is not None:
             return f' SYSTEM "{system_id}"'
 
         return ""

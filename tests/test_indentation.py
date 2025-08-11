@@ -1,12 +1,14 @@
-from pathlib import Path
+"""This module tests the indentation functionality in the XMLCustomFormatter class."""
 
-from xmlcustomformatter.formatter import XMLCustomFormatter
+from pathlib import Path
 
 import pytest
 
+from xmlcustomformatter.formatter import XMLCustomFormatter
+
 
 class TestXMLCustomFormatterIndentation:
-    """Unit tests for the indentation functionality in the XMLCustomFormatter class."""
+    """This class tests the indentation functionality in the XMLCustomFormatter class."""
 
     @pytest.fixture
     def xml_content(self) -> str:
@@ -80,6 +82,7 @@ class TestXMLCustomFormatterIndentation:
             (4, "    "),
             (8, "        "),
         ],
+        ids=["zero-indentation", "four-spaces", "eight-spaces"],
     )
     def test_indentation_(self, xml_file: str, count: int, expected: str) -> None:
         """Tests that the indentation is returned correctly."""

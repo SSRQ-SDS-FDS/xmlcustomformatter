@@ -1,15 +1,16 @@
-import pytest
+"""This module tests the initialization behavior of the XMLCustomFormatter class."""
 
 from pathlib import Path
+from xml.dom.minidom import Document
+
+import pytest
+
 from xmlcustomformatter.formatter import XMLCustomFormatter
 from xmlcustomformatter.options import Options
-from xml.dom.minidom import Document
 
 
 class TestXMLCustomFormatterInitialization:
-    """
-    Unit tests for the initialization behavior of the XMLCustomFormatter class.
-    """
+    """Unit tests for the initialization behavior of the XMLCustomFormatter class."""
 
     @pytest.fixture
     def indentation_at_start(self) -> int:
@@ -89,21 +90,15 @@ class TestXMLCustomFormatterInitialization:
         assert custom_formatter.options.inline_elements == options.inline_elements
 
     def test_dom_instance(self, default_formatter: XMLCustomFormatter) -> None:
-        """
-        Checks that the input file is correctly parsed to a Document object.
-        """
+        """Checks that the input file is correctly parsed to a Document object."""
         assert isinstance(default_formatter._dom, Document)
 
     def test_dom_root_element_is_not_none(self, default_formatter: XMLCustomFormatter) -> None:
-        """
-        Checks that the root element is correctly parsed from the input file.
-        """
+        """Checks that the root element is correctly parsed from the input file."""
         assert default_formatter._dom.documentElement is not None
 
     def test_dom_root_element_is_root(self, default_formatter: XMLCustomFormatter) -> None:
-        """
-        Checks that the root element is correctly parsed from the input file.
-        """
+        """Checks that the root element is correctly parsed from the input file."""
         if default_formatter._dom.documentElement is not None:
             assert default_formatter._dom.documentElement.tagName == "root"
 
@@ -119,10 +114,11 @@ class TestXMLCustomFormatterInitialization:
     def test_indentation_level_at_start(
         self, default_formatter: XMLCustomFormatter, indentation_at_start: int
     ) -> None:
+        """Tests that the indentation level is correctly set at start."""
         assert default_formatter._indentation_level == indentation_at_start
 
     def test_result_at_start(
         self, default_formatter: XMLCustomFormatter, result_at_start: str
     ) -> None:
-        print(repr(default_formatter._dom.standalone))
+        """Tests that the result is correctly set at start."""
         assert default_formatter._result[0] == result_at_start
