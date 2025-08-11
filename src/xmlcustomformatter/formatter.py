@@ -240,12 +240,13 @@ class XMLCustomFormatter:
             self._process_cdata_section(text)
 
     def _process_text(self, text: Text) -> None:
-        # ToDo: Normalization of text nodes
-        self._result.append(text.data)
+        data = SM.reduce_redundant_whitespace(text.data)
+        self._result.append(data)
 
     def _process_cdata_section(self, cdata: Text) -> None:
-        # ToDo: Normalization of cdata nodes
-        self._result.append(f"<![CDATA[{cdata.data}]]>")
+        data = SM.reduce_redundant_whitespace(cdata.data)
+        data = data.strip()
+        self._result.append(f"<![CDATA[{data}]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
