@@ -66,16 +66,18 @@ class TestCustomXMLFormatterCDATA:
 
     @staticmethod
     @pytest.fixture
-    def xml_file(tmp_path: Path, cdatanodes: tuple[str, str]) -> str:
+    def xml_files(tmp_path: Path, cdatanodes: tuple[str, str]) -> tuple[str, str]:
         """Writes the XML content to a temp file and returns the path as a string."""
         xml_content, _ = cdatanodes
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content)
-        return str(file_path)
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        return str(input_path), str(output_path)
 
     @staticmethod
-    def test_cdata_noted(cdatanodes: tuple[str, str], xml_file: str) -> None:
+    def test_cdata_noted(cdatanodes: tuple[str, str], xml_files: tuple[str, str]) -> None:
         """Tests that CDATASections are processed correctly."""
         _, expected = cdatanodes
-        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        input_file, output_file = xml_files
+        formatter = XMLCustomFormatter(input_file, output_file)
         assert formatter.get_result_as_string() == expected

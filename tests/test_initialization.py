@@ -38,33 +38,42 @@ class TestXMLCustomFormatterInitialization:
 
     @staticmethod
     @pytest.fixture
-    def xml_file(tmp_path: Path, xml_content: str) -> str:
+    def xml_files(tmp_path: Path, xml_content: str) -> tuple[str, str]:
         """Returns a file path as a string"""
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content, encoding="utf-8")
-        return str(file_path)
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content, encoding="utf-8")
+        return str(input_path), str(output_path)
 
     @staticmethod
     @pytest.fixture
-    def default_formatter(xml_file: str) -> XMLCustomFormatter:
+    def default_formatter(xml_files: tuple[str, str]) -> XMLCustomFormatter:
         """Returns an instance with default formatting options."""
-        return XMLCustomFormatter(xml_file, "output.xml")
+        input_file, output_file = xml_files
+        return XMLCustomFormatter(input_file, output_file)
 
     @staticmethod
     @pytest.fixture
-    def custom_formatter(options: Options, xml_file: str) -> XMLCustomFormatter:
+    def custom_formatter(options: Options, xml_files: tuple[str, str]) -> XMLCustomFormatter:
         """Returns an instance with custom formatting options."""
-        return XMLCustomFormatter(xml_file, "output.xml", options)
+        input_file, output_file = xml_files
+        return XMLCustomFormatter(input_file, output_file, options)
 
     @staticmethod
-    def test_sets_input_file(default_formatter: XMLCustomFormatter, xml_file: str) -> None:
+    def test_sets_input_file(
+        default_formatter: XMLCustomFormatter, xml_files: tuple[str, str]
+    ) -> None:
         """Checks that the input_file attribute is set correctly upon initialization."""
-        assert default_formatter.input_file == xml_file
+        input_file, _ = xml_files
+        assert default_formatter.input_file == input_file
 
     @staticmethod
-    def test_sets_output_file(default_formatter: XMLCustomFormatter) -> None:
+    def test_sets_output_file(
+        default_formatter: XMLCustomFormatter, xml_files: tuple[str, str]
+    ) -> None:
         """Checks that the output_file attribute is set correctly upon initialization."""
-        assert default_formatter.output_file == "output.xml"
+        _, output_file = xml_files
+        assert default_formatter.output_file == output_file
 
     @staticmethod
     def test_sets_default_formatting_options(default_formatter: XMLCustomFormatter) -> None:

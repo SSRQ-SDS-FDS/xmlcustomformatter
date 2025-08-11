@@ -72,16 +72,20 @@ class TestXMLCustomFormatterXMLDeclarations:
 
     @staticmethod
     @pytest.fixture
-    def xml_file(tmp_path: Path, xml_declarations: tuple[str, str, str]) -> str:
+    def xml_files(tmp_path: Path, xml_declarations: tuple[str, str, str]) -> tuple[str, str]:
         """Writes the XML content to a temp file and returns the path as a string."""
         encoding, xml_content, _ = xml_declarations
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content, encoding=encoding)
-        return str(file_path)
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content, encoding=encoding)
+        return str(input_path), str(output_path)
 
     @staticmethod
-    def test_xml_declaration(xml_declarations: tuple[str, str, str], xml_file: str) -> None:
+    def test_xml_declaration(
+        xml_declarations: tuple[str, str, str], xml_files: tuple[str, str]
+    ) -> None:
         """Tests the XML declaration is being constructed correctly."""
         _, _, expected = xml_declarations
-        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        input_file, output_file = xml_files
+        formatter = XMLCustomFormatter(input_file, output_file)
         assert formatter._result[0] == expected

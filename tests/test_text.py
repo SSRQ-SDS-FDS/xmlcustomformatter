@@ -61,16 +61,18 @@ class TestCustomXMLFormatterText:
 
     @staticmethod
     @pytest.fixture
-    def xml_file(tmp_path: Path, textnodes: tuple[str, str]) -> str:
+    def xml_files(tmp_path: Path, textnodes: tuple[str, str]) -> tuple[str, str]:
         """Writes the XML content to a temp file and returns the path as a string."""
         xml_content, _ = textnodes
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content)
-        return str(file_path)
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        return str(input_path), str(output_path)
 
     @staticmethod
-    def test_textnodes(textnodes: tuple[str, str], xml_file: str) -> None:
+    def test_textnodes(textnodes: tuple[str, str], xml_files: tuple[str, str]) -> None:
         """Tests that textnodes are processed correctly."""
         _, expected = textnodes
-        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        input_file, output_file = xml_files
+        formatter = XMLCustomFormatter(input_file, output_file)
         assert formatter.get_result_as_string() == expected

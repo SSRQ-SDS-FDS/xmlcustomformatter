@@ -71,18 +71,20 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     @pytest.fixture
-    def xml_file(tmp_path: Path, elements: tuple[str, bool]) -> str:
+    def xml_files(tmp_path: Path, elements: tuple[str, bool]) -> tuple[str, str]:
         """Writes the XML content to a temp file and returns the path as a string."""
         xml_content, _ = elements
-        file_path = tmp_path / "input.xml"
-        file_path.write_text(xml_content)
-        return str(file_path)
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        return str(input_path), str(output_path)
 
     @staticmethod
-    def test_is_empty_element(xml_file: str, elements: tuple[str, bool]) -> None:
+    def test_is_empty_element(xml_files: tuple[str, str], elements: tuple[str, bool]) -> None:
         """Tests that empty and non-empty elements are classified correctly."""
         _, expected = elements
-        formatter = XMLCustomFormatter(xml_file, "output.xml")
+        input_file, output_file = xml_files
+        formatter = XMLCustomFormatter(input_file, output_file)
         if isinstance(formatter._dom.documentElement, Element):
             assert formatter._is_empty_element(formatter._dom.documentElement) == expected
 
