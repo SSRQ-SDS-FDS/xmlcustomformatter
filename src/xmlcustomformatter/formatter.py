@@ -137,53 +137,81 @@ class XMLCustomFormatter:
                 self._process_node(child)
 
     def _process_element_node(self, element: Element) -> None:
-        """Processes all element nodes depending on emptiness."""
-        if self._is_empty_element(element):
-            self._process_empty_element(element)
-        else:
-            self._process_non_empty_element(element)
+        """Processes all element nodes depending on emptiness and element group."""
+        empty = self._is_empty_element(element)
 
-    def _process_empty_element(self, element: Element) -> None:
-        """Processes empty elements."""
         if self._is_inline_element(element):
-            self._open_start_tag(element)
-            self._process_attributes(element)
-            self._close_empty_tag()
+            group = "inline"
+        elif self._is_semicontainer_element(element):
+            group = "semicontainer"
         else:
-            self._result.append("\n")
-            self._result.append(self._indentation(self._calculate_indentation()))
-            self._open_start_tag(element)
-            self._process_attributes(element)
-            self._close_empty_tag()
-            self._result.append("\n")
+            group = "container"
 
-    def _process_non_empty_element(self, element: Element) -> None:
-        """Processes all non-empty elements.."""
-        if self._is_inline_element(element):
-            self._open_start_tag(element)
-            self._process_attributes(element)
-            self._close_start_tag()
-            self._process_all_child_nodes(element)
-            self._process_element_end_tag(element)
-        else:
-            self._result.append("\n")
-            self._result.append(self._indentation(self._calculate_indentation()))
-            self._open_start_tag(element)
-            self._process_attributes(element)
-            self._close_start_tag()
-            self._result.append("\n")
-            self._increase_indentation_level()
-            self._process_all_child_nodes(element)
-            self._decrease_indentation_level()
-            self._result.append("\n")
-            self._result.append(self._indentation(self._calculate_indentation()))
-            self._process_element_end_tag(element)
-            self._result.append("\n")
+        method_map = {
+            ("inline", True): self._process_empty_inline_element,
+            ("inline", False): self._process_nonempty_inline_element,
+            ("semicontainer", True): self._process_empty_semicontainer_element,
+            ("semicontainer", False): self._process_nonempty_semicontainer_element,
+            ("container", True): self._process_empty_container_element,
+            ("container", False): self._process_nonempty_container_element,
+        }
+
+        method = method_map[(group, empty)]
+        method(element)
+
+    def _process_empty_inline_element(self, element: Element) -> None:
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_empty_tag()
+
+    def _process_nonempty_inline_element(self, element: Element) -> None:
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_start_tag()
+        self._process_all_child_nodes(element)
+        self._process_element_end_tag(element)
+
+    def _process_empty_container_element(self, element: Element) -> None:
+        self._result.append("\n")
+        self._result.append(self._indentation(self._calculate_indentation()))
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_empty_tag()
+        self._result.append("\n")
+
+    def _process_nonempty_container_element(self, element: Element) -> None:
+        self._result.append("\n")
+        self._result.append(self._indentation(self._calculate_indentation()))
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_start_tag()
+        self._result.append("\n")
+        self._increase_indentation_level()
+        self._process_all_child_nodes(element)
+        self._decrease_indentation_level()
+        self._result.append("\n")
+        self._result.append(self._indentation(self._calculate_indentation()))
+        self._process_element_end_tag(element)
+        self._result.append("\n")
+
+    def _process_empty_semicontainer_element(self, element: Element) -> None:
+        raise NotImplementedError
+
+    def _process_nonempty_semicontainer_element(self, element: Element) -> None:
+        raise NotImplementedError
 
     def _is_inline_element(self, element: Element) -> bool:
         if (
             self.options.inline_elements is not None
             and element.tagName in self.options.inline_elements
+        ):
+            return True
+        return False
+
+    def _is_semicontainer_element(self, element: Element) -> bool:
+        if (
+            self.options.semicontainer_elements is not None
+            and element.tagName in self.options.semicontainer_elements
         ):
             return True
         return False

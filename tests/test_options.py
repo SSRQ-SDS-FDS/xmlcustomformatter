@@ -1,6 +1,10 @@
 """This module tests the behavior of the Options class."""
 
+from typing import cast, Any
+
 import pytest
+from pytest import FixtureRequest
+
 from xmlcustomformatter.options import Options
 
 
@@ -32,6 +36,12 @@ class TestDefaultOptions:
         return ()
 
     @staticmethod
+    @pytest.fixture
+    def default_semicontainer_elements() -> tuple[()]:
+        """Fixture for the default semicontainer_elements tuple."""
+        return ()
+
+    @staticmethod
     def test_default_indentation(default_options: Options, default_indentation: int) -> None:
         """Tests that the default indentation value is correctly set."""
         assert default_options.indentation == default_indentation
@@ -49,6 +59,13 @@ class TestDefaultOptions:
     ) -> None:
         """Tests that the default inline_elements tuple is correctly set."""
         assert default_options.inline_elements == default_inline_elements
+
+    @staticmethod
+    def test_default_semicontainer_elements(
+        default_options: Options, default_semicontainer_elements: tuple[()]
+    ) -> None:
+        """Tests that the default semicontainer_elements tuple is correctly set."""
+        assert default_options.semicontainer_elements == default_semicontainer_elements
 
 
 class TestCustomOptions:
@@ -69,35 +86,59 @@ class TestCustomOptions:
         assert options.max_line_length == max_line_length
 
     @staticmethod
-    @pytest.mark.parametrize(
-        "inline_elements",
-        [
-            ("div", "span"),
-            tuple(),
+    @pytest.fixture(
+        params=[
             ("a",),
+            (
+                "div",
+                "span",
+            ),
         ],
-        ids=["two-elements", "a-tuple", "one-element"],
+        ids=[
+            "one element",
+            "two elements",
+        ],
     )
-    def test_custom_inline_elements(inline_elements: tuple[str, ...]) -> None:
-        """Tests that custom valid inline_elements tuples are accepted and correctly set."""
-        options = Options(inline_elements=inline_elements)
-        assert options.inline_elements == inline_elements
+    def valid_elements(request: FixtureRequest) -> tuple[str, ...]:
+        """Valid inline_elements tuples."""
+        return cast(tuple[str, ...], request.param)
 
     @staticmethod
-    @pytest.mark.parametrize(
-        "invalid_input",
-        [
-            ["div", 42],
-            (None,),
-            [object()],
-            (b"byte",),
-            [True],
+    @pytest.fixture(
+        params=[
+            (tuple(),),
+            (["div", 42]),
+            ((None,)),
+            ([object()]),
+            ((b"byte",)),
+            ([True]),
         ],
-        ids=["integers", "none", "objects", "bytes", "booleans"],
+        ids=["an empty tuple", "integers", "none", "objects", "bytes", "booleans"],
     )
-    def test_custom_invalid_inline_elements(invalid_input: list[str]) -> None:
-        """
-        Tests that custom invalid inline_elements raise a TypeError.
-        """
-        with pytest.raises(TypeError, match="inline_elements must contain only strings"):
-            Options(inline_elements=tuple(invalid_input))
+    def invalid_elements(request: FixtureRequest) -> tuple[Any, ...]:
+        """Invalid inline_elements inputs."""
+        return tuple(request.param)
+
+    @staticmethod
+    def test_custom_inline_elements(valid_elements: tuple[str, ...]) -> None:
+        """Valid tuples are accepted and set correctly."""
+        options = Options(inline_elements=valid_elements)
+        assert options.inline_elements == valid_elements
+
+    @staticmethod
+    def test_custom_invalid_inline_elements(invalid_elements: tuple[Any, ...]) -> None:
+        """Invalid tuples raise TypeError."""
+        with pytest.raises(TypeError):
+            Options(inline_elements=invalid_elements)
+
+    @staticmethod
+    def test_custom_semicontainer_elements(valid_elements: tuple[str, ...]) -> None:
+        """Valid tuples are accepted and set correctly."""
+        options = Options(semicontainer_elements=valid_elements)
+        assert options.semicontainer_elements == valid_elements
+
+    @staticmethod
+    def test_custom_invalid_semicontainer_elements(invalid_elements: tuple[Any, ...]) -> None:
+        """Invalid tuples raise TypeError."""
+        with pytest.raises(TypeError):
+            Options(semicontainer_elements=invalid_elements)

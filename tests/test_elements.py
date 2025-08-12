@@ -107,7 +107,8 @@ class TestXMLCustomFormatterElements:
         formatter = XMLCustomFormatter(input_file, output_file, options)
         assert not formatter._is_inline_element(element)
 
-    def test_inline_element(self, tmp_path: Path) -> None:
+    @staticmethod
+    def test_inline_element(tmp_path: Path) -> None:
         """Tests the formatting of a certain inline element."""
         xml_content = "<root>foo</root>"
         expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root>foo</root>"""
@@ -119,7 +120,30 @@ class TestXMLCustomFormatterElements:
         result = Path(formatter.output_file).read_text(encoding="UTF-8")
         assert result == expected
 
-    def test_default_element(self, tmp_path: Path) -> None:
+    @staticmethod
+    def test_semicontainer_element(tmp_path: Path) -> None:
+        """Tests the formatting of a semicontainer element."""
+        xml_content = "<root>foo</root>"
+        options = Options(semicontainer_elements=("root",))
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        with pytest.raises(NotImplementedError):
+            XMLCustomFormatter(str(input_path), str(output_path), options)
+
+    @staticmethod
+    def test_empty_semicontainer_element(tmp_path: Path) -> None:
+        """Tests the formatting of a semicontainer element."""
+        xml_content = "<root/>"
+        options = Options(semicontainer_elements=("root",))
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        with pytest.raises(NotImplementedError):
+            XMLCustomFormatter(str(input_path), str(output_path), options)
+
+    @staticmethod
+    def test_default_element(tmp_path: Path) -> None:
         """Tests the formatting of a default element."""
         xml_content = "<root>foo</root>"
         expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root>\n    foo\n</root>\n"""

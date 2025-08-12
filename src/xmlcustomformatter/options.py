@@ -16,6 +16,8 @@ class Options:  # pylint: disable=too-many-instance-attributes
         max_line_length: Maximum allowed line length before wrapping occurs.
         inline_elements: A tuple of element names that should be treated as inline
             during formatting. All element names must be strings.
+       semicontainer_elements: A tuple of element names that should be treated as semi containers
+            during formatting. All element names must be strings.
         sorted_attributes: Attributes may be sorted by name in alphabetical order.
         comments_have_trailing_spaces: Comments may have spaces between their content
             and their delimiters.
@@ -32,6 +34,7 @@ class Options:  # pylint: disable=too-many-instance-attributes
 
     # Options for elements
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
+    semicontainer_elements: tuple[str, ...] = field(default_factory=tuple)
 
     # Options for attributes
     sorted_attributes: bool = field(default=True)
@@ -49,11 +52,15 @@ class Options:  # pylint: disable=too-many-instance-attributes
 
     def __post_init__(self) -> None:
         """
-        Validates that all elements in `inline_elements` are of type `str`.
+        Validates that all elements in inline_elements and semicontainer_elements are of type str.
 
         Raises:
-            TypeError: If one or more elements in `inline_elements` are not strings.
+            TypeError: If one or more elements are not strings.
         """
         invalid = [el for el in self.inline_elements if not isinstance(el, str)]
         if invalid:
             raise TypeError(f"inline_elements must contain only strings. Invalid: {invalid}")
+
+        invalid = [el for el in self.semicontainer_elements if not isinstance(el, str)]
+        if invalid:
+            raise TypeError(f"semicontainer_elements must contain only strings. Invalid: {invalid}")
