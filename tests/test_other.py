@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from xmlcustomformatter.formatter import XMLCustomFormatter
+from xmlcustomformatter.options import Options
 
 
 class TestXMLCustomFormatterOther:
@@ -19,18 +20,19 @@ class TestXMLCustomFormatterOther:
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml, encoding="UTF-8")
-        return XMLCustomFormatter(str(input_path), str(output_path))
+        options = Options(inline_elements=("root",))
+        return XMLCustomFormatter(str(input_path), str(output_path), options)
 
     @staticmethod
     def test_get_result_as_list(xml_dummy: XMLCustomFormatter) -> None:
         """Tests the result as a list of strings."""
-        expected = ['<?xml version="1.0" encoding="UTF-8"?>', "<root", "/>"]
+        expected = ['<?xml version="1.0" encoding="UTF-8"?>\n', "<root/>"]
         assert xml_dummy.get_result_as_list() == expected
 
     @staticmethod
     def test_get_result_as_string(xml_dummy: XMLCustomFormatter) -> None:
         """Tests the result as a string."""
-        expected = """<?xml version="1.0" encoding="UTF-8"?><root/>"""
+        expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root/>"""
         assert xml_dummy.get_result_as_string() == expected
 
     @staticmethod
@@ -47,6 +49,6 @@ class TestXMLCustomFormatterOther:
     @staticmethod
     def test_output_file_has_correct_content(xml_dummy: XMLCustomFormatter) -> None:
         """Checks that the output file has the correct content."""
-        expected = """<?xml version="1.0" encoding="UTF-8"?><root/>"""
+        expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root/>"""
         result = Path(xml_dummy.output_file).read_text(encoding="UTF-8")
         assert result == expected

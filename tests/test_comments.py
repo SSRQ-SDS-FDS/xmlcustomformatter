@@ -20,47 +20,51 @@ class TestXMLCustomFormatterComments:
             (
                 """<!--Foo--><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<?xml version="1.0"?><!--Foo--><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<root><!--Foo--></root>""",
-                """<?xml version="1.0" encoding="UTF-8"?><root>\n<!-- Foo -->\n</root>""",
-                Options(),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root>\n<!-- Foo -->\n</root>""",
+                Options(inline_elements=("root",)),
             ),
             (
                 """<root/><!--Foo-->""",
-                """<?xml version="1.0" encoding="UTF-8"?><root/>\n<!-- Foo -->\n""",
-                Options(),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<!-- Foo -->\n""",
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!--  Foo  --><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!--\nFoo\n--><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo -->\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!--  Foo  \n Bar  --><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!-- Foo Bar -->\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!--  Foo  \n Bar  --><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!--Foo Bar-->\n<root/>""",
-                Options(comments_have_trailing_spaces=False),
+                Options(comments_have_trailing_spaces=False, inline_elements=("root",)),
             ),
             (
                 """<!--  Foo  Bar  --><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?><!--Foo Bar--><root/>""",
-                Options(comments_have_trailing_spaces=False, comments_start_new_lines=False),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<!--Foo Bar--><root/>""",
+                Options(
+                    comments_have_trailing_spaces=False,
+                    comments_start_new_lines=False,
+                    inline_elements=("root",),
+                ),
             ),
         ],
         ids=[

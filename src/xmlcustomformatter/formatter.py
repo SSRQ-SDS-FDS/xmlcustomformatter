@@ -56,7 +56,7 @@ class XMLCustomFormatter:
         self._indentation_level: int = 0
         self._result: list[str] = []
         self._process_node(self._dom)
-        #     self.postprocess()
+        self._postprocess()
         self._write_to_output_file()
 
     def get_result_as_list(self) -> list[str]:
@@ -133,6 +133,7 @@ class XMLCustomFormatter:
         """Iterates over all existing child nodes and calls the main processing method."""
         if node.hasChildNodes():
             for child in node.childNodes:
+                self._result.append(self._indentation(self._calculate_indentation()))
                 self._process_node(child)
 
     def _process_element_node(self, element: Element) -> None:
@@ -144,17 +145,48 @@ class XMLCustomFormatter:
 
     def _process_empty_element(self, element: Element) -> None:
         """Processes empty elements."""
-        self._open_start_tag(element)
-        self._process_attributes(element)
-        self._close_empty_tag()
+        if self._is_inline_element(element):
+            self._open_start_tag(element)
+            self._process_attributes(element)
+            self._close_empty_tag()
+        else:
+            self._result.append("\n")
+            self._result.append(self._indentation(self._calculate_indentation()))
+            self._open_start_tag(element)
+            self._process_attributes(element)
+            self._close_empty_tag()
+            self._result.append("\n")
 
     def _process_non_empty_element(self, element: Element) -> None:
         """Processes all non-empty elements.."""
-        self._open_start_tag(element)
-        self._process_attributes(element)
-        self._close_start_tag()
-        self._process_all_child_nodes(element)
-        self._process_element_end_tag(element)
+        if self._is_inline_element(element):
+            self._open_start_tag(element)
+            self._process_attributes(element)
+            self._close_start_tag()
+            self._process_all_child_nodes(element)
+            self._process_element_end_tag(element)
+        else:
+            self._result.append("\n")
+            self._result.append(self._indentation(self._calculate_indentation()))
+            self._open_start_tag(element)
+            self._process_attributes(element)
+            self._close_start_tag()
+            self._result.append("\n")
+            self._increase_indentation_level()
+            self._process_all_child_nodes(element)
+            self._decrease_indentation_level()
+            self._result.append("\n")
+            self._result.append(self._indentation(self._calculate_indentation()))
+            self._process_element_end_tag(element)
+            self._result.append("\n")
+
+    def _is_inline_element(self, element: Element) -> bool:
+        if (
+            self.options.inline_elements is not None
+            and element.tagName in self.options.inline_elements
+        ):
+            return True
+        return False
 
     def _process_element_end_tag(self, element: Element) -> None:
         """Processes the end tag of a non-empty element."""
@@ -298,7 +330,7 @@ class XMLCustomFormatter:
         version = self._set_version()
         encoding = self._set_encoding()
         standalone = self._set_standalone()
-        self._result.append(f"<?xml{version}{encoding}{standalone}?>")
+        self._result.append(f"<?xml{version}{encoding}{standalone}?>\n")
 
     def _set_encoding(self) -> str:
         """Sets the encoding part of the XML declaration."""
@@ -412,20 +444,25 @@ class XMLCustomFormatter:
         """
         return not element.hasChildNodes()
 
+    def _postprocess(self) -> None:
+        """Delegates postprocessing of result to specialized methods."""
+        self._postprocess_rearrange_result()
+
+    #     self.postprocess_result_lines()
+    #     self.postprocess_result_as_string()
+
+    def _postprocess_rearrange_result(self) -> None:
+        """Splits the result at newline and removes empty lines."""
+        result = "".join(self._result)
+        result = SM.remove_empty_lines(result)
+        result = SM.remove_whitespace_before_eol(result)
+        self._result = result.splitlines(keepends=True)
+
     def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""
         with open(self.output_file, "w", encoding=self._encoding) as f:
             f.writelines(self._result)
 
-    # def postprocess(self) -> None:
-    #     self.postprocess_rearrange_result()
-    #     self.postprocess_result_lines()
-    #     self.postprocess_result_as_string()
-    #
-    # # Functions for postprocessing
-    # def postprocess_rearrange_result(self) -> None:
-    #     self._result = "".join(self._result).split("\n")
-    #
     # def postprocess_result_lines(self) -> None:
     #     lines = self._result
     #     self._result = []
@@ -468,12 +505,3 @@ class XMLCustomFormatter:
     # @staticmethod
     # def get_current_indentation(string) -> int:
     #     return len(string) - len(string.lstrip())
-    #
-    # def is_inline_element(self, node: minidom.Element) -> bool:
-    #     if (
-    #         self.options.inline_elements is not None
-    #         and node.tagName in self.options.inline_elements
-    #     ):
-    #         return True
-    #
-    #     return False

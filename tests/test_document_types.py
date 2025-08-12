@@ -20,64 +20,64 @@ class TestXMLCustomFormatterDocumentTypes:
             (
                 """<!DOCTYPE root><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root SYSTEM "foo"><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root SYSTEM "foo">\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root PUBLIC "foo" "bar"><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root PUBLIC "foo" "bar">'
                 "\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root []><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [%foo;]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root [\n    %foo;\n]>\n<root/>',
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<?foo bar?>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <?foo bar?>\n]>\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<!--foo-->]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!--foo-->\n]>\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<!NOTATION foo SYSTEM "foo">]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 '\n    <!NOTATION foo SYSTEM "foo">\n]>\n<root/>',
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<!ENTITY foo "foo">]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 '\n    <!ENTITY foo "foo">\n]>\n<root/>',
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<!ELEMENT root EMPTY>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!ELEMENT root EMPTY>\n]>\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<!DOCTYPE root [<!ATTLIST root>]><root/>""",
                 '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root ['
                 "\n    <!ATTLIST root>\n]>\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 '<!DOCTYPE root PUBLIC "foo" "bar" ['
@@ -97,7 +97,7 @@ class TestXMLCustomFormatterDocumentTypes:
                 '\n    <!NOTATION foo SYSTEM "foo">'
                 '\n    <!ENTITY foo "foo">'
                 "\n    %foo;\n]>\n<root/>",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 '<!DOCTYPE root PUBLIC "foo" "bar" ['
@@ -109,7 +109,7 @@ class TestXMLCustomFormatterDocumentTypes:
                 '<!ENTITY foo "foo">'
                 "%foo;"
                 "]><root/>",
-                '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root PUBLIC "foo" "bar" ['
+                '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root PUBLIC "foo" "bar" ['
                 "<!ELEMENT root EMPTY>"
                 "<!ATTLIST root>"
                 "<!--Test-->"
@@ -120,6 +120,7 @@ class TestXMLCustomFormatterDocumentTypes:
                 Options(
                     doctype_declaration_starts_new_line=False,
                     doctype_subset_parts_start_new_lines=False,
+                    inline_elements=("root",),
                 ),
             ),
         ],

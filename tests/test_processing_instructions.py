@@ -20,37 +20,37 @@ class TestXMLCustomFormatterProcessingInstructions:
             (
                 """<?foo bar?><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<?xml version="1.0"?><?foo bar?><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<root><?foo bar?></root>""",
-                """<?xml version="1.0" encoding="UTF-8"?><root>\n<?foo bar?>\n</root>""",
-                Options(),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root>\n<?foo bar?>\n</root>""",
+                Options(inline_elements=("root",)),
             ),
             (
                 """<root/><?foo bar?>""",
-                """<?xml version="1.0" encoding="UTF-8"?><root/>\n<?foo bar?>\n""",
-                Options(),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<?foo bar?>\n""",
+                Options(inline_elements=("root",)),
             ),
             (
                 """<?foo bar\n   baz\n  bat?><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar baz bat?>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<?foo  \n bar \n  ?><root/>""",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?>\n<root/>""",
-                Options(),
+                Options(inline_elements=("root",)),
             ),
             (
                 """<?foo bar?><root/>""",
-                """<?xml version="1.0" encoding="UTF-8"?><?foo bar?><root/>""",
-                Options(processing_instructions_start_new_lines=False),
+                """<?xml version="1.0" encoding="UTF-8"?>\n<?foo bar?><root/>""",
+                Options(processing_instructions_start_new_lines=False, inline_elements=("root",)),
             ),
         ],
         ids=[
