@@ -67,11 +67,6 @@ class XMLCustomFormatter:
         """Returns the result as a concatenated string."""
         return "".join(self._result)
 
-    def _process_all_child_nodes(self, node: Node) -> None:
-        if node.hasChildNodes():
-            for child in node.childNodes:
-                self._process_node(child)
-
     def _process_node(self, node: Node) -> None:
         """Delegates the processing of nodes to specialized methods."""
         match node:
@@ -134,6 +129,11 @@ class XMLCustomFormatter:
             #     # Thus it is not necessary to process this kind of node while formatting.
             #     pass
 
+    def _process_all_child_nodes(self, node: Node) -> None:
+        if node.hasChildNodes():
+            for child in node.childNodes:
+                self._process_node(child)
+
     def _process_element_node(self, element: Element) -> None:
         """Processes all element nodes depending on emptiness."""
         if self._is_empty_element(element):
@@ -184,13 +184,9 @@ class XMLCustomFormatter:
 
     def _process_attribute_node(self, attribute: Attr) -> None:
         """Processes an attribute node, escaping double quotes."""
-        self._result.append(self._construct_attribute(attribute))
-
-    @staticmethod
-    def _construct_attribute(attribute: Attr) -> str:
         name = attribute.name
         value = SM.escape_double_quotes(attribute.value)
-        return f' {name}="{value}"'
+        self._result.append(f' {name}="{value}"')
 
     def _process_text_node(self, text: Text) -> None:
         # CDATASection shares the same interface as Text.
