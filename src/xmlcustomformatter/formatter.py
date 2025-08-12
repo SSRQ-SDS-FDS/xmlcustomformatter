@@ -57,7 +57,7 @@ class XMLCustomFormatter:
         self._result: list[str] = []
         self._process_node(self._dom)
         #     self.postprocess()
-        self.write_to_output_file()
+        self._write_to_output_file()
 
     def get_result_as_list(self) -> list[str]:
         """Returns the result as a list of strings."""
@@ -412,7 +412,7 @@ class XMLCustomFormatter:
         """
         return not element.hasChildNodes()
 
-    def write_to_output_file(self) -> None:
+    def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""
         with open(self.output_file, "w", encoding=self._encoding) as f:
             f.writelines(self._result)
