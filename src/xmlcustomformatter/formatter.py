@@ -130,6 +130,7 @@ class XMLCustomFormatter:
             #     pass
 
     def _process_all_child_nodes(self, node: Node) -> None:
+        """Iterates over all existing child nodes and calls the main processing method."""
         if node.hasChildNodes():
             for child in node.childNodes:
                 self._process_node(child)
@@ -156,15 +157,19 @@ class XMLCustomFormatter:
         self._process_element_end_tag(element)
 
     def _process_element_end_tag(self, element: Element) -> None:
+        """Processes the end tag of a non-empty element."""
         self._result.append(f"</{element.tagName}>")
 
     def _open_start_tag(self, element: Element) -> None:
+        """Opens the start tag of a non-empty element or the empty tag of an empty element."""
         self._result.append(f"<{element.tagName}")
 
     def _close_start_tag(self) -> None:
+        """Closes the start tag of a non-empty element."""
         self._result.append(">")
 
     def _close_empty_tag(self) -> None:
+        """Closes the empty tag of an empty element."""
         self._result.append("/>")
 
     def _process_attributes(self, element: Element) -> None:
@@ -183,12 +188,16 @@ class XMLCustomFormatter:
                 self._process_node(attribute)
 
     def _process_attribute_node(self, attribute: Attr) -> None:
-        """Processes an attribute node, escaping double quotes."""
+        """Processes an attribute node and escapes double quotes inside the attribute value."""
         name = attribute.name
         value = SM.escape_double_quotes(attribute.value)
         self._result.append(f' {name}="{value}"')
 
     def _process_text_node(self, text: Text) -> None:
+        """
+        Delegates the processing of a text to specialized methods for
+        text nodes and cdata nodes.
+        """
         # CDATASection shares the same interface as Text.
         # Therefore, CDATASection will be treated as an instance
         # of Text by minidom. So you have to disambiguate any Text
@@ -200,58 +209,84 @@ class XMLCustomFormatter:
             self._process_cdata_section(text)
 
     def _process_text(self, text: Text) -> None:
+        """Processes a text node by reducing redundant whitespace."""
         data = SM.reduce_redundant_whitespace(text.data)
         self._result.append(data)
 
     def _process_cdata_section(self, cdata: Text) -> None:
+        """
+        Processes a CDATASection by reducing redundant whitespace
+        and stripping leading and trailing whitespace.
+        """
         data = SM.reduce_redundant_whitespace(cdata.data)
         data = data.strip()
         self._result.append(f"<![CDATA[{data}]]>")
 
     def _process_processing_instruction_node(self, pi: ProcessingInstruction) -> None:
         """Processes processing instruction nodes."""
-        self._result.append(self._construct_processing_instruction(pi))
-
-    def _construct_processing_instruction(self, pi: ProcessingInstruction) -> str:
         newline = self._set_processing_instruction_newline()
         indentation = self._indentation(self._calculate_indentation())
         target = pi.target
         data = self._normalize_processing_instruction_data(pi)
-        return f"{newline}{indentation}<?{target}{data}?>{newline}"
+        self._result.append(f"{newline}{indentation}<?{target}{data}?>{newline}")
 
     @staticmethod
     def _normalize_processing_instruction_data(pi: ProcessingInstruction) -> str:
+        """Normalizes the data part of a processing instruction by reducing redundant whitespace."""
         return " " + SM.reduce_redundant_whitespace(pi.data).strip()
 
     def _set_processing_instruction_newline(self) -> str:
+        """
+        Determines whether processing instructions start on new lines
+        and returns a linebreak or empty string.
+        """
         return "\n" if self.options.processing_instructions_start_new_lines else ""
 
     def _process_comment_node(self, comment: Comment) -> None:
         """Processes comment nodes."""
-        self._result.append(self._construct_comment(comment))
-
-    def _construct_comment(self, comment: Comment) -> str:
         newline = self._set_comment_newline()
         indentation = self._indentation(self._calculate_indentation())
         start = self._set_comment_start()
         data = self._normalize_comment_data(comment)
         end = self._set_comment_end()
-        return f"{newline}{indentation}{start}{data}{end}{newline}"
+        self._result.append(f"{newline}{indentation}{start}{data}{end}{newline}")
 
     @staticmethod
     def _normalize_comment_data(comment: Comment) -> str:
-        return SM.reduce_redundant_whitespace(comment.data).strip()
+        """
+        Normalizes the data of an XML comment by reducing redundant whitespace
+        and stripping leading and trailing whitespaces.
+        """
+        data = SM.reduce_redundant_whitespace(comment.data)
+        data = data.strip()
+        return data
 
     def _set_comment_newline(self) -> str:
+        """
+        Determines whether comments start on new lines
+        and returns a linebreak or empty string.
+        """
         return "\n" if self.options.comments_start_new_lines else ""
 
     def _set_comment_start(self) -> str:
+        """
+        Determines whether comments should have leading whitespace and
+        returns the start with or without leading whitespace.
+        """
         return "<!-- " if self.options.comments_have_trailing_spaces else "<!--"
 
     def _set_comment_end(self) -> str:
+        """
+        Determines whether comments should have trailing whitespace and
+        returns the end with or without trailing whitespace.
+        """
         return " -->" if self.options.comments_have_trailing_spaces else "-->"
 
     def _process_document_node(self, node: Document) -> None:
+        """
+        Processes the complete document by constructing the XML declaration,
+        which is not a node itself and recursively iterating all child nodes.
+        """
         self._process_xml_declaration()
         self._process_all_child_nodes(node)
 
@@ -260,14 +295,10 @@ class XMLCustomFormatter:
         Processes the XML declaration. If version, encoding or standalone are not
         set, then default values will be used. The declaration is appended to the result.
         """
-        self._result.append(self._construct_xml_declaration())
-
-    def _construct_xml_declaration(self) -> str:
-        """Constructs the XML declaration."""
         version = self._set_version()
         encoding = self._set_encoding()
         standalone = self._set_standalone()
-        return f"<?xml{version}{encoding}{standalone}?>"
+        self._result.append(f"<?xml{version}{encoding}{standalone}?>")
 
     def _set_encoding(self) -> str:
         """Sets the encoding part of the XML declaration."""
@@ -292,18 +323,38 @@ class XMLCustomFormatter:
         return f' version="{self._dom.version}"'
 
     def _process_document_type_node(self, doc_type: DocumentType) -> None:
-        self._result.append(self._set_doctype_content(doc_type))
-
-    def _set_doctype_content(self, doc_type: DocumentType) -> str:
+        """Processes document type nodes."""
         newline = self._set_doctype_newline()
         external_id = self._construct_external_id(doc_type.publicId, doc_type.systemId)
-        subset = self._normalize_internal_subset(doc_type.internalSubset)
-        return f"{newline}<!DOCTYPE {doc_type.name}{external_id}{subset}>{newline}"
+        subset = self._construct_internal_subset(doc_type.internalSubset)
+        self._result.append(f"{newline}<!DOCTYPE {doc_type.name}{external_id}{subset}>{newline}")
 
     def _set_doctype_newline(self) -> str:
+        """
+        Determines whether doctype declarations start on new lines
+        and returns a linebreak or empty string.
+        """
         return "\n" if self.options.doctype_declaration_starts_new_line else ""
 
-    def _normalize_internal_subset(self, subset: str | None) -> str:
+    @staticmethod
+    def _construct_external_id(public_id: str | None, system_id: str | None) -> str:
+        """
+        Constructs the external id depending on the existence of the
+        public id part and the system id part.
+        """
+        if public_id is not None:
+            return f' PUBLIC "{public_id}" "{system_id}"'
+
+        if system_id is not None:
+            return f' SYSTEM "{system_id}"'
+
+        return ""
+
+    def _construct_internal_subset(self, subset: str | None) -> str:
+        """
+        Determines whether an internal subset exists and returns either an empty string
+        or the complete formatted subset.
+        """
         if subset is None or subset == "":
             return ""
 
@@ -315,7 +366,7 @@ class XMLCustomFormatter:
         self._decrease_indentation_level()
 
         # These are all valid constituents of a doctype declaration
-        # according to xml version 1.0 specification
+        # according to the XML version 1.0 specification
         patterns = [
             r"<!ELEMENT[^>]*?>",  # element declarations
             r"<!ENTITY[^>]*?>",  # entity declarations
@@ -323,7 +374,7 @@ class XMLCustomFormatter:
             r"<!NOTATION[^>]*?>",  # notation declarations
             r"<!--.*?-->",  # comments
             r"<\?.*?\?>",  # processing instructions
-            r"%\w+;",  # preferences
+            r"%\w+;",  # pe-references
         ]
         combined_pattern = f"({'|'.join(patterns)})"
         parts = re.findall(combined_pattern, subset, re.DOTALL)
@@ -331,16 +382,6 @@ class XMLCustomFormatter:
         for part in parts:
             formatted_lines.append(indentation + part.strip())
         return f" [\n{'\n'.join(formatted_lines)}\n]"
-
-    @staticmethod
-    def _construct_external_id(public_id: str | None, system_id: str | None) -> str:
-        if public_id is not None:
-            return f' PUBLIC "{public_id}" "{system_id}"'
-
-        if system_id is not None:
-            return f' SYSTEM "{system_id}"'
-
-        return ""
 
     @staticmethod
     def _indentation(count: int) -> str:
@@ -365,10 +406,14 @@ class XMLCustomFormatter:
 
     @staticmethod
     def _is_empty_element(element: Element) -> bool:
+        """
+        Determines whether an element is empty or not. An element is said to be empty
+        if it has no child nodes.
+        """
         return not element.hasChildNodes()
 
     def write_to_output_file(self) -> None:
-        """Writes the collected result lines to the output file."""
+        """Writes the collected result to the output file."""
         with open(self.output_file, "w", encoding=self._encoding) as f:
             f.writelines(self._result)
 
