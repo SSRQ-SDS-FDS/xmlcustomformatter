@@ -91,7 +91,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_is_inline_element(xml_files: tuple[str, str]) -> None:
-        """Tests that a certain element is inline."""
+        """Tests that an element is inline."""
         input_file, output_file = xml_files
         element = Element("foo")
         options = Options(inline_elements=("foo",))
@@ -100,7 +100,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_is_not_inline_element(xml_files: tuple[str, str]) -> None:
-        """Tests that a certain element is not inline"""
+        """Tests that an element is not inline"""
         input_file, output_file = xml_files
         element = Element("foo")
         options = Options(inline_elements=("bar",))
@@ -109,7 +109,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_inline_element(tmp_path: Path) -> None:
-        """Tests the formatting of a certain inline element."""
+        """Tests the formatting of an inline element."""
         xml_content = "<root>foo</root>"
         expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root>foo</root>"""
         options = Options(inline_elements=("root",))
@@ -122,7 +122,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_semicontainer_element(tmp_path: Path) -> None:
-        """Tests the formatting of a semicontainer element."""
+        """Tests the formatting of a semi container element."""
         xml_content = "<root>foo</root>"
         options = Options(semicontainer_elements=("root",))
         input_path = tmp_path / "input.xml"
@@ -133,7 +133,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_empty_semicontainer_element(tmp_path: Path) -> None:
-        """Tests the formatting of a semicontainer element."""
+        """Tests the formatting of a semi container element."""
         xml_content = "<root/>"
         options = Options(semicontainer_elements=("root",))
         input_path = tmp_path / "input.xml"

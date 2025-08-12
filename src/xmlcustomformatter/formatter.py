@@ -160,11 +160,13 @@ class XMLCustomFormatter:
         method(element)
 
     def _process_empty_inline_element(self, element: Element) -> None:
+        """Processes inline elements which are empty."""
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_empty_tag()
 
     def _process_nonempty_inline_element(self, element: Element) -> None:
+        """Processes inline elements which have child nodes."""
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_start_tag()
@@ -172,6 +174,7 @@ class XMLCustomFormatter:
         self._process_element_end_tag(element)
 
     def _process_empty_container_element(self, element: Element) -> None:
+        """Processes container elements which are empty."""
         self._result.append("\n")
         self._result.append(self._indentation(self._calculate_indentation()))
         self._open_start_tag(element)
@@ -180,6 +183,7 @@ class XMLCustomFormatter:
         self._result.append("\n")
 
     def _process_nonempty_container_element(self, element: Element) -> None:
+        """Processes container elements which have child nodes."""
         self._result.append("\n")
         self._result.append(self._indentation(self._calculate_indentation()))
         self._open_start_tag(element)
@@ -195,12 +199,17 @@ class XMLCustomFormatter:
         self._result.append("\n")
 
     def _process_empty_semicontainer_element(self, element: Element) -> None:
+        """Processes semi container elements which are empty.
+        ToDo: Implement this."""
         raise NotImplementedError
 
     def _process_nonempty_semicontainer_element(self, element: Element) -> None:
+        """Processes semi container elements which have child nodes.
+        ToDo: Implement this."""
         raise NotImplementedError
 
     def _is_inline_element(self, element: Element) -> bool:
+        """Determines whether an element is an inline element."""
         if (
             self.options.inline_elements is not None
             and element.tagName in self.options.inline_elements
@@ -209,6 +218,7 @@ class XMLCustomFormatter:
         return False
 
     def _is_semicontainer_element(self, element: Element) -> bool:
+        """Determines whether an element is a semi container element."""
         if (
             self.options.semicontainer_elements is not None
             and element.tagName in self.options.semicontainer_elements
