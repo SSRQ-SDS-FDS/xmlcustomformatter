@@ -130,11 +130,31 @@ class XMLCustomFormatter:
             #     pass
 
     def _process_all_child_nodes(self, node: Node) -> None:
-        """Iterates over all existing child nodes and calls the main processing method."""
-        if node.hasChildNodes():
-            for child in node.childNodes:
-                self._add_indentation()
+        """
+        Iterates over all existing child nodes and calls the main processing method.
+        Adds indentation to all child nodes depending on context.
+        """
+        for child in node.childNodes:
+            # No indentation after semicontainer
+            if (
+                child.previousSibling is not None
+                and isinstance(child.previousSibling, Element)
+                and self._is_semicontainer_element(child.previousSibling)
+            ):
                 self._process_node(child)
+                continue
+
+            # No indentation for first child in semicontainer
+            if (
+                child.previousSibling is None
+                and isinstance(child.parentNode, Element)
+                and self._is_semicontainer_element(child.parentNode)
+            ):
+                self._process_node(child)
+                continue
+
+            self._add_indentation()
+            self._process_node(child)
 
     def _process_element_node(self, element: Element) -> None:
         """Processes all element nodes depending on emptiness and element group."""
@@ -199,14 +219,22 @@ class XMLCustomFormatter:
         self._add_linebreak()
 
     def _process_empty_semicontainer_element(self, element: Element) -> None:
-        """Processes semi container elements which are empty.
-        ToDo: Implement this."""
-        raise NotImplementedError
+        """Processes semi container elements which are empty."""
+        self._add_linebreak()
+        self._add_indentation()
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_empty_tag()
 
     def _process_nonempty_semicontainer_element(self, element: Element) -> None:
-        """Processes semi container elements which have child nodes.
-        ToDo: Implement this."""
-        raise NotImplementedError
+        """Processes semi container elements which have child nodes."""
+        self._add_linebreak()
+        self._add_indentation()
+        self._open_start_tag(element)
+        self._process_attributes(element)
+        self._close_start_tag()
+        self._process_all_child_nodes(element)
+        self._process_element_end_tag(element)
 
     def _is_inline_element(self, element: Element) -> bool:
         """Determines whether an element is an inline element."""

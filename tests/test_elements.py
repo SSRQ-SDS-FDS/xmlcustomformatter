@@ -136,24 +136,30 @@ class TestXMLCustomFormatterElements:
     @staticmethod
     def test_semicontainer_element(tmp_path: Path) -> None:
         """Tests the formatting of a semi container element."""
-        xml_content = "<root>foo</root>"
-        options = Options(semicontainer_elements=("root",))
+        xml_content = "<root>foo<semicontainer>bar</semicontainer>baz</root>"
+        expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        expected += "<root>\n    foo\n    <semicontainer>bar</semicontainer>baz\n</root>\n"
+        options = Options(semicontainer_elements=("semicontainer",))
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
-        with pytest.raises(NotImplementedError):
-            XMLCustomFormatter(str(input_path), str(output_path), options)
+        formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
+        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        assert result == expected
 
     @staticmethod
     def test_empty_semicontainer_element(tmp_path: Path) -> None:
-        """Tests the formatting of am empty semi container element."""
-        xml_content = "<root/>"
-        options = Options(semicontainer_elements=("root",))
+        """Tests the formatting of an empty semi container element."""
+        xml_content = "<root>foo<semicontainer/>bar</root>"
+        expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        expected += "<root>\n    foo\n    <semicontainer/>bar\n</root>\n"
+        options = Options(semicontainer_elements=("semicontainer",))
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
-        with pytest.raises(NotImplementedError):
-            XMLCustomFormatter(str(input_path), str(output_path), options)
+        formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
+        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        assert result == expected
 
     @staticmethod
     def test_container_element(tmp_path: Path) -> None:
