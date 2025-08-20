@@ -14,7 +14,7 @@ class TestXMLCustomFormatterExampleFile:
         """Tests whether the formatted file equals the expected file."""
         input_file = "tests/example_files/SSRQ-SG-III_4-24_unformatiert.xml"
         output_file = str(tmp_path / "output.xml")
-        expected = Path("tests/example_files/SSRQ-SG-III_4-24_formatted.xml").read_text(
+        expected = Path("tests/example_files/SSRQ-SG-III_4-24_all_container.xml").read_text(
             encoding="UTF-8"
         )
         options = Options()
