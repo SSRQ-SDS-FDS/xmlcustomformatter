@@ -121,6 +121,19 @@ class TestXMLCustomFormatterElements:
         assert result == expected
 
     @staticmethod
+    def test_empty_inline_element(tmp_path: Path) -> None:
+        """Tests the formatting of an inline element."""
+        xml_content = "<root>foo<inline/>bar</root>"
+        expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root>foo<inline/>bar</root>"""
+        options = Options(inline_elements=("root", "inline"))
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
+        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        assert result == expected
+
+    @staticmethod
     def test_semicontainer_element(tmp_path: Path) -> None:
         """Tests the formatting of a semi container element."""
         xml_content = "<root>foo</root>"
@@ -133,7 +146,7 @@ class TestXMLCustomFormatterElements:
 
     @staticmethod
     def test_empty_semicontainer_element(tmp_path: Path) -> None:
-        """Tests the formatting of a semi container element."""
+        """Tests the formatting of am empty semi container element."""
         xml_content = "<root/>"
         options = Options(semicontainer_elements=("root",))
         input_path = tmp_path / "input.xml"
@@ -143,10 +156,24 @@ class TestXMLCustomFormatterElements:
             XMLCustomFormatter(str(input_path), str(output_path), options)
 
     @staticmethod
-    def test_default_element(tmp_path: Path) -> None:
-        """Tests the formatting of a default element."""
+    def test_container_element(tmp_path: Path) -> None:
+        """Tests the formatting of a container element."""
         xml_content = "<root>foo</root>"
-        expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root>\n    foo\n</root>\n"""
+        expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        expected += "<root>\n    foo\n</root>\n"
+        input_path = tmp_path / "input.xml"
+        output_path = tmp_path / "output.xml"
+        input_path.write_text(xml_content)
+        formatter = XMLCustomFormatter(str(input_path), str(output_path))
+        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        assert result == expected
+
+    @staticmethod
+    def test_empty_container_element(tmp_path: Path) -> None:
+        """Tests the formatting of a container element."""
+        xml_content = "<root>foo<container/>bar</root>"
+        expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        expected += "<root>\n    foo\n    <container/>\n    bar\n</root>\n"
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
