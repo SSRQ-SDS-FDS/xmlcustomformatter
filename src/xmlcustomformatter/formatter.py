@@ -133,7 +133,7 @@ class XMLCustomFormatter:
         """Iterates over all existing child nodes and calls the main processing method."""
         if node.hasChildNodes():
             for child in node.childNodes:
-                self._result.append(self._indentation(self._calculate_indentation()))
+                self._add_indentation()
                 self._process_node(child)
 
     def _process_element_node(self, element: Element) -> None:
@@ -175,28 +175,28 @@ class XMLCustomFormatter:
 
     def _process_empty_container_element(self, element: Element) -> None:
         """Processes container elements which are empty."""
-        self._result.append("\n")
-        self._result.append(self._indentation(self._calculate_indentation()))
+        self._add_linebreak()
+        self._add_indentation()
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_empty_tag()
-        self._result.append("\n")
+        self._add_linebreak()
 
     def _process_nonempty_container_element(self, element: Element) -> None:
         """Processes container elements which have child nodes."""
-        self._result.append("\n")
-        self._result.append(self._indentation(self._calculate_indentation()))
+        self._add_linebreak()
+        self._add_indentation()
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_start_tag()
-        self._result.append("\n")
         self._increase_indentation_level()
+        self._add_linebreak()
         self._process_all_child_nodes(element)
         self._decrease_indentation_level()
-        self._result.append("\n")
-        self._result.append(self._indentation(self._calculate_indentation()))
+        self._add_linebreak()
+        self._add_indentation()
         self._process_element_end_tag(element)
-        self._result.append("\n")
+        self._add_linebreak()
 
     def _process_empty_semicontainer_element(self, element: Element) -> None:
         """Processes semi container elements which are empty.
@@ -474,6 +474,14 @@ class XMLCustomFormatter:
         """Increases the indentation level by 1"""
         self._indentation_level += 1
 
+    def _add_indentation(self) -> None:
+        """Adds indentation to the result based on the currend indentation level"""
+        self._result.append(self._indentation(self._calculate_indentation()))
+
+    def _add_linebreak(self) -> None:
+        """Adds a linebreak to the result"""
+        self._result.append("\n")
+
     @staticmethod
     def _is_empty_element(element: Element) -> bool:
         """
@@ -485,9 +493,8 @@ class XMLCustomFormatter:
     def _postprocess(self) -> None:
         """Delegates postprocessing of result to specialized methods."""
         self._postprocess_rearrange_result()
-
-    #     self.postprocess_result_lines()
-    #     self.postprocess_result_as_string()
+        #     self.postprocess_result_lines()
+        #     self.postprocess_result_as_string()
 
     def _postprocess_rearrange_result(self) -> None:
         """Splits the result at newline and removes empty lines."""
