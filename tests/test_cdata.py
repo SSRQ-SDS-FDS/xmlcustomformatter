@@ -85,7 +85,7 @@ class TestCustomXMLFormatterCDATA:
         return str(input_path), str(output_path)
 
     @staticmethod
-    def test_cdata_noted(cdatanodes: tuple[str, str, Options], xml_files: tuple[str, str]) -> None:
+    def test_cdata_notes(cdatanodes: tuple[str, str, Options], xml_files: tuple[str, str]) -> None:
         """Tests that CDATASections are processed correctly."""
         _, expected, options = cdatanodes
         input_file, output_file = xml_files

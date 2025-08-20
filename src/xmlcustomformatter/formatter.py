@@ -135,20 +135,45 @@ class XMLCustomFormatter:
         Adds indentation to all child nodes depending on context.
         """
         for child in node.childNodes:
-            # No indentation after semicontainer
+            # No indentation after semicontainer or inline element
             if (
                 child.previousSibling is not None
                 and isinstance(child.previousSibling, Element)
-                and self._is_semicontainer_element(child.previousSibling)
+                and (
+                    self._is_semicontainer_element(child.previousSibling)
+                    or self._is_inline_element(child.previousSibling)
+                )
             ):
                 self._process_node(child)
                 continue
 
-            # No indentation for first child in semicontainer
+            # No indentation for first child in semicontainer or inline element
             if (
                 child.previousSibling is None
                 and isinstance(child.parentNode, Element)
-                and self._is_semicontainer_element(child.parentNode)
+                and (
+                    self._is_semicontainer_element(child.parentNode)
+                    or self._is_inline_element(child.parentNode)
+                )
+            ):
+                self._process_node(child)
+                continue
+
+            # No indentation for inline-element after text
+            if (
+                isinstance(child, Element)
+                and self._is_inline_element(child)
+                and child.previousSibling is not None
+                and isinstance(child.previousSibling, Text)
+            ):
+                self._process_node(child)
+                continue
+
+            # No indentation for text after text (e. g. two CDATA nodes
+            if (
+                isinstance(child, Text)
+                and child.previousSibling is not None
+                and isinstance(child.previousSibling, Text)
             ):
                 self._process_node(child)
                 continue
@@ -190,7 +215,13 @@ class XMLCustomFormatter:
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_start_tag()
+        self._increase_indentation_level()
         self._process_all_child_nodes(element)
+        # If the content of the element ends with a linebreak
+        # then the end tag has to be indented
+        if self._result[-1].endswith("\n"):
+            self._add_indentation()
+        self._decrease_indentation_level()
         self._process_element_end_tag(element)
 
     def _process_empty_container_element(self, element: Element) -> None:
@@ -233,7 +264,13 @@ class XMLCustomFormatter:
         self._open_start_tag(element)
         self._process_attributes(element)
         self._close_start_tag()
+        self._increase_indentation_level()
         self._process_all_child_nodes(element)
+        # If the content of the element ends with a linebreak
+        # then the end tag has to be indented
+        if self._result[-1].endswith("\n"):
+            self._add_indentation()
+        self._decrease_indentation_level()
         self._process_element_end_tag(element)
 
     def _is_inline_element(self, element: Element) -> bool:
@@ -296,6 +333,11 @@ class XMLCustomFormatter:
         Delegates the processing of a text to specialized methods for
         text nodes and cdata nodes.
         """
+
+        # Do not process whitespace only text nodes after a linebreak or other spaces
+        if self._is_whitespace_only_text(text) and self._result[-1].endswith(("\n", " ")):
+            return
+
         # CDATASection shares the same interface as Text.
         # Therefore, CDATASection will be treated as an instance
         # of Text by minidom. So you have to disambiguate any Text
@@ -517,6 +559,14 @@ class XMLCustomFormatter:
         if it has no child nodes.
         """
         return not element.hasChildNodes()
+
+    @staticmethod
+    def _is_whitespace_only_text(text: Text) -> bool:
+        """
+        Determines whether a text node consist of whitespace only.
+        """
+        data = text.data
+        return data.strip() == ""
 
     def _postprocess(self) -> None:
         """Delegates postprocessing of result to specialized methods."""

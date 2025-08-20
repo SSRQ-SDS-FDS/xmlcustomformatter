@@ -2,6 +2,7 @@
 
 from pathlib import Path
 from typing import cast
+from xml.dom.minidom import Text
 
 import pytest
 
@@ -17,6 +18,11 @@ class TestCustomXMLFormatterText:
     @staticmethod
     @pytest.fixture(
         params=[
+            (
+                "<root> </root>",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root> </root>""",
+                Options(inline_elements=("root",)),
+            ),
             (
                 "<root>foo</root>",
                 """<?xml version="1.0" encoding="UTF-8"?>\n<root>foo</root>""",
@@ -54,6 +60,7 @@ class TestCustomXMLFormatterText:
             ),
         ],
         ids=[
+            "text consisting of just spaces",
             "text without spaces",
             "text with space",
             "text with tab",
@@ -84,3 +91,29 @@ class TestCustomXMLFormatterText:
         input_file, output_file = xml_files
         formatter = XMLCustomFormatter(input_file, output_file, options)
         assert formatter.get_result_as_string() == expected
+
+    @staticmethod
+    @pytest.mark.parametrize(
+        "text_value, expected",
+        [
+            ("", True),
+            ("   ", True),
+            ("\n\t", True),
+            ("foo", False),
+            (" foo ", False),
+            ("bar\n", False),
+        ],
+        ids=[
+            "empty_string",
+            "spaces_only",
+            "tabs_newlines_only",
+            "non_empty_string",
+            "non_empty_with_spaces",
+            "non_empty_with_newline",
+        ],
+    )
+    def test_is_whitespace_only_text(text_value: str, expected: bool) -> None:
+        """Tests whether a node consists of whitespace characters or not."""
+        node = Text()
+        node.data = text_value
+        assert XMLCustomFormatter._is_whitespace_only_text(node) is expected
