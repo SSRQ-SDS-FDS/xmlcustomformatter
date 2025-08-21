@@ -585,16 +585,17 @@ class XMLCustomFormatter:
 
     def _postprocess(self) -> None:
         """Delegates postprocessing of result to specialized methods."""
-        self._postprocess_rearrange_result()
-        #     self.postprocess_result_lines()
-        #     self.postprocess_result_as_string()
+        # ToDo:
+        # Split lines, which are to long, such that the resulting lines are less
+        # than the max_line_length Option
 
-    def _postprocess_rearrange_result(self) -> None:
-        """Splits the result at newline and removes empty lines."""
-        result = "".join(self._result)
-        result = SM.remove_empty_lines(result)
-        result = SM.remove_whitespace_before_eol(result)
-        self._result = result.splitlines(keepends=True)
+        result_as_string = "".join(self._result)
+        result_as_string = SM.remove_empty_lines(result_as_string)
+        result_as_string = SM.remove_whitespace_before_eol(result_as_string)
+        self._result = result_as_string.splitlines(keepends=True)
+        self._result[1] = self._result[1].lstrip()
+        self._result[-1] = self._result[-1].rstrip()
+        # self._split_too_long_lines()
 
     def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""

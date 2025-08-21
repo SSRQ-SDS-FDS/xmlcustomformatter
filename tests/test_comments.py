@@ -34,7 +34,7 @@ class TestXMLCustomFormatterComments:
             ),
             (
                 """<root/><!--Foo-->""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<!-- Foo -->\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<!-- Foo -->""",
                 Options(inline_elements=("root",)),
             ),
             (

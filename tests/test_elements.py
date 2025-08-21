@@ -138,7 +138,7 @@ class TestXMLCustomFormatterElements:
         """Tests the formatting of a semi container element."""
         xml_content = "<root>foo<semicontainer>bar</semicontainer>baz</root>"
         expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        expected += "<root>\n    foo\n    <semicontainer>bar</semicontainer>baz\n</root>\n"
+        expected += "<root>\n    foo\n    <semicontainer>bar</semicontainer>baz\n</root>"
         options = Options(semicontainer_elements=("semicontainer",))
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
@@ -152,7 +152,7 @@ class TestXMLCustomFormatterElements:
         """Tests the formatting of an empty semi container element."""
         xml_content = "<root>foo<semicontainer/>bar</root>"
         expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        expected += "<root>\n    foo\n    <semicontainer/>bar\n</root>\n"
+        expected += "<root>\n    foo\n    <semicontainer/>bar\n</root>"
         options = Options(semicontainer_elements=("semicontainer",))
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
@@ -166,7 +166,7 @@ class TestXMLCustomFormatterElements:
         """Tests the formatting of a container element."""
         xml_content = "<root>foo</root>"
         expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        expected += "<root>\n    foo\n</root>\n"
+        expected += "<root>\n    foo\n</root>"
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
@@ -179,7 +179,7 @@ class TestXMLCustomFormatterElements:
         """Tests the formatting of a container element."""
         xml_content = "<root>foo<container/>bar</root>"
         expected = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        expected += "<root>\n    foo\n    <container/>\n    bar\n</root>\n"
+        expected += "<root>\n    foo\n    <container/>\n    bar\n</root>"
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)

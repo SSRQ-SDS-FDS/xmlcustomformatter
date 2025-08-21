@@ -34,7 +34,7 @@ class TestXMLCustomFormatterProcessingInstructions:
             ),
             (
                 """<root/><?foo bar?>""",
-                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<?foo bar?>\n""",
+                """<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n<?foo bar?>""",
                 Options(inline_elements=("root",)),
             ),
             (

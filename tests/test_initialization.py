@@ -22,7 +22,7 @@ class TestXMLCustomFormatterInitialization:
     @pytest.fixture
     def result_string_at_start() -> str:
         """Returns the empty result at the start of the formatting process."""
-        return '<?xml version="1.0" encoding="UTF-8"?>\n<root/>\n'
+        return '<?xml version="1.0" encoding="UTF-8"?>\n<root/>'
 
     @staticmethod
     @pytest.fixture
