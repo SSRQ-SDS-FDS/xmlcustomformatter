@@ -132,47 +132,57 @@ class XMLCustomFormatter:
     def _process_all_child_nodes(self, node: Node) -> None:
         """
         Iterates over all existing child nodes and calls the main processing method.
-        Adds indentation to all child nodes depending on context.
+        Adds indentation to child nodes depending on context.
         """
         for child in node.childNodes:
-            # No indentation for first child in semicontainer or inline element
-            if (
-                child.previousSibling is None
-                and isinstance(child.parentNode, Element)
-                and (
-                    self._is_semicontainer_element(child.parentNode)
-                    or self._is_inline_element(child.parentNode)
-                )
-            ):
-                self._process_node(child)
-                continue
-
-            # No indentation for any child after semicontainer or inline element
-            if (
-                child.previousSibling is not None
-                and isinstance(child.previousSibling, Element)
-                and (
-                    self._is_semicontainer_element(child.previousSibling)
-                    or self._is_inline_element(child.previousSibling)
-                )
-            ):
-                self._process_node(child)
-                continue
-
-            # No indentation for inline-elements or text after text (e. g. two CDATA nodes
-            if (
-                child.previousSibling is not None
-                and (
-                    (isinstance(child, Element) and self._is_inline_element(child))
-                    or isinstance(child, Text)
-                )
-                and isinstance(child.previousSibling, Text)
-            ):
-                self._process_node(child)
-                continue
-
-            self._add_indentation()
+            if self._needs_indentation(child):
+                self._add_indentation()
             self._process_node(child)
+
+    def _needs_indentation(self, child: Node) -> bool:
+        """Returns True if the child should be indented before processing."""
+        return (
+            self.needs_indent_for_first_child(child)
+            and self.needs_indent_after_special_sibling(child)
+            and self.needs_indent_for_text(child)
+        )
+
+    def needs_indent_for_first_child(self, child: Node) -> bool:
+        """Indentation is required if the child is not the first child of a
+        semicontainer or inline element."""
+        return not (
+            child.previousSibling is None
+            and isinstance(child.parentNode, Element)
+            and (
+                self._is_semicontainer_element(child.parentNode)
+                or self._is_inline_element(child.parentNode)
+            )
+        )
+
+    def needs_indent_after_special_sibling(self, child: Node) -> bool:
+        """Indentation is required unless the child follows a semicontainer or inline element."""
+        return not (
+            child.previousSibling is not None
+            and isinstance(child.previousSibling, Element)
+            and (
+                self._is_semicontainer_element(child.previousSibling)
+                or self._is_inline_element(child.previousSibling)
+            )
+        )
+
+    def needs_indent_for_text(self, child: Node) -> bool:
+        """
+        Indentation is required unless the child is an inline element or text
+        following another text (e.g. two CDATA nodes in sequence).
+        """
+        return not (
+            child.previousSibling is not None
+            and (
+                (isinstance(child, Element) and self._is_inline_element(child))
+                or isinstance(child, Text)
+            )
+            and isinstance(child.previousSibling, Text)
+        )
 
     def _process_element_node(self, element: Element) -> None:
         """Processes all element nodes depending on emptiness and element group."""
