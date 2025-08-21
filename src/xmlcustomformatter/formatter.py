@@ -135,18 +135,6 @@ class XMLCustomFormatter:
         Adds indentation to all child nodes depending on context.
         """
         for child in node.childNodes:
-            # No indentation after semicontainer or inline element
-            if (
-                child.previousSibling is not None
-                and isinstance(child.previousSibling, Element)
-                and (
-                    self._is_semicontainer_element(child.previousSibling)
-                    or self._is_inline_element(child.previousSibling)
-                )
-            ):
-                self._process_node(child)
-                continue
-
             # No indentation for first child in semicontainer or inline element
             if (
                 child.previousSibling is None
@@ -159,20 +147,25 @@ class XMLCustomFormatter:
                 self._process_node(child)
                 continue
 
-            # No indentation for inline-element after text
+            # No indentation for any child after semicontainer or inline element
             if (
-                isinstance(child, Element)
-                and self._is_inline_element(child)
-                and child.previousSibling is not None
-                and isinstance(child.previousSibling, Text)
+                child.previousSibling is not None
+                and isinstance(child.previousSibling, Element)
+                and (
+                    self._is_semicontainer_element(child.previousSibling)
+                    or self._is_inline_element(child.previousSibling)
+                )
             ):
                 self._process_node(child)
                 continue
 
-            # No indentation for text after text (e. g. two CDATA nodes
+            # No indentation for inline-elements or text after text (e. g. two CDATA nodes
             if (
-                isinstance(child, Text)
-                and child.previousSibling is not None
+                child.previousSibling is not None
+                and (
+                    (isinstance(child, Element) and self._is_inline_element(child))
+                    or isinstance(child, Text)
+                )
                 and isinstance(child.previousSibling, Text)
             ):
                 self._process_node(child)
