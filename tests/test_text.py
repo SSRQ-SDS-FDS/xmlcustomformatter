@@ -67,7 +67,7 @@ class TestCustomXMLFormatterText:
             "text with newline",
             "text with multiple newlines",
             "text with various whitespaces",
-            "test with leading and trailing whitespace",
+            "text with leading and trailing whitespace",
         ],
     )
     def textnodes(request: FixtureRequest) -> tuple[str, str, Options]:

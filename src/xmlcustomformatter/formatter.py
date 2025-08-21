@@ -219,7 +219,7 @@ class XMLCustomFormatter:
         self._process_all_child_nodes(element)
         # If the content of the element ends with a linebreak
         # then the end tag has to be indented
-        if self._result[-1].endswith("\n"):
+        if self._result_endswith_linebreak():
             self._add_indentation()
         self._decrease_indentation_level()
         self._process_element_end_tag(element)
@@ -268,7 +268,7 @@ class XMLCustomFormatter:
         self._process_all_child_nodes(element)
         # If the content of the element ends with a linebreak
         # then the end tag has to be indented
-        if self._result[-1].endswith("\n"):
+        if self._result_endswith_linebreak():
             self._add_indentation()
         self._decrease_indentation_level()
         self._process_element_end_tag(element)
@@ -333,11 +333,6 @@ class XMLCustomFormatter:
         Delegates the processing of a text to specialized methods for
         text nodes and cdata nodes.
         """
-
-        # Do not process whitespace only text nodes after a linebreak or other spaces
-        if self._is_whitespace_only_text(text) and self._result[-1].endswith(("\n", " ")):
-            return
-
         # CDATASection shares the same interface as Text.
         # Therefore, CDATASection will be treated as an instance
         # of Text by minidom. So you have to disambiguate any Text
@@ -351,7 +346,17 @@ class XMLCustomFormatter:
     def _process_text(self, text: Text) -> None:
         """Processes a text node by reducing redundant whitespace."""
         data = SM.reduce_redundant_whitespace(text.data)
+
+        if self._result_endswith_whitespace():
+            data = data.lstrip()
+
         self._result.append(data)
+
+    def _result_endswith_linebreak(self) -> bool:
+        return self._result[-1].endswith("\n")
+
+    def _result_endswith_whitespace(self) -> bool:
+        return self._result[-1].endswith(("\n", " ", "\t", "\r"))
 
     def _process_cdata_section(self, cdata: Text) -> None:
         """

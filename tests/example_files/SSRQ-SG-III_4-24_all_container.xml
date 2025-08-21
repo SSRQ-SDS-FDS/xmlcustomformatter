@@ -45,7 +45,7 @@
                 <date type="print" when-custom="2020-11-20"/>
                 <availability>
                     <licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                         Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+                        Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
                     </licence>
                 </availability>
             </publicationStmt>
@@ -87,7 +87,7 @@
                     <msContents>
                         <summary xml:lang="de">
                             <p>
-                                 Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
+                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
                             </p>
                         </summary>
                         <msItem>
@@ -110,7 +110,7 @@
                         </objectDesc>
                         <bindingDesc>
                             <p>
-                                 Original, Heft (3 Einzelblätter, 4 Seiten beschrieben)
+                                Original, Heft (3 Einzelblätter, 4 Seiten beschrieben)
                             </p>
                         </bindingDesc>
                         <handDesc>
@@ -175,7 +175,7 @@
                     <placeName ref="loc006078.02">
                         Sant Niclasen
                     </placeName>
-                     ze
+                    ze
                     <lb/>
                     <choice>
                         <abbr>
@@ -217,11 +217,11 @@
                             <date calendar="julian" from-custom="1437-01-01" to-custom="1437-12-31">
                                 1437
                             </date>
-                             wird Konrad Rohrer von Altendorf von
+                            wird Konrad Rohrer von Altendorf von
                             <persName ref="per008052a">
                                 Ulrich von St. Johann
                             </persName>
-                             um 40 Pfund aus der Leibeigenschaft entlassen (
+                            um 40 Pfund aus der Leibeigenschaft entlassen (
                             <bibl>
                                 <ref target="urn:ssrq:SSRQ-SG-III_4-41-1">
                                     SSRQ SG III/4 41-1
@@ -229,7 +229,7 @@
                             </bibl>
                             ).
                         </note>
-                         umb
+                        umb
                         <measure commodity="wheat" quantity="1" type="volume" unit="Viertel">
                             <subst>
                                 <del rend="rubbing">
@@ -239,7 +239,7 @@
                                     j fiertel
                                 </add>
                             </subst>
-                             waissen
+                            waissen
                         </measure>
                         . Die liess
                         <persName ref="per004462a">
@@ -254,7 +254,7 @@
                             <lb/>
                             Vittler
                         </persName>
-                         und
+                        und
                         <persName ref="per004463a">
                             Elsbet
                         </persName>
@@ -269,11 +269,11 @@
                         <persName ref="per004448">
                             Uli
                         </persName>
-                         an dem
+                        an dem
                         <term ref="lem001108">
                             kilchweg
                         </term>
-                         hǎt gelǎn ain wisli,
+                        hǎt gelǎn ain wisli,
                         <lb/>
                         dz lit ze
                         <placeName ref="loc000428.04">
@@ -295,7 +295,7 @@
                         <term ref="lem008955">
                             hus und hofstatt
                         </term>
-                         gǎt
+                        gǎt
                         <lb/>
                         <measure quantity="6" type="currency" unit="d">
                             vj ₰
@@ -321,7 +321,7 @@
                             <term ref="lem001121">
                                 bongarten
                             </term>
-                             gǎt
+                            gǎt
                             <num value="6">
                                 vj
                             </num>
@@ -357,7 +357,7 @@
                                 </ref>
                                 , Anhang, S. 25,
                             </bibl>
-                             fehlen beide Einträge.
+                            fehlen beide Einträge.
                         </note>
                     </p>
                     <p>
@@ -367,14 +367,14 @@
                             <orgName ref="org001048.02">
                                 Bikkers
                             </orgName>
-                             hofstat zuͦm
+                            hofstat zuͦm
                             <placeName ref="loc007196.01">
                                 Hinderen
                                 <term ref="lem000154">
                                     Tor
                                 </term>
                             </placeName>
-                             gat
+                            gat
                             <measure quantity="4" type="currency" unit="d">
                                 vj ₰
                             </measure>
@@ -426,7 +426,7 @@
                         <add place="above">
                             und hoffstatt
                         </add>
-                         bi der
+                        bi der
                         <placeName ref="loc006084.02">
                             Stappffen
                         </placeName>
@@ -434,13 +434,13 @@
                         <orgName ref="org001804">
                             Maler
                         </orgName>
-                         und
+                        und
                         <persName ref="per004465a">
                             Heͣnsli
                             <lb/>
                             Stainhu̍wel
                         </persName>
-                         erkoufft hand, gat jaͤrlich
+                        erkoufft hand, gat jaͤrlich
                         <placeName ref="loc006078">
                             Sant Niclausen
                         </placeName>
@@ -468,7 +468,7 @@
         <back>
             <div>
                 <p>
-                     Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region
+                    Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region
                     <placeName ref="loc000962">
                         Werdenberg
                     </placeName>
@@ -476,11 +476,11 @@
                     <placeName ref="loc006078">
                         St. Niklaus
                     </placeName>
-                     existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
+                    existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
                     <date calendar="julian" from-custom="1401-01-01" to-custom="1500-12-31">
                         15. Jh.
                     </date>
-                     erwähnt und war eine Kapelle im Städtchen
+                    erwähnt und war eine Kapelle im Städtchen
                     <placeName ref="loc000016">
                         Werdenberg
                     </placeName>
@@ -495,15 +495,15 @@
                     <placeName ref="loc000335">
                         Grabs
                     </placeName>
-                     von
+                    von
                     <date calendar="julian" from-custom="1455-01-01" to-custom="1455-12-31">
                         1455
                     </date>
-                     hat ein Priester zweimal
+                    hat ein Priester zweimal
                     <date dur-iso="R/P1W">
                         wöchentlich
                     </date>
-                     in der Niklauskapelle in der Stadt Werdenberg Messe zu lesen (vgl. dazu
+                    in der Niklauskapelle in der Stadt Werdenberg Messe zu lesen (vgl. dazu
                     <bibl>
                         <ref target="urn:ssrq:SSRQ-SG-III_4-51-1">
                             SSRQ SG III/4 51-1
@@ -512,11 +512,11 @@
                     ).
                 </p>
                 <p>
-                     Am
+                    Am
                     <date calendar="julian" when-custom="1461-11-26">
                         26. November 1461
                     </date>
-                     sitzt
+                    sitzt
                     <persName ref="per000883">
                         Heinrich Gocham
                     </persName>
@@ -524,7 +524,7 @@
                     <persName ref="per000884a">
                         Wilhelm VIII. von Montfort-Tettnang
                     </persName>
-                     zu Gericht in der Stadt
+                    zu Gericht in der Stadt
                     <placeName ref="loc000016">
                         Werdenberg
                     </placeName>
@@ -536,7 +536,7 @@
                     <term ref="key000154">
                         Zinsen
                     </term>
-                     sehr schwierig einzutreiben seien. Das
+                    sehr schwierig einzutreiben seien. Das
                     <term ref="key000057">
                         Gericht
                     </term>
@@ -547,11 +547,11 @@
                     <term ref="key000441">
                         gepfändet
                     </term>
-                     oder ihre Güter auf der
+                    oder ihre Güter auf der
                     <term ref="key000412">
                         Gant
                     </term>
-                     versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der Kirche kaufen (
+                    versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der Kirche kaufen (
                     <bibl>
                         <ref target="https://archivverzeichnis.gl.ch/home/#/content/918ba7e71d8145fb87af8f484276dd1f">
                             LAGL AG III.2402:029

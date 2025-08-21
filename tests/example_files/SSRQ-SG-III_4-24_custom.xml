@@ -27,7 +27,7 @@
                 <date type="print" when-custom="2020-11-20"/>
                 <availability>
                     <licence target="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-                         Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+                        Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
                     </licence>
                 </availability>
             </publicationStmt>
@@ -51,7 +51,7 @@
                     <msContents>
                         <summary xml:lang="de">
                             <p>
-                                 Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
+                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
                             </p>
                         </summary>
                         <msItem>
@@ -74,7 +74,7 @@
                         </objectDesc>
                         <bindingDesc>
                             <p>
-                                 Original, Heft (3 Einzelblätter, 4 Seiten beschrieben)
+                                Original, Heft (3 Einzelblätter, 4 Seiten beschrieben)
                             </p>
                         </bindingDesc>
                         <handDesc>
@@ -140,7 +140,7 @@
                                 <del rend="rubbing"><gap/></del>
                                 <add place="overwritten">j fiertel</add>
                             </subst>
-                             waissen</measure>. Die liess <persName ref="per004462a">
+                            waissen</measure>. Die liess <persName ref="per004462a">
                             <choice>
                                 <abbr>Uͦlr</abbr>
                                 <expan>Uͦlrich</expan>
@@ -223,13 +223,13 @@
         <back>
             <div>
                 <p>
-                     Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region <placeName ref="loc000962">Werdenberg</placeName>. Die Kapelle <placeName ref="loc006078">St. Niklaus</placeName> existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
+                    Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region <placeName ref="loc000962">Werdenberg</placeName>. Die Kapelle <placeName ref="loc006078">St. Niklaus</placeName> existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
                     <date calendar="julian" from-custom="1401-01-01" to-custom="1500-12-31">15. Jh.</date> erwähnt und war eine Kapelle im Städtchen <placeName ref="loc000016">Werdenberg</placeName>, die möglicherweise im Oberstädtli in der Lücke der äusseren nördlichen Häuserreihe lag (<bibl><ref target="http://permalink.snl.ch/bib/chbsg000142778">Hilty 1906</ref>, S. 94ff.</bibl>). Laut den Amtspflichten eines Kaplans von <placeName ref="loc000335">Grabs</placeName> von
                     <date calendar="julian" from-custom="1455-01-01" to-custom="1455-12-31">1455</date> hat ein Priester zweimal
                     <date dur-iso="R/P1W">wöchentlich</date> in der Niklauskapelle in der Stadt Werdenberg Messe zu lesen (vgl. dazu <bibl><ref target="urn:ssrq:SSRQ-SG-III_4-51-1">SSRQ SG III/4 51-1</ref></bibl>).
                 </p>
                 <p>
-                     Am
+                    Am
                     <date calendar="julian" when-custom="1461-11-26">26. November 1461</date> sitzt <persName ref="per000883">Heinrich Gocham</persName>, Ammann von Werdenberg, im Namen des Grafen <persName ref="per000884a">Wilhelm VIII. von Montfort-Tettnang</persName> zu Gericht in der Stadt <placeName ref="loc000016">Werdenberg</placeName>. <persName ref="per004514">Sigmund Spenli</persName>, Kirchmeier der Kapelle St. Niklaus, beschwert sich, dass die fälligen <term ref="key000154">Zinsen</term> sehr schwierig einzutreiben seien. Das <term ref="key000057">Gericht</term> <term ref="key000683">urteilt</term>, dass künftig die Schulden bei der Kirche vom Gerichtsboten eingetrieben und die Schuldner falls nötig <term ref="key000441">gepfändet</term> oder ihre Güter auf der <term ref="key000412">Gant</term> versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der Kirche kaufen (<bibl><ref target="https://archivverzeichnis.gl.ch/home/#/content/918ba7e71d8145fb87af8f484276dd1f">LAGL AG III.2402:029</ref></bibl>).
                 </p>
             </div>
