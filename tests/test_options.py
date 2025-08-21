@@ -27,7 +27,7 @@ class TestDefaultOptions:
     @pytest.fixture
     def default_max_line_length() -> int:
         """Fixture for the default max_line_length value."""
-        return 80
+        return 120
 
     @staticmethod
     @pytest.fixture

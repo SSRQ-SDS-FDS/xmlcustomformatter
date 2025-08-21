@@ -30,7 +30,7 @@ class Options:  # pylint: disable=too-many-instance-attributes
 
     # Main options
     indentation: int = field(default=4)
-    max_line_length: int = field(default=80)
+    max_line_length: int = field(default=120)
 
     # Options for elements
     inline_elements: tuple[str, ...] = field(default_factory=tuple)
