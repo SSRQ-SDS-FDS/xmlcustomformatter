@@ -47,6 +47,13 @@ class XMLCustomFormatter:
         Initializes a XMLCustomFormatter instance.
         The input XML file is automatically parsed with the built-in
         minidom parser and formatted.
+        The processing takes place in two phases:
+        First: all nodes of the parsed dom are processed, such that
+            the markup is written into the result, indentation levels are calculated
+            and the distribution of the markup to lines is made
+        Second: the result from the first step is postprocessed to
+            remove empty lines and to split lines, which are too long
+            into smaller lines which are less or equal than the max_line_length option.
         """
         self.input_file = input_file
         self.output_file = output_file
