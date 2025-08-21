@@ -585,16 +585,61 @@ class XMLCustomFormatter:
 
     def _postprocess(self) -> None:
         """Delegates postprocessing of result to specialized methods."""
-        # ToDo:
-        # Split lines, which are too long, such that the resulting lines are less
-        # than the max_line_length Option
-
         result_as_string = "".join(self._result)
         result_as_string = SM.remove_empty_lines(result_as_string)
         result_as_string = SM.remove_whitespace_before_eol(result_as_string)
         result_as_string = result_as_string.strip()
-        # self._split_too_long_lines()
-        self._result = result_as_string.splitlines(keepends=True)
+
+        lines = result_as_string.splitlines(keepends=True)
+        lines = self._split_too_long_lines(lines)
+
+        self._result = lines
+
+    def _split_too_long_lines(self, lines: list[str]) -> list[str]:
+        """
+        Splits long lines safely at the last whitespace before max_line_length,
+        preserving indentation. If no whitespace is found, the line remains as is.
+        """
+        result: list[str] = []
+
+        for line in lines:
+            indent = line[: len(line) - len(line.lstrip(" "))]
+
+            # Prüfen, ob die Zeile ein Start-Tag enthält. Wenn ja, sollen eventuell abgetrennte
+            # Folgezeilen um ein Einrückungslevel mehr eingerückt werden.
+            pattern = re.compile(r"<(?!/)")
+            if pattern.search(line):
+                rest_indent = indent + self._indentation(self.options.indentation)
+            else:
+                rest_indent = indent
+
+            # Zeile solange aufteilen, bis alle Teilzeilen weniger als max_line_length lang sind.
+            while len(line) > self.options.max_line_length:
+                old_length = len(line)
+
+                # Suche die letzte Trennstelle vor max_len (Whitespace)
+                split_at = line.rfind(" ", 0, self.options.max_line_length)
+
+                if split_at == -1:
+                    # Keine Whitespace-Stelle gefunden → Zeile bleibt lang
+                    break
+
+                # Erste Teilzeile bis zum Whitespace
+                current_line = line[:split_at].rstrip()
+
+                # Rest weiter mit Einrückung
+                line = rest_indent + line[split_at + 1 :].lstrip()
+
+                # If the line does not get shorter end the loop
+                new_length = len(line)
+                if not new_length < old_length:
+                    break
+
+                result.append(current_line + "\n")
+
+            result.append(line)
+
+        return result
 
     def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""

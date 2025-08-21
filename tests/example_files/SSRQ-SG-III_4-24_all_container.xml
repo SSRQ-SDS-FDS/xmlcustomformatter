@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
+    schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <!-- Dies ist ein Test-Ballon -->
 <TEI xml:lang="de" xmlns="http://www.tei-c.org/ns/1.0">
     <teiHeader>
         <fileDesc>
             <titleStmt>
                 <title>
-                    XIV. Abteilung: Die Rechtsquellen des Kantons St. Gallen, Dritter Teil: Die Landschaften und Landstädte, Band 4: Die Rechtsquellen der Region Werdenberg: Grafschaft Werdenberg und Herrschaft Wartau, Freiherrschaft Sax-Forstegg und Herrschaft Hohensax-Gams
+                    XIV. Abteilung: Die Rechtsquellen des Kantons St. Gallen, Dritter Teil: Die Landschaften und
+                    Landstädte, Band 4: Die Rechtsquellen der Region Werdenberg: Grafschaft Werdenberg und Herrschaft
+                    Wartau, Freiherrschaft Sax-Forstegg und Herrschaft Hohensax-Gams
                 </title>
                 <editor>
                     <persName>
@@ -77,7 +81,8 @@
                         <repository xml:lang="de">
                             Landesarchiv Glarus
                         </repository>
-                        <idno source="https://archivverzeichnis.gl.ch/home/#/content/30ffaa060dd1463b8f3b86340e1ae260" xml:lang="de">
+                        <idno source="https://archivverzeichnis.gl.ch/home/#/content/30ffaa060dd1463b8f3b86340e1ae260"
+                            xml:lang="de">
                             LAGL AG III.2401:001
                         </idno>
                     </msIdentifier>
@@ -87,7 +92,8 @@
                     <msContents>
                         <summary xml:lang="de">
                             <p>
-                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
+                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt
+                                Werdenberg.
                             </p>
                         </summary>
                         <msItem>
@@ -121,7 +127,8 @@
                     </physDesc>
                     <history>
                         <origin>
-                            <origDate calendar="julian" from-custom="1400-01-01" to-custom="1400-12-31" type="document">
+                            <origDate calendar="julian" from-custom="1400-01-01" to-custom="1400-12-31"
+                                type="document">
                                 um etwa 1400
                             </origDate>
                         </origin>
@@ -350,7 +357,8 @@
                             </damage>
                         </del>
                         <note>
-                            Es handelt sich um zwei gestrichene Einträge, von denen nur noch einzelne Buchstaben lesbar sind. Bei
+                            Es handelt sich um zwei gestrichene Einträge, von denen nur noch einzelne Buchstaben lesbar
+                            sind. Bei
                             <bibl>
                                 <ref target="http://permalink.snl.ch/bib/chbsg000142660">
                                     Senn, Jahrzeitbuch
@@ -476,7 +484,10 @@
                     <placeName ref="loc006078">
                         St. Niklaus
                     </placeName>
-                    existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
+                    existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von
+                    Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen
+                    Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger
+                    Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
                     <date calendar="julian" from-custom="1401-01-01" to-custom="1500-12-31">
                         15. Jh.
                     </date>
@@ -543,7 +554,8 @@
                     <term ref="key000683">
                         urteilt
                     </term>
-                    , dass künftig die Schulden bei der Kirche vom Gerichtsboten eingetrieben und die Schuldner falls nötig
+                    , dass künftig die Schulden bei der Kirche vom Gerichtsboten eingetrieben und die Schuldner falls
+                    nötig
                     <term ref="key000441">
                         gepfändet
                     </term>
@@ -551,7 +563,8 @@
                     <term ref="key000412">
                         Gant
                     </term>
-                    versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der Kirche kaufen (
+                    versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der
+                    Kirche kaufen (
                     <bibl>
                         <ref target="https://archivverzeichnis.gl.ch/home/#/content/918ba7e71d8145fb87af8f484276dd1f">
                             LAGL AG III.2402:029

@@ -114,7 +114,7 @@ class TestXMLCustomFormatterDocumentTypes:
                 "<!ATTLIST root>"
                 "<!--Test-->"
                 "<?foo bar?>"
-                '<!NOTATION foo SYSTEM "foo">'
+                '<!NOTATION foo SYSTEM\n    "foo">'
                 '<!ENTITY foo "foo">'
                 "%foo;]><root/>",
                 Options(

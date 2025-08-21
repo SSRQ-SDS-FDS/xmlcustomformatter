@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
+    schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
+    schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <!-- Dies ist ein Test-Ballon -->
 <TEI xml:lang="de" xmlns="http://www.tei-c.org/ns/1.0">
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title>XIV. Abteilung: Die Rechtsquellen des Kantons St. Gallen, Dritter Teil: Die Landschaften und Landstädte, Band 4: Die Rechtsquellen der Region Werdenberg: Grafschaft Werdenberg und Herrschaft Wartau, Freiherrschaft Sax-Forstegg und Herrschaft Hohensax-Gams</title>
+                <title>XIV. Abteilung: Die Rechtsquellen des Kantons St. Gallen, Dritter Teil: Die Landschaften und
+                    Landstädte, Band 4: Die Rechtsquellen der Region Werdenberg: Grafschaft Werdenberg und Herrschaft
+                    Wartau, Freiherrschaft Sax-Forstegg und Herrschaft Hohensax-Gams</title>
                 <editor>
                     <persName>Sibylle Malamud</persName>
                 </editor>
@@ -45,13 +49,15 @@
                     <msIdentifier>
                         <settlement ref="loc000084" xml:lang="de">Glarus</settlement>
                         <repository xml:lang="de">Landesarchiv Glarus</repository>
-                        <idno source="https://archivverzeichnis.gl.ch/home/#/content/30ffaa060dd1463b8f3b86340e1ae260" xml:lang="de">LAGL AG III.2401:001</idno>
+                        <idno source="https://archivverzeichnis.gl.ch/home/#/content/30ffaa060dd1463b8f3b86340e1ae260"
+                            xml:lang="de">LAGL AG III.2401:001</idno>
                     </msIdentifier>
                     <head>Urbar der Kapelle St. Niklaus in Werdenberg</head>
                     <msContents>
                         <summary xml:lang="de">
                             <p>
-                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt Werdenberg.
+                                Verzeichnis der Schenkungen, Zinse und Einkünfte der Kapelle St. Niklaus in der Stadt
+                                Werdenberg.
                             </p>
                         </summary>
                         <msItem>
@@ -85,12 +91,15 @@
                     </physDesc>
                     <history>
                         <origin>
-                            <origDate calendar="julian" from-custom="1400-01-01" to-custom="1400-12-31" type="document">um etwa 1400</origDate>
+                            <origDate calendar="julian" from-custom="1400-01-01" to-custom="1400-12-31"
+                                type="document">um etwa 1400</origDate>
                         </origin>
                     </history>
                     <additional>
                         <listBibl type="literature">
-                            <bibl xml:id="id-ssrq-b213c850-291a-4961-84d8-e08f69113af0"><ref target="http://permalink.snl.ch/bib/chbsg000142660">Senn, Jahrzeitbuch</ref>, Anhang, S. 25–26 </bibl>
+                            <bibl xml:id="id-ssrq-b213c850-291a-4961-84d8-e08f69113af0"><ref
+                                target="http://permalink.snl.ch/bib/chbsg000142660">Senn, Jahrzeitbuch</ref>, Anhang,
+                                S. 25–26 </bibl>
                         </listBibl>
                     </additional>
                 </msDesc>
@@ -106,7 +115,8 @@
         <profileDesc>
             <textClass>
                 <keywords>
-                    <term ref="key000143">Kapelle</term> <term ref="key000192">Stiftung</term> <term ref="key000147">Gut</term> <term ref="key000154">Zins</term>
+                    <term ref="key000143">Kapelle</term> <term ref="key000192">Stiftung</term> <term
+                        ref="key000147">Gut</term> <term ref="key000154">Zins</term>
                 </keywords>
             </textClass>
         </profileDesc>
@@ -131,10 +141,14 @@
                                 <expan>Primo</expan>
                             </choice>
                             </foreign>.
-                        <lb/><delSpan hand="laterHand" rend="crossout" spanTo="del1"/>Item ain hoffstǎtt, lit ze dem <placeName ref="loc006060">Altendorf</placeName>, die hǎt
+                        <lb/><delSpan hand="laterHand" rend="crossout" spanTo="del1"/>Item ain hoffstǎtt, lit ze dem
+                            <placeName ref="loc006060">Altendorf</placeName>, die hǎt
                         <lb/><persName ref="per004445a.01">Cuͦntz Rorer</persName>
                         <note>
-                            <date calendar="julian" from-custom="1437-01-01" to-custom="1437-12-31">1437</date> wird Konrad Rohrer von Altendorf von <persName ref="per008052a">Ulrich von St. Johann</persName> um 40 Pfund aus der Leibeigenschaft entlassen (<bibl><ref target="urn:ssrq:SSRQ-SG-III_4-41-1">SSRQ SG III/4 41-1</ref></bibl>). </note> umb
+                            <date calendar="julian" from-custom="1437-01-01" to-custom="1437-12-31">1437</date> wird
+                                Konrad Rohrer von Altendorf von <persName ref="per008052a">Ulrich von St.
+                                Johann</persName> um 40 Pfund aus der Leibeigenschaft entlassen (<bibl><ref
+                                target="urn:ssrq:SSRQ-SG-III_4-41-1">SSRQ SG III/4 41-1</ref></bibl>). </note> umb
                         <measure commodity="wheat" quantity="1" type="volume" unit="Viertel">
                             <subst>
                                 <del rend="rubbing"><gap/></del>
@@ -145,17 +159,21 @@
                                 <abbr>Uͦlr</abbr>
                                 <expan>Uͦlrich</expan>
                             </choice>
-                            <lb/>Vittler</persName> und <persName ref="per004463a">Elsbet</persName>, sin wirtin.<anchor xml:id="del1"/>
+                            <lb/>Vittler</persName> und <persName ref="per004463a">Elsbet</persName>, sin
+                                wirtin.<anchor xml:id="del1"/>
                     </p>
                 </seg>
                 <seg>
                     <p>
-                        <lb/>Item <persName ref="per004448">Uli</persName> an dem <term ref="lem001108">kilchweg</term> hǎt gelǎn ain wisli,
+                        <lb/>Item <persName ref="per004448">Uli</persName> an dem <term ref="lem001108">kilchweg</term>
+                            hǎt gelǎn ain wisli,
                         <lb/>dz lit ze <placeName ref="loc000428.04">Revis</placeName>, dz gilt
-                        <measure commodity="wheat" quantity="1" type="volume" unit="Vierdung">ainen vierdung waissen</measure>.
+                        <measure commodity="wheat" quantity="1" type="volume" unit="Vierdung">ainen vierdung
+                            waissen</measure>.
                     </p>
                     <p>
-                        <lb/>Item ab <persName ref="per004449">Haintzen Vittler</persName>s <term ref="lem008955">hus und hofstatt</term> gǎt
+                        <lb/>Item ab <persName ref="per004449">Haintzen Vittler</persName>s <term ref="lem008955">hus
+                            und hofstatt</term> gǎt
                         <lb/>
                         <measure quantity="6" type="currency" unit="d">vj ₰</measure>.
                     </p>
@@ -165,7 +183,8 @@
                     </p>
                     <p>
                         <lb/>
-                        <del hand="laterHand" rend="strikethrough">Item ab dem hindren <term ref="lem001121">bongarten</term> gǎt <num value="6">vj</num>
+                        <del hand="laterHand" rend="strikethrough">Item ab dem hindren <term
+                            ref="lem001121">bongarten</term> gǎt <num value="6">vj</num>
                             <app>
                                 <rdg wit="id-ssrq-b213c850-291a-4961-84d8-e08f69113af0#p25">₰</rdg>
                             </app>
@@ -173,15 +192,21 @@
                     </p>
                     <p>
                         <lb/>
-                        <del hand="laterHand" rend="strikethrough">Item <damage agent="faded_ink"><gap quantity="1" unit="line"/></damage></del>
+                        <del hand="laterHand" rend="strikethrough">Item <damage agent="faded_ink"><gap quantity="1"
+                            unit="line"/></damage></del>
                     </p>
                     <p>
-                        <del hand="laterHand" rend="strikethrough">Item <damage agent="faded_ink"><gap quantity="2" unit="line"/></damage></del>
-                        <note>Es handelt sich um zwei gestrichene Einträge, von denen nur noch einzelne Buchstaben lesbar sind. Bei <bibl><ref target="http://permalink.snl.ch/bib/chbsg000142660">Senn, Jahrzeitbuch</ref>, Anhang, S. 25,</bibl> fehlen beide Einträge.</note>
+                        <del hand="laterHand" rend="strikethrough">Item <damage agent="faded_ink"><gap quantity="2"
+                            unit="line"/></damage></del>
+                        <note>Es handelt sich um zwei gestrichene Einträge, von denen nur noch einzelne Buchstaben
+                            lesbar sind. Bei <bibl><ref target="http://permalink.snl.ch/bib/chbsg000142660">Senn,
+                            Jahrzeitbuch</ref>, Anhang, S. 25,</bibl> fehlen beide Einträge.</note>
                     </p>
                     <p>
                         <lb/>
-                        <del hand="laterHand" rend="strikethrough">Item ab des <orgName ref="org001048.02">Bikkers</orgName> hofstat zuͦm <placeName ref="loc007196.01">Hinderen <term ref="lem000154">Tor</term></placeName> gat
+                        <del hand="laterHand" rend="strikethrough">Item ab des <orgName
+                            ref="org001048.02">Bikkers</orgName> hofstat zuͦm <placeName ref="loc007196.01">Hinderen
+                            <term ref="lem000154">Tor</term></placeName> gat
                             <measure quantity="4" type="currency" unit="d">vj ₰</measure>.</del>
                     </p>
                 </seg>
@@ -190,7 +215,8 @@
                         <cell>Ann kernnen</cell>
                         <cell>
                             <measureGrp>
-                                <measure quantity="92" type="volume" unit="Mütt">lxxxxij <abbr>m<hi rend="sup">t</hi></abbr></measure>
+                                <measure quantity="92" type="volume" unit="Mütt">lxxxxij <abbr>m<hi
+                                    rend="sup">t</hi></abbr></measure>
                                 <measure quantity="2" type="volume" unit="Viertel">ij <abbr>fl</abbr></measure>
                                 <measure commodity="spelt" quantity="2.5" type="volume" unit="Immi">iiɉ ymi</measure>
                             </measureGrp>
@@ -206,10 +232,14 @@
                     <handShift hand="secondHand"/>
                     <del hand="laterHand" rend="crossout">
                         <lb/>Item ab dem hus
-                        <add place="above">und hoffstatt</add> bi der <placeName ref="loc006084.02">Stappffen</placeName>, das der <orgName ref="org001804">Maler</orgName> und <persName ref="per004465a">Heͣnsli
-                            <lb/>Stainhu̍wel</persName> erkoufft hand, gat jaͤrlich <placeName ref="loc006078">Sant Niclausen</placeName>
+                        <add place="above">und hoffstatt</add> bi der <placeName
+                            ref="loc006084.02">Stappffen</placeName>, das der <orgName ref="org001804">Maler</orgName>
+                            und <persName ref="per004465a">Heͣnsli
+                            <lb/>Stainhu̍wel</persName> erkoufft hand, gat jaͤrlich <placeName ref="loc006078">Sant
+                                Niclausen</placeName>
                         <lb/>
-                        <measure commodity="wheat" quantity="1" type="volume" unit="Viertel">ain viertal waissen</measure>.</del>
+                        <measure commodity="wheat" quantity="1" type="volume" unit="Viertel">ain viertal
+                            waissen</measure>.</del>
                 </p>
                 <pb facs="LAGL_AG_III_2401-001_v"/>
                 <ab place="verso" type="dorsal">
@@ -223,14 +253,38 @@
         <back>
             <div>
                 <p>
-                    Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region <placeName ref="loc000962">Werdenberg</placeName>. Die Kapelle <placeName ref="loc006078">St. Niklaus</placeName> existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap. Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
-                    <date calendar="julian" from-custom="1401-01-01" to-custom="1500-12-31">15. Jh.</date> erwähnt und war eine Kapelle im Städtchen <placeName ref="loc000016">Werdenberg</placeName>, die möglicherweise im Oberstädtli in der Lücke der äusseren nördlichen Häuserreihe lag (<bibl><ref target="http://permalink.snl.ch/bib/chbsg000142778">Hilty 1906</ref>, S. 94ff.</bibl>). Laut den Amtspflichten eines Kaplans von <placeName ref="loc000335">Grabs</placeName> von
-                    <date calendar="julian" from-custom="1455-01-01" to-custom="1455-12-31">1455</date> hat ein Priester zweimal
-                    <date dur-iso="R/P1W">wöchentlich</date> in der Niklauskapelle in der Stadt Werdenberg Messe zu lesen (vgl. dazu <bibl><ref target="urn:ssrq:SSRQ-SG-III_4-51-1">SSRQ SG III/4 51-1</ref></bibl>).
+                    Es handelt sich hier um das älteste Urbar einer Kirche oder Kapelle der Region <placeName
+                        ref="loc000962">Werdenberg</placeName>. Die Kapelle <placeName ref="loc006078">St.
+                        Niklaus</placeName> existiert nicht mehr und ihre Lage ist unbekannt (zum Standort vgl. die
+                        neusten Erkenntnisse von Krumm (erscheint 2020), Die Kunstdenkmäler der Region Werdenberg, Kap.
+                        Gemeinde Grabs, Städtchen Werdenberg, die spätmittelalterliche Stadtgestalt, zur Frage nach dem
+                        Standort der Werdenberger Kapelle St. Nikolaus). Sie wird in den schriftlichen Quellen des
+                    <date calendar="julian" from-custom="1401-01-01" to-custom="1500-12-31">15. Jh.</date> erwähnt und
+                        war eine Kapelle im Städtchen <placeName ref="loc000016">Werdenberg</placeName>, die
+                        möglicherweise im Oberstädtli in der Lücke der äusseren nördlichen Häuserreihe lag (<bibl><ref
+                        target="http://permalink.snl.ch/bib/chbsg000142778">Hilty 1906</ref>, S. 94ff.</bibl>). Laut
+                        den Amtspflichten eines Kaplans von <placeName ref="loc000335">Grabs</placeName> von
+                    <date calendar="julian" from-custom="1455-01-01" to-custom="1455-12-31">1455</date> hat ein
+                        Priester zweimal
+                    <date dur-iso="R/P1W">wöchentlich</date> in der Niklauskapelle in der Stadt Werdenberg Messe zu
+                        lesen (vgl. dazu <bibl><ref target="urn:ssrq:SSRQ-SG-III_4-51-1">SSRQ SG III/4
+                        51-1</ref></bibl>).
                 </p>
                 <p>
                     Am
-                    <date calendar="julian" when-custom="1461-11-26">26. November 1461</date> sitzt <persName ref="per000883">Heinrich Gocham</persName>, Ammann von Werdenberg, im Namen des Grafen <persName ref="per000884a">Wilhelm VIII. von Montfort-Tettnang</persName> zu Gericht in der Stadt <placeName ref="loc000016">Werdenberg</placeName>. <persName ref="per004514">Sigmund Spenli</persName>, Kirchmeier der Kapelle St. Niklaus, beschwert sich, dass die fälligen <term ref="key000154">Zinsen</term> sehr schwierig einzutreiben seien. Das <term ref="key000057">Gericht</term> <term ref="key000683">urteilt</term>, dass künftig die Schulden bei der Kirche vom Gerichtsboten eingetrieben und die Schuldner falls nötig <term ref="key000441">gepfändet</term> oder ihre Güter auf der <term ref="key000412">Gant</term> versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der Kirche kaufen (<bibl><ref target="https://archivverzeichnis.gl.ch/home/#/content/918ba7e71d8145fb87af8f484276dd1f">LAGL AG III.2402:029</ref></bibl>).
+                    <date calendar="julian" when-custom="1461-11-26">26. November 1461</date> sitzt <persName
+                        ref="per000883">Heinrich Gocham</persName>, Ammann von Werdenberg, im Namen des Grafen
+                        <persName ref="per000884a">Wilhelm VIII. von Montfort-Tettnang</persName> zu Gericht in der
+                        Stadt <placeName ref="loc000016">Werdenberg</placeName>. <persName ref="per004514">Sigmund
+                        Spenli</persName>, Kirchmeier der Kapelle St. Niklaus, beschwert sich, dass die fälligen <term
+                        ref="key000154">Zinsen</term> sehr schwierig einzutreiben seien. Das <term
+                        ref="key000057">Gericht</term> <term ref="key000683">urteilt</term>, dass künftig die Schulden
+                        bei der Kirche vom Gerichtsboten eingetrieben und die Schuldner falls nötig <term
+                        ref="key000441">gepfändet</term> oder ihre Güter auf der <term ref="key000412">Gant</term>
+                        versteigert werden sollen. Ersteigert niemand das Gut, soll der Kirchmeier dieses zuhanden der
+                        Kirche kaufen (<bibl><ref
+                        target="https://archivverzeichnis.gl.ch/home/#/content/918ba7e71d8145fb87af8f484276dd1f">LAGL
+                        AG III.2402:029</ref></bibl>).
                 </p>
             </div>
         </back>
