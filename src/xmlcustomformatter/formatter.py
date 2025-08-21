@@ -586,16 +586,15 @@ class XMLCustomFormatter:
     def _postprocess(self) -> None:
         """Delegates postprocessing of result to specialized methods."""
         # ToDo:
-        # Split lines, which are to long, such that the resulting lines are less
+        # Split lines, which are too long, such that the resulting lines are less
         # than the max_line_length Option
 
         result_as_string = "".join(self._result)
         result_as_string = SM.remove_empty_lines(result_as_string)
         result_as_string = SM.remove_whitespace_before_eol(result_as_string)
-        self._result = result_as_string.splitlines(keepends=True)
-        self._result[1] = self._result[1].lstrip()
-        self._result[-1] = self._result[-1].rstrip()
+        result_as_string = result_as_string.strip()
         # self._split_too_long_lines()
+        self._result = result_as_string.splitlines(keepends=True)
 
     def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""
@@ -607,12 +606,6 @@ class XMLCustomFormatter:
     #     self._result = []
     #     for line in lines:
     #         self.postprocess_line(line)
-    #
-    # def postprocess_result_as_string(self) -> None:
-    #     self._result = sm.convert_list_to_string(self._result)
-    #     self._result = sm.remove_empty_lines(self._result)
-    #     self._result = sm.remove_whitespace_before_eol(self._result)
-    #     self._result = self._result.strip()
     #
     # def postprocess_line(self, line: str) -> None:
     #     # Todo: split this function up to make it more readable
