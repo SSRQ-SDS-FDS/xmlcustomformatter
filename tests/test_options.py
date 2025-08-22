@@ -142,3 +142,9 @@ class TestCustomOptions:
         """Invalid tuples raise TypeError."""
         with pytest.raises(TypeError):
             Options(semicontainer_elements=invalid_elements)
+
+    @staticmethod
+    def test_conflicting_inline_semicontainer_elements(valid_elements: tuple[str, ...]) -> None:
+        """Specifying elements as inline and semicontainer raises ValueError."""
+        with pytest.raises(ValueError):
+            Options(semicontainer_elements=valid_elements, inline_elements=valid_elements)

@@ -64,3 +64,10 @@ class Options:  # pylint: disable=too-many-instance-attributes
         invalid = [el for el in self.semicontainer_elements if not isinstance(el, str)]
         if invalid:
             raise TypeError(f"semicontainer_elements must contain only strings. Invalid: {invalid}")
+
+        conflicting = set(self.inline_elements) & set(self.semicontainer_elements)
+        if conflicting:
+            raise ValueError(
+                f"The following elements cannot be inline and semicontainer elements "
+                f"at the same time: {conflicting}"
+            )
