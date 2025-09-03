@@ -606,7 +606,7 @@ class XMLCustomFormatter:
             indent = line[: len(line) - len(line.lstrip(" "))]
 
             # Prüfen, ob die Zeile ein Start-Tag enthält. Wenn ja, sollen eventuell abgetrennte
-            # Folgezeilen um ein Einrückungslevel mehr eingerückt werden.
+            # Folgezeilen um eine Einrückungsebene mehr eingerückt werden.
             pattern = re.compile(r"<(?!/)")
             if pattern.search(line):
                 rest_indent = indent + self._indentation(self.options.indentation)
@@ -645,40 +645,3 @@ class XMLCustomFormatter:
         """Writes the collected result to the output file."""
         with open(self.output_file, "w", encoding=self._encoding) as f:
             f.writelines(self._result)
-
-    # def postprocess_result_lines(self) -> None:
-    #     lines = self._result
-    #     self._result = []
-    #     for line in lines:
-    #         self.postprocess_line(line)
-    #
-    # def postprocess_line(self, line: str) -> None:
-    #     # Todo: split this function up to make it more readable
-    #     number_of_spaces = self.get_current_indentation(line)
-    #     if number_of_spaces > 0:
-    #         indentation = number_of_spaces * " "
-    #     else:
-    #         indentation = ""
-    #     if len(line) <= self.options.max_line_length:
-    #         self._result.append(line)
-    #     else:
-    #         if " " in line:
-    #             position = line.rfind(
-    #                 " ", number_of_spaces, self.options.max_line_length
-    #             )
-    #             if position == -1:
-    #                 position = line.find(" ", self.options.max_line_length)
-    #                 if position == -1:
-    #                     self._result.append(line)
-    #                 else:
-    #                     self._result.append(line[0:position] + "\n")
-    #                     self.postprocess_line(indentation + line[position:].lstrip())
-    #             else:
-    #                 self._result.append(line[0:position] + "\n")
-    #                 self.postprocess_line(indentation + line[position:].lstrip())
-    #         else:
-    #             self._result.append(line)
-    #
-    # @staticmethod
-    # def get_current_indentation(string) -> int:
-    #     return len(string) - len(string.lstrip())
