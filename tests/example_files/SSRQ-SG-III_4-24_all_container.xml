@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
-    schematypens="http://relaxng.org/ns/structure/1.0"?>
+schematypens="http://relaxng.org/ns/structure/1.0"?>
 <?xml-model href="https://schema.ssrq-sds-fds.ch/latest/TEI_Schema.rng" type="application/xml"
-    schematypens="http://purl.oclc.org/dsdl/schematron"?>
+schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <!-- Dies ist ein Test-Ballon -->
 <TEI xml:lang="de" xmlns="http://www.tei-c.org/ns/1.0">
     <teiHeader>
@@ -82,7 +82,7 @@
                             Landesarchiv Glarus
                         </repository>
                         <idno source="https://archivverzeichnis.gl.ch/home/#/content/30ffaa060dd1463b8f3b86340e1ae260"
-                            xml:lang="de">
+                        xml:lang="de">
                             LAGL AG III.2401:001
                         </idno>
                     </msIdentifier>
@@ -128,7 +128,7 @@
                     <history>
                         <origin>
                             <origDate calendar="julian" from-custom="1400-01-01" to-custom="1400-12-31"
-                                type="document">
+                            type="document">
                                 um etwa 1400
                             </origDate>
                         </origin>

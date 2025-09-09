@@ -133,7 +133,7 @@ class XMLCustomFormatter:
             #     # This node type may be found in the DocumentType.notations node map,
             #     # but because it is also part of the document type declaration,
             #     # it will be part of DocumentType.internalSubset property.
-            #     # Thus it is not necessary to process this kind of node while formatting.
+            #     # Thus, it is not necessary to process this kind of node while formatting.
             #     pass
 
     def _process_all_child_nodes(self, node: Node) -> None:
@@ -605,32 +605,22 @@ class XMLCustomFormatter:
         for line in lines:
             indent = line[: len(line) - len(line.lstrip(" "))]
 
-            # Prüfen, ob die Zeile ein Start-Tag enthält. Wenn ja, sollen eventuell abgetrennte
-            # Folgezeilen um eine Einrückungsebene mehr eingerückt werden.
-            pattern = re.compile(r"<(?!/)")
-            if pattern.search(line):
-                rest_indent = indent + self._indentation(self.options.indentation)
-            else:
-                rest_indent = indent
-
-            # Zeile solange aufteilen, bis alle Teilzeilen weniger als max_line_length lang sind.
+            # Split line while it is longer than max_line_length
             while len(line) > self.options.max_line_length:
                 old_length = len(line)
 
-                # Suche die letzte Trennstelle vor max_len (Whitespace)
+                # Find last whitespace before max_line_length
                 split_at = line.rfind(" ", 0, self.options.max_line_length)
 
                 if split_at == -1:
-                    # Keine Whitespace-Stelle gefunden → Zeile bleibt lang
+                    # If no whitespace is found, end the loop, the line remains as is
                     break
 
-                # Erste Teilzeile bis zum Whitespace
                 current_line = line[:split_at].rstrip()
 
-                # Rest weiter mit Einrückung
-                line = rest_indent + line[split_at + 1 :].lstrip()
+                line = indent + line[split_at + 1 :].lstrip()
 
-                # If the line does not get shorter end the loop
+                # If the line does not get shorter end the loop to prevent endless iterations
                 new_length = len(line)
                 if not new_length < old_length:
                     break

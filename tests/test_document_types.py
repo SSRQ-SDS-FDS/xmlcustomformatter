@@ -89,14 +89,17 @@ class TestXMLCustomFormatterDocumentTypes:
                 '<!ENTITY foo "foo">'
                 "%foo;"
                 "]><root/>",
-                '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root PUBLIC "foo" "bar" ['
-                "\n    <!ELEMENT root EMPTY>"
-                "\n    <!ATTLIST root>"
-                "\n    <!--Test-->"
-                "\n    <?foo bar?>"
-                '\n    <!NOTATION foo SYSTEM "foo">'
-                '\n    <!ENTITY foo "foo">'
-                "\n    %foo;\n]>\n<root/>",
+                '<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<!DOCTYPE root PUBLIC "foo" "bar" [\n'
+                "    <!ELEMENT root EMPTY>\n"
+                "    <!ATTLIST root>\n"
+                "    <!--Test-->\n"
+                "    <?foo bar?>\n"
+                '    <!NOTATION foo SYSTEM "foo">\n'
+                '    <!ENTITY foo "foo">\n'
+                "    %foo;\n"
+                "]>\n"
+                "<root/>",
                 Options(inline_elements=("root",)),
             ),
             (
@@ -109,12 +112,14 @@ class TestXMLCustomFormatterDocumentTypes:
                 '<!ENTITY foo "foo">'
                 "%foo;"
                 "]><root/>",
-                '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE root PUBLIC "foo" "bar" ['
+                '<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<!DOCTYPE root PUBLIC "foo" "bar" ['
                 "<!ELEMENT root EMPTY>"
                 "<!ATTLIST root>"
                 "<!--Test-->"
                 "<?foo bar?>"
-                '<!NOTATION foo SYSTEM\n    "foo">'
+                "<!NOTATION foo SYSTEM\n"
+                '"foo">'
                 '<!ENTITY foo "foo">'
                 "%foo;]><root/>",
                 Options(
@@ -136,8 +141,8 @@ class TestXMLCustomFormatterDocumentTypes:
             "doctype_with_internal_subset_with_entity",
             "doctype_with_internal_subset_with_element",
             "doctype_with_internal_subset_with_attlist",
-            "doctype_with_all_kinds_of_content",
-            "doctype_with_all_kinds_of_content",
+            "doctype_with_all_kinds_of_content-1",
+            "doctype_with_all_kinds_of_content-2",
         ],
     )
     def doctypes(request: FixtureRequest) -> tuple[str, str, Options]:
