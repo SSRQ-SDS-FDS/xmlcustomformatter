@@ -1,6 +1,6 @@
 [project]
 name = "xmlcustomformatter"
-version = "0.1.0"
+version = "1.0.0"
 description = "A customizable formatter for XML-files"
 readme = "README.md"
 authors = [
