@@ -560,7 +560,7 @@ class XMLCustomFormatter:
         self._indentation_level += 1
 
     def _add_indentation(self) -> None:
-        """Adds indentation to the result based on the currend indentation level"""
+        """Adds indentation to the result based on the current indentation level"""
         self._result.append(self._indentation(self._calculate_indentation()))
 
     def _add_linebreak(self) -> None:
@@ -609,11 +609,8 @@ class XMLCustomFormatter:
             while len(line) > self.options.max_line_length:
                 old_length = len(line)
 
-                # Find last whitespace before max_line_length
-                split_at = line.rfind(" ", 0, self.options.max_line_length)
-
-                if split_at == -1:
-                    # If no whitespace is found, end the loop, the line remains as is
+                split_at = self._find_split_position(line)
+                if split_at is None:
                     break
 
                 current_line = line[:split_at].rstrip()
@@ -630,6 +627,25 @@ class XMLCustomFormatter:
             result.append(line)
 
         return result
+
+    def _find_split_position(self, line: str) -> int | None:
+        """
+        Returns an index, where the line should be split.
+
+        Prefers the last whitespace before max_line_length,
+        otherwise the first one after it.
+
+        Returns None if no whitespace is found at all.
+        """
+        result = line.rfind(" ", 0, self.options.max_line_length)
+        if result != -1:
+            return result
+
+        result = line.find(" ", self.options.max_line_length)
+        if result != -1:
+            return result
+
+        return None
 
     def _write_to_output_file(self) -> None:
         """Writes the collected result to the output file."""
