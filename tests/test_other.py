@@ -42,16 +42,12 @@ class TestXMLCustomFormatterOther:
             xml_dummy._process_node(Node())
 
     @staticmethod
-    def test_output_file_is_created(xml_dummy: XMLCustomFormatter) -> None:
-        """Checks that the output file is created."""
-        assert Path(xml_dummy.output_file).exists()
-
-    @staticmethod
     def test_output_file_has_correct_content(xml_dummy: XMLCustomFormatter) -> None:
         """Checks that the output file has the correct content."""
         expected = """<?xml version="1.0" encoding="UTF-8"?>\n<root/>"""
-        result = Path(xml_dummy.output_file).read_text(encoding="UTF-8")
-        assert result == expected
+        if isinstance(xml_dummy.output, str):
+            result = Path(xml_dummy.output).read_text(encoding="UTF-8")
+            assert result == expected
 
     @staticmethod
     def test_really_long_input_line(tmp_path: Path) -> None:

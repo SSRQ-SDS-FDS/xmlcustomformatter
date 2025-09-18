@@ -1,6 +1,7 @@
 """This module contains the XMLCustomFormatter class."""
 
 import re
+from pathlib import Path
 from typing import Optional, cast
 from xml.dom import minidom
 from xml.dom.minidom import (
@@ -23,13 +24,15 @@ class XMLCustomFormatter:
     Formatter for XML files applying custom formatting options.
 
     Args:
-        input_file (str): Path to the input XML file to be read.
-        output_file (str): Path to the output XML file where the formatted XML will be saved.
+        input_xml (str): Path to the input XML file to be read or an XML string.
+        output_xml (str, optional): Path to the file where the formatted XML will be saved.
+            If not provided, the result can be accesses via get_result_as_list or
+            get_result_as_string.
         options (Options, optional): Configuration options for formatting.
             If not provided, default Options() will be used.
 
     Default values:
-        If no information is provided in the XML file to be processed, then
+        If no information is provided in the XML to be processed, then
         XML Version 1.0, encoding UTF-8 and an empty standalone declaration are used.
     """
 
@@ -39,8 +42,8 @@ class XMLCustomFormatter:
 
     def __init__(
         self,
-        input_file: str,
-        output_file: str,
+        input_xml: str,
+        output_xml: Optional[str] = None,
         options: Optional[Options] = None,
     ):
         """
@@ -55,16 +58,34 @@ class XMLCustomFormatter:
             remove empty lines and to split lines, which are too long
             into smaller lines which are less or equal than the max_line_length option.
         """
-        self.input_file = input_file
-        self.output_file = output_file
+
+        self.input = input_xml
+        self.output = output_xml
         self.options = options or Options()
-        self._dom = minidom.parse(self.input_file)
+
+        self._dom = self._parse_input(self.input)
         self._encoding = self._dom.encoding or self.default_encoding
         self._indentation_level: int = 0
         self._result: list[str] = []
+
         self._process_node(self._dom)
         self._postprocess()
-        self._write_to_output_file()
+
+        if self.output:
+            self._write_to_output_file(self.output, self._encoding, self._result)
+
+    @staticmethod
+    def _parse_input(input_xml: str) -> Document:
+        """
+        Parses the input into a minidom Document.
+
+        If `input_xml` is a valid file path, the file will be parsed.
+        Otherwise, the string is assumed to contain XML and will be parsed.
+        """
+        if Path(input_xml).is_file():
+            return minidom.parse(input_xml)
+
+        return minidom.parseString(input_xml)
 
     def get_result_as_list(self) -> list[str]:
         """Returns the result as a list of strings."""
@@ -647,7 +668,8 @@ class XMLCustomFormatter:
 
         return None
 
-    def _write_to_output_file(self) -> None:
+    @staticmethod
+    def _write_to_output_file(output_file: str, encoding: str, result: list[str]) -> None:
         """Writes the collected result to the output file."""
-        with open(self.output_file, "w", encoding=self._encoding) as f:
-            f.writelines(self._result)
+        with open(output_file, "w", encoding=encoding) as f:
+            f.writelines(result)
