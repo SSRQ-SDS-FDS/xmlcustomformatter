@@ -74,18 +74,37 @@ class XMLCustomFormatter:
         if self.output:
             self._write_to_output_file(self.output, self._encoding, self._result)
 
-    @staticmethod
-    def _parse_input(input_xml: str) -> Document:
+    def _parse_input(self, input_xml: str) -> Document:
         """
         Parses the input into a minidom Document.
 
         If `input_xml` is a valid file path, the file will be parsed.
         Otherwise, the string is assumed to contain XML and will be parsed.
         """
-        if Path(input_xml).is_file():
-            return minidom.parse(input_xml)
+        try:
+            path = Path(input_xml)
+            if path.is_file():
+                return self._parse_from_file(path)
+        except (OSError, TypeError, ValueError):
+            pass
 
-        return minidom.parseString(input_xml)
+        return self._parse_from_string(input_xml)
+
+    @staticmethod
+    def _parse_from_file(path: Path) -> Document:
+        try:
+            return minidom.parse(str(path))
+        except Exception as e:
+            raise ValueError(f"File '{path}' exists but could not be parsed as XML: {e}") from e
+
+    @staticmethod
+    def _parse_from_string(string: str) -> Document:
+        try:
+            return minidom.parseString(string)
+        except Exception as e:
+            raise ValueError(
+                f"`input_xml` is neither a valid file path nor a well-formed XML-String: {e}"
+            ) from e
 
     def get_result_as_list(self) -> list[str]:
         """Returns the result as a list of strings."""
