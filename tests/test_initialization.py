@@ -20,15 +20,20 @@ class TestXMLCustomFormatterInitialization:
 
     @staticmethod
     @pytest.fixture
-    def result_string_at_start() -> str:
-        """Returns the empty result at the start of the formatting process."""
+    def result_string() -> str:
+        """Returns the result of the formatting process."""
         return '<?xml version="1.0" encoding="UTF-8"?>\n<root/>'
 
     @staticmethod
     @pytest.fixture
     def options() -> Options:
         """Returns an Options object"""
-        return Options(2, 100, ("div", "span"))
+        return Options(
+            indentation=2,
+            max_line_length=100,
+            inline_elements=("div", "span"),
+            semicontainer_elements=("foo", "bar"),
+        )
 
     @staticmethod
     @pytest.fixture
@@ -39,7 +44,7 @@ class TestXMLCustomFormatterInitialization:
     @staticmethod
     @pytest.fixture
     def xml_files(tmp_path: Path, xml_content: str) -> tuple[str, str]:
-        """Returns a file path as a string"""
+        """Returns file paths as a tuple of strings"""
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content, encoding="utf-8")
@@ -60,12 +65,26 @@ class TestXMLCustomFormatterInitialization:
         return XMLCustomFormatter(input_file, output_file, options)
 
     @staticmethod
+    @pytest.fixture
+    def input_is_xml_string(options: Options, xml_files: tuple[str, str]) -> XMLCustomFormatter:
+        """Returns an instance when the input is an xml string instead of a filename."""
+        _, output_file = xml_files
+        return XMLCustomFormatter("<root/>", output_file, options)
+
+    @staticmethod
+    @pytest.fixture
+    def output_is_none(options: Options, xml_files: tuple[str, str]) -> XMLCustomFormatter:
+        """Returns an instance when the input is an xml string instead of a filename."""
+        input_file, _ = xml_files
+        return XMLCustomFormatter(input_file, None, options)
+
+    @staticmethod
     def test_sets_input_file(
         default_formatter: XMLCustomFormatter, xml_files: tuple[str, str]
     ) -> None:
         """Checks that the input_file attribute is set correctly upon initialization."""
         input_file, _ = xml_files
-        assert default_formatter.input_file == input_file
+        assert default_formatter.input == input_file
 
     @staticmethod
     def test_sets_output_file(
@@ -73,7 +92,7 @@ class TestXMLCustomFormatterInitialization:
     ) -> None:
         """Checks that the output_file attribute is set correctly upon initialization."""
         _, output_file = xml_files
-        assert default_formatter.output_file == output_file
+        assert default_formatter.output == output_file
 
     @staticmethod
     def test_sets_default_formatting_options(default_formatter: XMLCustomFormatter) -> None:
@@ -113,6 +132,13 @@ class TestXMLCustomFormatterInitialization:
         assert custom_formatter.options.inline_elements == options.inline_elements
 
     @staticmethod
+    def test_custom_formatter_semicontainer_elements(
+        custom_formatter: XMLCustomFormatter, options: Options
+    ) -> None:
+        """Checks that the inline_elements attribute is set correctly upon initialization."""
+        assert custom_formatter.options.semicontainer_elements == options.semicontainer_elements
+
+    @staticmethod
     def test_dom_instance(default_formatter: XMLCustomFormatter) -> None:
         """Checks that the input file is correctly parsed to a Document object."""
         assert isinstance(default_formatter._dom, Document)
@@ -129,16 +155,6 @@ class TestXMLCustomFormatterInitialization:
             assert default_formatter._dom.documentElement.tagName == "root"
 
     @staticmethod
-    def test_file_not_found() -> None:
-        """
-        Test that initializing XMLCustomFormatter with a non-existent input file
-        raises a FileNotFoundError.
-        """
-        non_existing_path = "does_not_exist.xml"
-        with pytest.raises(FileNotFoundError):
-            XMLCustomFormatter(non_existing_path, "output.xml")
-
-    @staticmethod
     def test_indentation_level_at_start(
         default_formatter: XMLCustomFormatter, indentation_at_start: int
     ) -> None:
@@ -146,8 +162,16 @@ class TestXMLCustomFormatterInitialization:
         assert default_formatter._indentation_level == indentation_at_start
 
     @staticmethod
-    def test_result_at_start(
-        default_formatter: XMLCustomFormatter, result_string_at_start: str
-    ) -> None:
+    def test_result_string(default_formatter: XMLCustomFormatter, result_string: str) -> None:
         """Tests that the result is correctly set at start."""
-        assert default_formatter.get_result_as_string() == result_string_at_start
+        assert default_formatter.get_result_as_string() == result_string
+
+    @staticmethod
+    def test_input_is_xml_string(input_is_xml_string: XMLCustomFormatter) -> None:
+        """Tests"""
+        assert isinstance(input_is_xml_string, XMLCustomFormatter)
+
+    @staticmethod
+    def test_output_is_none(output_is_none: XMLCustomFormatter) -> None:
+        """Tests"""
+        assert isinstance(output_is_none, XMLCustomFormatter)

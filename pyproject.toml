@@ -1,6 +1,6 @@
 [project]
 name = "xmlcustomformatter"
-version = "1.0.0"
+version = "1.1.0"
 description = "A customizable formatter for XML-files"
 readme = "README.md"
 authors = [
@@ -38,6 +38,7 @@ line-length = 100
 [tool.pylint."messages control"]
 disable = [
     "R0903", # too-few-public-methods
+    "R0904", # too-many-public-methods
     "W0212", # access to protected members
 ]
 

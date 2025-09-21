@@ -117,7 +117,7 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected
 
     @staticmethod
@@ -130,7 +130,7 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected
 
     @staticmethod
@@ -144,7 +144,7 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected
 
     @staticmethod
@@ -158,7 +158,7 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path), options)
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected
 
     @staticmethod
@@ -171,7 +171,7 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path))
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected
 
     @staticmethod
@@ -184,5 +184,5 @@ class TestXMLCustomFormatterElements:
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content)
         formatter = XMLCustomFormatter(str(input_path), str(output_path))
-        result = Path(formatter.output_file).read_text(encoding="UTF-8")
+        result = Path(str(formatter.output)).read_text(encoding="UTF-8")
         assert result == expected

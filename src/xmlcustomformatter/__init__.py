@@ -1,7 +1,6 @@
 """This module contains the entry point."""
 
 import argparse
-from pathlib import Path
 from importlib.metadata import version
 
 from .formatter import XMLCustomFormatter
@@ -38,8 +37,13 @@ def main() -> None:
 
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
-    parser.add_argument("input", type=Path, help="Path to input XML file")
-    parser.add_argument("output", type=Path, help="Path to output XML file")
+    parser.add_argument("input", help="Path to input XML file or a string containing XML")
+
+    parser.add_argument(
+        "output",
+        nargs="?",
+        help="Path to output XML file. If omitted, formatted XML will be printed to stdout",
+    )
 
     parser.add_argument(
         "--indentation", type=int, default=4, help="Number of whitespaces for indentation"
@@ -103,7 +107,10 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    XMLCustomFormatter(str(args.input), str(args.output), build_options_from_args(args))
+    formatter = XMLCustomFormatter(args.input, args.output, options=build_options_from_args(args))
+
+    if args.output is None:
+        print(formatter.get_result_as_string())  # pragma: no cover
 
 
 if __name__ == "__main__":  # pragma: no cover
