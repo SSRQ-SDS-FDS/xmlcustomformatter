@@ -82,14 +82,27 @@ class StringManipulation:
         return cls.WHITESPACE_EOL.sub("\n", string)
 
     @classmethod
-    def escape_double_quotes(cls, string: str) -> str:
+    def escape_xml_entities(cls, string: str) -> str:
         """
-        Escapes double quote charaters by their entity representation.
+        Escapes XML entities.
 
         Args:
-            string (str): The input string that may contain quotes.
+            string (str): The input string that may contain resolved entities.
 
         Returns:
-            str: A string where quotes are escaped.
+            str: A string where entities are escaped.
         """
-        return string.replace('"', "&quot;")
+        result = string
+
+        if "&" in result:
+            result = result.replace("&", "&amp;")
+        if "<" in result:
+            result = result.replace("<", "&lt;")
+        if ">" in result:
+            result = result.replace(">", "&gt;")
+        if '"' in result:
+            result = result.replace('"', "&quot;")
+        if "'" in result:
+            result = result.replace("'", "&apos;")
+
+        return result
