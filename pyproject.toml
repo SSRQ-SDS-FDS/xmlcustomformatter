@@ -1,6 +1,6 @@
 [project]
 name = "xmlcustomformatter"
-version = "1.1.0"
+version = "1.1.1"
 description = "A customizable formatter for XML-files"
 readme = "README.md"
 authors = [
@@ -15,13 +15,13 @@ xmlfmt = "xmlcustomformatter:main"
 [dependency-groups]
 dev = [
     "mkdocs>=1.6.1",
-    "mkdocstrings[python]>=0.30.0",
-    "mypy>=1.17.1",
+    "mkdocstrings[python]>=0.30.1",
+    "mypy>=1.18.2",
     "pre-commit>=4.3.0",
     "pylint>=3.3.8",
-    "pytest>=8.4.1",
-    "pytest-cov>=6.2.1",
-    "ruff>=0.12.8",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.13.1",
 ]
 
 [tool.mypy]
@@ -37,6 +37,7 @@ line-length = 100
 
 [tool.pylint."messages control"]
 disable = [
+    "R0801", # similar lines in multiple files
     "R0903", # too-few-public-methods
     "R0904", # too-many-public-methods
     "W0212", # access to protected members

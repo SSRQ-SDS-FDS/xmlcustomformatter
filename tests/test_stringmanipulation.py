@@ -105,12 +105,15 @@ class TestStringManipulation:
         "input_string, expected",
         [
             ("Text text text", "Text text text"),
-            ("Text 'text' text", "Text 'text' text"),
+            ("Text 'text' text", "Text &apos;text&apos; text"),
             ('Text "text" text', "Text &quot;text&quot; text"),
+            ("Text & text", "Text &amp; text"),
+            ("Text < text", "Text &lt; text"),
+            ("Text > text", "Text &gt; text"),
         ],
-        ids=["no quotes", "single quotes", "double quotes"],
+        ids=["no quotes", "single quotes", "double quotes", "ampersand", "lt", "gt"],
     )
-    def test_escape_double_quotes(input_string: str, expected: str) -> None:
-        """Tests escaping of double quotes."""
-        result = StringManipulation.escape_double_quotes(input_string)
+    def test_escape_xml_entities(input_string: str, expected: str) -> None:
+        """Tests escaping of entities."""
+        result = StringManipulation.escape_xml_entities(input_string)
         assert result == expected

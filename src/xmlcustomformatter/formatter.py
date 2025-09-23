@@ -375,7 +375,7 @@ class XMLCustomFormatter:
     def _process_attribute_node(self, attribute: Attr) -> None:
         """Processes an attribute node and escapes double quotes inside the attribute value."""
         name = attribute.name
-        value = SM.escape_double_quotes(attribute.value)
+        value = SM.escape_xml_entities(attribute.value)
         self._result.append(f' {name}="{value}"')
 
     def _process_text_node(self, text: Text) -> None:
@@ -399,6 +399,8 @@ class XMLCustomFormatter:
 
         if self._result_endswith_whitespace():
             data = data.lstrip()
+
+        data = SM.escape_xml_entities(data)
 
         self._result.append(data)
 

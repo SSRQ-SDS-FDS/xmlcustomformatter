@@ -38,13 +38,13 @@ class TestXMLCustomFormatterInitialization:
     @staticmethod
     @pytest.fixture
     def xml_content() -> str:
-        """Returns XML content as a string"""
+        """Returns XML content as a string."""
         return """<?xml version="1.0" encoding="UTF-8"?><root/>"""
 
     @staticmethod
     @pytest.fixture
     def xml_files(tmp_path: Path, xml_content: str) -> tuple[str, str]:
-        """Returns file paths as a tuple of strings"""
+        """Returns file paths as a tuple of strings."""
         input_path = tmp_path / "input.xml"
         output_path = tmp_path / "output.xml"
         input_path.write_text(xml_content, encoding="utf-8")
